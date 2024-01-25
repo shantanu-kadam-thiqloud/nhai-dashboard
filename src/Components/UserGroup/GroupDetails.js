@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AddGroup from "./AddGroup";
 
 function GroupDetails() {
-  const { groupId } = useParams();
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,8 +42,9 @@ function GroupDetails() {
     },
   ];
 
-  const group = groups.find((g) => g.id.toString() === groupId);
-
+  const group = groups.find((g) => g.id.toString() === userId);
+  const path = window.location.pathname;
+  const isDelete = path.includes("DeleteGroup") ? true : false;
   if (!group) {
     return <p>Group not found.</p>;
   }
@@ -53,10 +54,19 @@ function GroupDetails() {
       <div className="ULContainer">
         <div className="row">
           <div className="col-md-11 mx-auto">
-            <h2 className="mb-3 mt-3 pageTitle">Group Details</h2>
+            <h2 className="mb-3 mt-3 pageTitle">
+              {isDelete ? "Delete Group" : "Group Details"}
+            </h2>
           </div>
         </div>
         <div className="row UserDetails mt-3">
+          {isDelete ? (
+            <h4 className="mb-4 mx-5">
+              Are you sure you want to delete this ?
+            </h4>
+          ) : (
+            ""
+          )}
           <div className="col-md-11 mx-auto">
             <div className="col-md-6 UDCoulmns">
               <strong>Group Name:</strong>
@@ -72,7 +82,14 @@ function GroupDetails() {
               <strong>Is Active:</strong>
             </div>
             <div className="col-md-6 UDCoulmns">
-              {group.isActive ? "Yes" : "No"}
+              <input
+                name="isActive"
+                className="form-check-input"
+                type="checkbox"
+                id="flexSwitchCheckChecked"
+                checked={group.isActive}
+                readOnly
+              />
             </div>
 
             <div className="col-md-6 UDCoulmns">
@@ -92,7 +109,7 @@ function GroupDetails() {
               className="btn BackBtn"
               type="button"
               onClick={() => {
-                navigate("/NHAI/GroupList");
+                navigate("/NHAI/Groups");
               }}
             >
               Back to List
@@ -101,15 +118,17 @@ function GroupDetails() {
               className="btn addUser"
               type="button"
               onClick={() => {
-                setIsOpen(true);
+                //setIsOpen(true);
+                navigate(
+                  `/NHAI/${isDelete ? "DeleteGroup" : "EditGroup"}/${group.id}`
+                );
               }}
             >
-              Edit Group
+              {isDelete ? "Delete" : "Edit"}
             </button>
           </div>
         </div>
       </div>
-      <AddGroup isOpen={isOpen} setModal={setIsOpen} />
     </div>
   );
 }

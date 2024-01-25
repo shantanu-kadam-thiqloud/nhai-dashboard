@@ -28,6 +28,7 @@ router.get("/auth/redis", RegisterController.redisAccess);
 //API for Dashboard with /secure
 router.get("/secure/dashboard", DashboardController.dashboard);
 router.get("/secure/financial", FinancialController.financial);
+router.get("/secure/bank", BankController.bank);
 router.get("/secure/reginolOffice", RegionalOfficeController.regionalOffice);
 
 // // Handle GET requests to /api route

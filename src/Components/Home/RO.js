@@ -1,40 +1,47 @@
 import React, { useState, useEffect } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import "../../Assets/Css/Dashboard.css";
-import axios from 'axios';
+import axios from "axios";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import Box from "@mui/material/Box";
+import {
+  DateFormatFunction,
+  ConvertFormat,
+} from "../HtmlComponents/DateFunction";
 
 const RO = () => {
-  const [dynamicDate, setDate] = useState(new Date());
-  const currentDate = new Date().toISOString().split("T")[0];
+  const [asOnDate, setAsOnDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [dbdata, setDbdata] = useState([]);
   const [reginoalTable, setReginoalTable] = useState([]);
-  const [corDecimalType, setcoreDecimalType] = useState('');
-  
+  const [corDecimalType, setcoreDecimalType] = useState("");
 
   useEffect(() => {
     // Initialize the data to "Core" when the component mounts
-    fetchCoreData('crore');
+    fetchCoreData("crore");
   }, []);
 
   const fetchCoreData = (type) => {
-    const apiUrl = 'http://localhost:3007/api/secure/reginolOffice';
-    const uuid = localStorage.getItem('UUID');
+    const apiUrl = "http://localhost:3007/api/secure/reginolOffice";
+    const uuid = localStorage.getItem("UUID");
     const headers = {
-      'XUuid': uuid
+      XUuid: uuid,
     };
 
     // Make the Axios GET request with the headers
-    axios.get(apiUrl, { headers })
+    axios
+      .get(apiUrl, { headers })
       .then((response) => {
         setDbdata(response.data.data.regionWiseData);
-        if(type === 'crore'){          
-          setcoreDecimalType('crore');
-        } else{         
-          setcoreDecimalType('decimal');
-        }        
+        if (type === "crore") {
+          setcoreDecimalType("crore");
+        } else {
+          setcoreDecimalType("decimal");
+        }
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
   };
 
@@ -45,148 +52,111 @@ const RO = () => {
       //   total: value,
       //   kotak: value
       // }));
-     const reginaolData = dbdata.map((item, index) => ({
+      const reginaolData = dbdata.map((item, index) => ({
         id: index + 1,
         office: item.regionalOffice,
         zone: item.zone,
         piu: item.countOfPIU,
         subsidiaryAccounts: item.countOfSubsidiaryAccounts,
-        sanctionLimit: corDecimalType === 'crore' ? item.crore.sanctionLimit : item.decimal.sanctionLimit,
-        utilizedLimit: corDecimalType === 'crore' ? item.crore.utilizedLimit : item.decimal.utilizedLimit,
-        unutilizedLimit: corDecimalType === 'crore' ? item.crore.unUtilizedLimit : item.decimal.unUtilizedLimit,
-        percentage: corDecimalType === 'crore' ? item.crore.utilizedPercent : item.decimal.utilizedPercent,
+        sanctionLimit:
+          corDecimalType === "crore"
+            ? item.crore.sanctionLimit
+            : item.decimal.sanctionLimit,
+        utilizedLimit:
+          corDecimalType === "crore"
+            ? item.crore.utilizedLimit
+            : item.decimal.utilizedLimit,
+        unutilizedLimit:
+          corDecimalType === "crore"
+            ? item.crore.unUtilizedLimit
+            : item.decimal.unUtilizedLimit,
+        percentage:
+          corDecimalType === "crore"
+            ? item.crore.utilizedPercent
+            : item.decimal.utilizedPercent,
       }));
       setReginoalTable(reginaolData);
-      console.log('reginoalTable', reginaolData);
+      console.log("reginoalTable", reginaolData);
     }
-    
   }, [dbdata]);
-
   const columns = [
+    { field: "id", headerName: "Sr no", width: 90 },
     {
-      Header: "Sr No.",
-      accessor: "id",
-      //  Cell: ({ value }) => <div style={{ float: "left" }}>{value}</div>,
+      field: "office",
+      headerName: "Regional Office",
+      width: 150,
+      editable: true,
     },
     {
-      Header: "Regional Office", //<div className="float-end fw-bold">Total</div>,
-      accessor: "office",
-      //Cell: ({ value }) => <div style={{ float: "right" }}>{value}</div>,
+      field: "zone",
+      headerName: "Zone",
+      width: 150,
+      editable: true,
     },
     {
-      Header: "Zone",
-      accessor: "zone",
+      field: "piu",
+      headerName: "No. of PIU",
+      type: "number",
+      width: 110,
+      editable: true,
     },
     {
-      Header: "No. of PIU",
-      accessor: "piu",
-      //  Cell: ({ value }) => <div style={{ float: "left" }}>{value}</div>,
+      field: "subsidiaryAccounts",
+      headerName: "No. of Subsidiary Accounts",
+      sortable: true,
+      width: 160,
+    },
+    // Extra fields
+    {
+      field: "sanctionLimit",
+      headerName: "Sanction Limit",
+      type: "number",
+      width: 120,
+      editable: true,
     },
     {
-      Header: "No. of Subsidiary Accounts",
-      accessor: "subsidiaryAccounts",
+      field: "utilizedLimit",
+      headerName: "Utilized Limit",
+      type: "number",
+      width: 120,
+      editable: true,
     },
     {
-      Header: "Sanction Limit",
-      accessor: "sanctionLimit",
+      field: "unutilizedLimit", // Field for "Un-Utilized Limit"
+      headerName: "Un-Utilized Limit",
+      type: "number",
+      width: 120,
+      editable: true,
     },
     {
-      Header: "Utilized Limit",
-      accessor: "utilizedLimit",
-    },
-    {
-      Header: "Un-Utilized Limit",
-      accessor: "unutilizedLimit",
-    },
-    {
-      Header: "Utilized Percentage",
-      accessor: "percentage",
+      field: "percentage", // Field for "Utilized Percentage"
+      headerName: "Utilized Percentage",
+      type: "number",
+      width: 120,
+      editable: true,
     },
   ];
-  // const data = [
-  //   {
-  //     id: 1,
-  //     office: "Total",
-  //     zone: "",
-  //     piu: "154",
-  //     subsidiaryAccounts: "793",
-  //     sanctionLimit: "64,251.97",
-  //     utilizedLimit: "56,544.68",
-  //     unutilizedLimit: "7,707.29",
-  //     percentage: "88.00%",
-  //   },
-  //   {
-  //     id: 2,
-  //     office: "Bhubaneswar",
-  //     zone: "East",
-  //     piu: "7",
-  //     subsidiaryAccounts: "31",
-  //     sanctionLimit: "599.24",
-  //     utilizedLimit: "542.88",
-  //     unutilizedLimit: "56.36",
-  //     percentage: "90.60%",
-  //   },
-  //   {
-  //     id: 3,
-  //     office: "Guwahati",
-  //     zone: "East",
-  //     piu: "4",
-  //     subsidiaryAccounts: "10",
-  //     sanctionLimit: "20.22",
-  //     utilizedLimit: "9.42",
-  //     unutilizedLimit: "10.80",
-  //     percentage: "46.57%",
-  //   },
-  //   {
-  //     id: 4,
-  //     office: "Kolkata",
-  //     zone: "East",
-  //     piu: "1",
-  //     subsidiaryAccounts: "1",
-  //     sanctionLimit: "133.78",
-  //     utilizedLimit: "129.10",
-  //     unutilizedLimit: "4.68",
-  //     percentage: "96.50%",
-  //   },
-  //   {
-  //     id: 5,
-  //     office: "Patna",
-  //     zone: "East",
-  //     piu: "9",
-  //     subsidiaryAccounts: "35",
-  //     sanctionLimit: "3,538.63",
-  //     utilizedLimit: "2,671.62",
-  //     unutilizedLimit: "96.84",
-  //     percentage: "89.00%",
-  //   },
-  // ];
+
   return (
     <div>
       <div className="row">
         <div className="col">
           <div className="p-1">
-            <label className="float-start pageTitle">RO</label>
-            <div className="float-end">
-              <label className="statusOn">Status as on :</label>
+            {/* <label className="float-start pageTitle">RO</label> */}
+            <div className="float-start dashboardLabels">
+              <label className="statusOn">Status As On : </label>
               {"  "}
               <input
                 id="dateInput"
                 className="inputDate"
                 type="date"
-                // onChange={(e) => {
-                //   setDate(e.target.value);
-                // }}
-                defaultValue={currentDate}
+                value={asOnDate || ""}
+                onChange={(e) => {
+                  setAsOnDate(e.target.value);
+                  console.log("->", ConvertFormat(e.target.value));
+                }}
               />{" "}
-              <label className="statusOn">Bank :</label>{" "}
-              <select name="bank" className="inputDate">
-                <option value="Kotak">Kotak</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
-              </select>
-              {"  "}
-              <label className="statusOn">Zone :</label>{" "}
+              <label className="statusOn">Zone : </label>{" "}
               <select name="zone" className="inputDate">
                 <option value="All">All</option>
                 <option value="East">East</option>
@@ -198,17 +168,19 @@ const RO = () => {
                 <option value="Unmapped">Unmapped</option>
               </select>
               {"  "}
+            </div>
+            <div className="float-end dashboardLabels">
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => fetchCoreData('crore')}                
+                onClick={() => fetchCoreData("crore")}
               >
                 Crore
               </button>{" "}
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => fetchCoreData('decimal')}
+                onClick={() => fetchCoreData("decimal")}
               >
                 Decimal
               </button>{" "}
@@ -226,12 +198,35 @@ const RO = () => {
       <hr />
       <div className="row">
         <div className="p-2">
-          <DataTable
+          {/* <DataTable
             columns={columns}
             data={reginoalTable}
             customClass="ROTable"
             showSearchBar={false}
-          />{" "}
+          />{" "} */}
+          <Box sx={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={reginoalTable}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+              disableSelectionOnClick={true}
+              className="custom-datagrid"
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                },
+              }}
+            />
+          </Box>
         </div>
       </div>
     </div>

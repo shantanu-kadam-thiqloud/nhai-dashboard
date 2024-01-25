@@ -1,77 +1,151 @@
-import React, {useState} from 'react';
-import DataTable from '../HtmlComponents/DataTable';
+import React, { useEffect, useState } from "react";
+import DataTable from "../HtmlComponents/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-//import AddUser from './AddUser';
 import { useNavigate, useParams } from "react-router-dom";
-
+import TablesDataChecker from "../Checker/fieldData";
+import sideBarDataChecker from "../Checker/sideBarData";
+import { UserService } from "../../Service/UserService";
+import Spinner from "../HtmlComponents/Spinner";
 const UserList = () => {
-    //const [isOpen, setIsOpen] = useState(false);
-    const navigate = useNavigate();
-    const data = [
-        { id: 1, fullName: 'John Doe', userId: 'JD001', userType: 'Admin', role: 'Admin', isActive: true },
-        { id: 2, fullName: 'Jane Smith', userId: 'JS002', userType: 'User', role: 'Member', isActive: true },
-        { id: 3, fullName: 'Bob Johnson', userId: 'BJ003', userType: 'User', role: 'Member', isActive: true },
-        { id: 4, fullName: 'Alice Brown', userId: 'AB004', userType: 'User', role: 'Member', isActive: false },
-        { id: 5, fullName: 'Eve Anderson', userId: 'EA005', userType: 'User', role: 'Guest', isActive: false },
-        { id: 6, fullName: 'Tom Wilson', userId: 'TW006', userType: 'User', role: 'Guest', isActive: true },
-        { id: 7, fullName: 'Laura Lee', userId: 'LL007', userType: 'User', role: 'Guest', isActive: true },
-        { id: 8, fullName: 'Michael Johnson', userId: 'MJ008', userType: 'User', role: 'Member', isActive: false },
-        { id: 9, fullName: 'Olivia Brown', userId: 'OB009', userType: 'User', role: 'Member', isActive: true },
-        { id: 10, fullName: 'William Lee', userId: 'WL010', userType: 'User', role: 'Member', isActive: true },
-      ];
-      
-      const columns = [
-        { Header: 'User Full Name', accessor: 'fullName' },
-        { Header: 'User ID', accessor: 'userId' },
-        { Header: 'User Type', accessor: 'userType' },
-        { Header: 'Role', accessor: 'role' },
-        { Header: 'Is Active', accessor: 'isActive', 
-        Cell: ({ value }) =>  
-        <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked={value} /> },
-        {
-          Header: 'Action',
-          accessor: 'id',
-        },
-      ];
-      
-      function handleAction(id) {
-        // Implement your action logic here based on the id
-      };
-      
-      const HandleAddUser = () => {
-        navigate('../NHAI/AddUser');
-      }
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [is, setIs] = useState(false);
+  const [userList, setUserList] = useState([]);
+  //User Data
+  var jsonData = TablesDataChecker.find((item) => item.type === "User_list");
+  const data = jsonData.data;
+  //Side bar Data
+  var sidejsonData = sideBarDataChecker.find(
+    (item) => item.type === "menuData"
+  );
+  const sidebarMockData = sidejsonData.data;
 
-      return (
-        <div className="wrapper">
-        <div className="container">
-          <div className='ULContainer'>
-            <div className='row'>
-              <div className="col-md-11 mx-auto"> 
-                <h2 className="mb-3 mt-3 pageTitle">User Listing</h2>
-                <div className="addUserBtnDiv  mt-3">
-                <button
+  const isAddUser =
+    (sidebarMockData || []).find((x) => {
+      if (x.menuName === "Admin") {
+        return (x.subMenu || []).find((s) => {
+          if (s.name === "User") {
+            return (s.action || []).find((a) => {
+              if (a.actionName === "Add") {
+                //console.log("Is add user ->", a.check);
+                return a.check;
+              }
+            });
+          }
+        });
+      }
+    }) !== undefined;
+  useEffect(() => {
+    setIs(isAddUser);
+  }, []);
+
+  const columns = [
+    {
+      Header: <div className="float-center">User Full Name</div>,
+      accessor: "fullName",
+    },
+    { Header: <div className="float-center">User ID</div>, accessor: "userId" },
+    {
+      Header: <div className="float-center">User Type</div>,
+      accessor: "userType",
+    },
+    { Header: <div className="float-center">Role</div>, accessor: "userRole" },
+    {
+      Header: "Is Active",
+      accessor: "isActive",
+    },
+    {
+      Header: "Action",
+      accessor: "id",
+      Cell: ({ row }) => {
+        return row.values.id;
+      },
+    },
+  ];
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchUserList();
+  }, []);
+
+  function fetchUserList() {
+    var UserList = [];
+    UserService.getUserList(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.data.responseMetaData.status === "200") {
+          UserList = res.data.users;
+          setUserList(UserList);
+          setIsLoading(false);
+        }
+        // else if (res.data.responseMetaData.status === "500") {
+        //   prompt("Internal Server Error");
+        // } else if (res.status === "404") {
+        //   prompt("Please provide valid inputs.");
+        // } else {
+        // }
+        //   return data;
+      }
+    );
+    console.log("UserList->", UserList);
+
+    return UserList;
+  }
+
+  function handleAction(id) {}
+
+  const HandleAddUser = () => {
+    navigate("/NHAI/AddUser");
+  };
+
+  return (
+    <div className="wrapper">
+      <Spinner isLoading={isLoading} />
+      <div className="container">
+        <div className="ULContainer">
+          <div className="row">
+            <div className="col-md-12">
+              <h2 className="mb-3 mt-3 pageTitle">User Listing</h2>
+              <div className="addUserBtnDiv  mt-3">
+                {is ? (
+                  <button
                     className="btn addUser"
                     type="button"
                     onClick={HandleAddUser}
-                    >               
-                    <FontAwesomeIcon icon={faPlusCircle} className="plusIcon" /> 
-                    Add New User         
-                </button>
-                </div>
-              </div>              
-            </div>
-            <div className='row'>
-              <div className='col-md-11 mx-auto flex'>              
-                <DataTable columns={columns} data={data} customClass= 'ULTable' detailpage= 'UserList/UserDetails' />
+                  >
+                    <FontAwesomeIcon icon={faPlusCircle} className="plusIcon" />
+                    Add New User
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
-          {/* <AddUser isOpen={isOpen} setModal={setIsOpen} /> */}
+          <div className="row">
+            <div className="p-2">
+              {/* <div className="col-md-11 mx-auto flex"> */}
+              <DataTable
+                columns={columns}
+                data={userList} //{data}
+                // customClass="ULTable"
+                detailpage="UserDetails"
+                editpage="EditUser"
+                deletepage="DeleteUser"
+              />
+            </div>
+          </div>
         </div>
-        </div>
-      );
-    };
+      </div>
+    </div>
+  );
+};
 
 export default UserList;

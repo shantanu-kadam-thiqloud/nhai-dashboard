@@ -84,6 +84,7 @@ footer.text-center.footer {
 /* user list css */
 .ULContainer {
   text-align: left;
+  margin-bottom: 60px;
 }
 .ULTable td {
   min-width: 150px;
@@ -98,27 +99,36 @@ footer.text-center.footer {
   background: #ffffff !important;
   color: black !important;
   font-weight: bold !important;
-  height: 40px !important;
+  /* height: 40px !important; */
   padding: 10px;
 }
 
-.ULTable
+.tableDiv
+  /* .ULTable */
   .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked
   + .MuiSwitch-track {
   background-color: green !important;
   opacity: 1 !important;
 }
-.ULTable .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {
+.tableDiv
+  /* .ULTable */
+  .css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked {
   color: #ffffff !important;
 }
-.ULTable .css-jsexje-MuiSwitch-thumb {
+.tableDiv 
+/* .ULTable  */
+.css-jsexje-MuiSwitch-thumb {
   border: 1px solid black;
 }
-.ULTable .css-1yjjitx-MuiSwitch-track {
+.tableDiv 
+/* .ULTable */
+.css-1yjjitx-MuiSwitch-track {
   background-color: #ff0000 !important;
   opacity: 1 !important;
 }
-.ULTable svg.svg-inline--fa {
+.tableDiv 
+/* .ULTable  */
+svg.svg-inline--fa {
   color: #84c0db !important;
 }
 .addUserBtnDiv {
@@ -139,17 +149,18 @@ footer.text-center.footer {
   font-size: 16px;
   color: #ffffff;
   margin-right: 5px;
+  cursor: pointer;
 }
 .wrapper {
-  margin-left: 200px;
-  padding: 12px;
+  /* margin-left: 200px; */
+  padding: 6px;
 }
 
 /* user list css end */
 
 /* add user css */
 .min {
-  padding: 8px !important;
+  /* padding: 8px !important; */
   min-width: 70px;
   border-radius: 3px !important;
 }
@@ -163,7 +174,7 @@ footer.text-center.footer {
 }
 .BackBtn {
   border-color: #003366 !important;
-  padding: 12px !important;
+  /* padding: 12px !important; */
   min-width: 120px;
   border-radius: 4px !important;
   background-color: #003366 !important;
@@ -252,6 +263,7 @@ header {
 }
 body {
   font-family: Roboto !important;
+  overflow-x: hidden;
 }
 
 .loginForm {
@@ -275,9 +287,22 @@ body {
   border-color: #ff0000 !important;
   color: #ffffff !important;
   background-color: #ee1c25 !important;
-  padding: 12px !important;
+  /* padding: 12px !important; */
   min-width: 120px;
   border-radius: 4px !important;
+}
+
+.smallBtn {
+  border-color: #ff0000 !important;
+  color: #ffffff !important;
+  background-color: #ee1c25 !important;
+  border-radius: 4px !important;
+  min-width: 50px;
+}
+
+.button-container {
+  display: flex; /* Use flexbox to arrange items in a row */
+  justify-content: space-between; /* Space between the buttons */
 }
 
 /* .addUser:hover {
@@ -337,83 +362,90 @@ body {
   border: 1px solid #0070e0 !important;
 }
 
-.snapTable th {
-  min-width: 150px;
-  border: 1px solid black;
-  padding: 10px;
-  background-color: #dfe7eb !important;
-  font-size: 14px;
+.NHAILogoHy {
+  float: left;
+  width: 70px !important;
+  height: 55px !important;
+  /* margin-left: 25px; */
+  margin-top: 8px;
+  margin-bottom: 8px;
+  /* border: solid 1px #ffffff; */
 }
 
-.snapTable td {
-  border: 1px solid black;
-  padding: 10px;
-  align-items: center !important;
-  font-size: 14px;
+.NHAITextHy {
+  color: #ffffff;
+  text-align: center !important;
+  margin: 15px;
+  /* font-weight: bold; */
+  font-size: 20px;
+  vertical-align: text-top;
 }
-/* 22-9-23 as per figma  */
 
-.AgeingTable th {
-  min-width: 150px;
-  border: 1px solid black;
-  padding: 10px;
-  font-size: 14px;
-  background-color: #dfe7eb !important;
+.hyperlink {
+  height: 100vh;
+  /* background-color: #003366; */
+  background-color: #325b84;
 }
-.AgeingTable td {
-  border: 1px solid black;
-  padding: 10px;
-  font-size: 14px;
-}
-.ZoneTable th {
-  /* min-width: 100px; */
-  border: 1px solid black;
-  padding: 5px;
-  font-size: 14px;
-  background-color: #dfe7eb !important;
-}
-.ZoneTable td {
-  border: 1px solid black;
-  padding: 9px;
-  font-size: 14px;
-}
-.PIUTable th {
-  min-width: 120px;
-  border: 1px solid black;
-  padding: 5px;
-  font-size: 14px;
-  background-color: #dfe7eb !important;
-}
-.PIUTable td {
-  border: 1px solid black;
-  padding: 9px;
-  font-size: 14px;
-}
-.ROTable th {
-  min-width: 60px;
-  border: 1px solid black;
-  padding: 5px;
-  font-size: 14px;
-  background-color: #dfe7eb !important;
-}
-.ROTable td {
-  border: 1px solid black;
-  padding: 9px;
-  font-size: 14px;
-}
-.BankTable td {
-  /* min-width: 300px; */
-  min-width: 200px;
-  padding: 10px;
-  border: 1px solid black;
 
-  font-size: 14px;
+.hyperTitle {
+  float: left;
+  color: #bec5c8;
 }
-.BankTable th {
-  padding: 10px;
+
+/* -----------------------------Financial(D) -------------------------------------- */
+table {
+  width: 90%;
+  margin: 0 auto;
   border: 1px solid black;
-  font-size: 14px;
+  float: left;
+}
+
+td {
+  border-right: 1px solid black !important;
+  text-align: left;
+  padding: 10px;
+  font-size: 12px;
+}
+
+th {
+  min-width: 70px;
+  padding: 10px;
+  border: 1px solid black !important;
+  font-size: 12px;
   background-color: #dfe7eb !important;
+}
+.tright {
+  text-align: right !important;
+}
+.upperb {
+  border-top: 1px solid black !important;
+}
+.bottomb {
+  border-bottom: 1px solid black !important;
+}
+
+.footerbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: auto;
+}
+
+.wrap-10-char {
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Display ellipsis (...) for truncated text */
+  max-width: 7em;
+  /* word-wrap: break-word; 
+  word-break: break-all; 
+  max-width: 8em;  */
+}
+
+.tableDiv {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
 /* //-----------------varient css--------------------------------- */
@@ -421,8 +453,7 @@ body {
   min-width: 200px;
   padding: 10px;
   border: 1px solid black;
-
-  font-size: 14px;
+  font-size: 12px;
 }
 .varient2 th {
   padding: 10px;
@@ -436,13 +467,12 @@ body {
   min-width: 200px;
   padding: 10px;
   border: 1px solid black;
-
-  font-size: 14px;
+  font-size: 12px;
 }
 .varient3 th {
   padding: 10px;
   border: 1px solid black;
-  font-size: 14px;
+  font-size: 12px;
   background-color: #ee1c25 !important;
   color: white;
 }
@@ -477,4 +507,266 @@ body {
 }
 .css-1yybqq8-MuiButtonBase-root-MuiButton-root {
   border: 1 !important;
+}
+
+/* Material UI Data Grid Css */
+.MuiDataGrid-withBorderColor {
+  /* border-color: rgba(224, 224, 224, 1); */
+  border: 1px solid black !important;
+}
+
+.MuiDataGrid-columnHeadersInner {
+  background: #dfe7eb;
+}
+
+.dataGridBox {
+  margin-left: auto;
+  min-height: 400px;
+}
+
+.custom-datagrid {
+  font-family: Roboto !important;
+  font-size: 12px !important;
+  text-align: left !important;
+}
+
+.css-c5c7cs-MuiDataGrid-root {
+  font-size: 12px;
+}
+/* Styles for mobile view */
+@media screen and (min-width: 768px) {
+  #sidebarMenu {
+    display: block;
+  }
+}
+
+/* Hamburger menu icon styles */
+.menu-icon {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mobile-menu-toggle {
+  display: none;
+}
+
+.sideBar {
+  width: 20% !important;
+}
+@media screen and (max-width: 1124px) and (min-width: 992px) {
+  .wrapper {
+    margin-left: 40px;
+  }
+}
+.dataContainer {
+  font-size: 14px;
+  padding: 0px;
+}
+/* -------------------New CSS -------------------------------------------------------- */
+.pageWrapper {
+  width: 80% !important;
+  padding-left: 0 !important;
+}
+.tableDiv th {
+  min-width: 150px;
+  border: 1px solid black;
+  padding: 10px;
+  background-color: #dfe7eb !important;
+  font-size: 12px;
+  align-items: center;
+  text-align: center !important;
+}
+
+.tableDiv td {
+  border: 1px solid black;
+  padding: 10px;
+  align-items: left !important;
+  font-size: 12px;
+  background-color: white !important;
+}
+
+.BankTable th {
+  width: 200px !important;
+}
+
+.BankTable .amount {
+  float: right !important;
+}
+
+.required::after {
+  content: "*";
+  color: red;
+  margin-left: 2px; /* Add some spacing between the asterisk and the label text */
+}
+
+.bigCheckbox {
+  width: 30px;
+  height: 30px;
+}
+
+/* Profile Mapping */
+.menuColor {
+  background-color: #dee2e6;
+  font-size: 14px;
+}
+
+.submenuColor {
+  background-color: #e9eef178;
+  font-size: 14px;
+}
+
+.checkerAction {
+  margin-left: 5px;
+  margin-right: 20px;
+}
+.accordion-button:not(.collapsed) {
+  background-color: white !important;
+}
+.accordion-button:focus {
+  border-color: black !important;
+}
+/* ----------------------Loader------------------------------------------------- */
+
+/* Spinner.css */
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(245, 243, 242, 0.7); /* Semi-transparent background */
+  backdrop-filter: blur(4px); /* Adjust the blur amount as needed */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Place the overlay above other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-container {
+  position: relative; /* Use relative position for the spinner container */
+}
+
+.spinner {
+  width: 8vmax;
+  height: 8vmax;
+  border-right: 4px solid #0f0601;
+  border-radius: 100%;
+  animation: spinRight 800ms linear infinite;
+  position: absolute; /* Use absolute position for the spinner */
+}
+
+.spinner:before,
+.spinner:after {
+  content: "";
+  width: 6vmax;
+  height: 6vmax;
+  display: block;
+  position: absolute;
+  top: calc(50% - 3vmax);
+  left: calc(50% - 3vmax);
+  border-left: 3px solid #0f0601;
+  border-radius: 100%;
+  animation: spinLeft 800ms linear infinite;
+}
+
+@keyframes spinLeft {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(720deg);
+  }
+}
+
+@keyframes spinRight {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.logoutBtn {
+  margin-top: 20px;
+}
+/* ------------------------Inline CSS------------------------------------------------- */
+.bgAppColor {
+  background-color: #003366;
+}
+/* ---btn---- */
+.min-width-110px {
+  min-width: 110px;
+}
+/* -----Menu Mgmt--------- */
+.activeIcon {
+  cursor: pointer;
+  color: #84c0db;
+  margin-top: 10px;
+}
+.disableIcon {
+  cursor: not-allowed;
+  color: #ccc;
+  margin-top: 10px;
+}
+.closeIconPopup {
+  cursor: pointer;
+  margin-right: 8px;
+  color: black;
+  float: right;
+}
+/* ---------barChart------ */
+.barCss {
+  width: 100%;
+  height: 300px;
+}
+/* -----------financial---------- */
+.fBgColor {
+  background-color: #f8f9f9;
+}
+/* ------Hyperlink popup------------- */
+.closeIconPopupWhite {
+  cursor: pointer;
+  margin-right: 8px;
+  color: #ffffff;
+  float: right;
+}
+/* ------------Snapshot------------------ */
+.cardFlex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.inputType1 {
+  border-radius: 4px !important;
+  width: 50% !important;
+}
+.inputType2 {
+  text-align: end !important;
+  color: black !important;
+  font-weight: bold !important;
+  background-color: white !important;
+}
+/* --------------DataTable-------------------------- */
+.tableBorder {
+  border: 1px solid black;
+}
+.tableIcon {
+  cursor: pointer;
+  margin-right: 8px;
+}
+.tablePointer {
+  cursor: pointer;
+}
+/* ------------Tab component------------------ */
+.arrowColor {
+  color: #999999;
+}
+/* -------------Add User,Group,Profile------------------------------ */
+.box30 {
+  width: 30px;
+  height: 30px;
 }

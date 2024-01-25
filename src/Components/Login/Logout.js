@@ -33,8 +33,8 @@ function Logout() {
     <div>
       <span className="NHAIText">
         <FontAwesomeIcon
+          className="arrowColor"
           icon={faPowerOff}
-          style={{ color: "#999999" }}
           onClick={logout}
         />
       </span>
