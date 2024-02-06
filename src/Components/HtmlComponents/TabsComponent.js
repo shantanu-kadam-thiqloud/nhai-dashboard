@@ -4,30 +4,40 @@ import {
   faCircleChevronRight,
   faCircleChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 const TabsComponent = (props) => {
-  const tabsData = [
-    { title: "Snapshot", content: "Content for Tab 1" },
-    { title: "Financial", content: "Content for Tab 2" },
-    { title: "Financial(D)", content: "Content for Tab 3" },
-    { title: "Bank", content: "Content for Tab 4" },
-    { title: "Zone", content: "Content for Tab 5" },
-    { title: "RO", content: "Content for Tab 6" },
-    { title: "PIU", content: "Content for Tab 7" },
-    { title: "Account Level", content: "Content for Tab 8" },
-    { title: "Transaction", content: "Content for Tab 9" },
-    { title: "Ageing", content: "Content for Tab 10" },
-    { title: "Events", content: "Content for Tab 11" },
-    { title: "Limit Ledger", content: "Content for Tab 12" },
-    { title: "Velocity", content: "Content for Tab 12" },
+  const data = [
+    {
+      id: 1,
+      menuName: "Home",
+      subMenu: [
+        { id: 1, name: "Snapshot", check: true, action: [] },
+        { id: 2, name: "Financial", check: true, action: [] },
+        { id: 3, name: "Financial(D)", check: true, action: [] },
+        { id: 4, name: "Bank", check: true, action: [] },
+        { id: 5, name: "Zone", check: true, action: [] },
+        { id: 6, name: "RO", check: true, action: [] },
+        { id: 7, name: "PIU", check: true, action: [] },
+        { id: 8, name: "Account Level", check: true, action: [] },
+        { id: 9, name: "Transaction", check: true, action: [] },
+        { id: 10, name: "Ageing", check: true, action: [] },
+        { id: 11, name: "Events", check: true, action: [] },
+        { id: 12, name: "Limit Ledger", check: true, action: [] },
+        { id: 13, name: "Velocity", check: true, action: [] },
+      ],
+      url: "/NHAI/Dashboard",
+    },
   ];
+
+  const tabsData = data[0].subMenu;
 
   const [activeTab, setActiveTab] = useState(tabsData[0]);
   const tabsRef = useRef(null);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    props.ActiveTab(tab.title);
+    props.ActiveTab(tab.name);
   };
 
   const handleNextClick = () => {
@@ -44,42 +54,46 @@ const TabsComponent = (props) => {
     }
   };
 
+  useEffect(() => {
+    setActiveTab(props.active);
+  }, [props.active]);
+
   return (
     <div>
       <div className="tabs-container">
         <div className="buttons">
           <button className="scrollbtn" onClick={handlePreviousClick}>
             <FontAwesomeIcon
+              className="arrowColor"
               icon={faCircleChevronLeft}
-              style={{ color: "#999999" }}
             />{" "}
           </button>
         </div>
         <div className="tabs" ref={tabsRef}>
-          {tabsData.map((tab) => (
-            <div
-              key={tab.title}
-              className={`tab ${activeTab.title === tab.title ? "active" : ""}`}
-              onClick={() => handleTabClick(tab)}
-            >
-              {tab.title}
-            </div>
-          ))}
+          {tabsData.map((tab) => {
+            return tab.check ? (
+              <div
+                key={tab.id}
+                className={`tab ${activeTab.name === tab.name ? "active" : ""}`}
+                onClick={() => handleTabClick(tab)}
+              >
+                {tab.name}
+              </div>
+            ) : (
+              ""
+            );
+          })}
         </div>
         <div className="buttons">
           <button className="scrollbtn" onClick={handleNextClick}>
             {" "}
             <FontAwesomeIcon
+              className="arrowColor"
               icon={faCircleChevronRight}
-              style={{ color: "#999999" }}
             />
           </button>
         </div>
       </div>
-      {/* <div className="tab-content">
-        <h2>{activeTab.title}</h2>
-        <p>{activeTab.content}</p>
-      </div> */}
     </div>
   );
 };
