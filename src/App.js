@@ -2,11 +2,10 @@ import "./App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./Components/HederFooter/Header";
-import Routers from "./Routes";
+import Routers from "./Components/Route/Routers";
 import Footer from "./Components/HederFooter/Footer";
 import Sidebar from "./Components/HederFooter/Sidebar";
 import { useLocation } from "react-router-dom";
-import MobileMenuToggle from "./Components/HederFooter/MobileMenuToggle";
 
 function App() {
   const location = useLocation();
@@ -17,32 +16,14 @@ function App() {
     location.pathname === "/NHAI/varients"
       ? true
       : false;
-
   return (
     <div className="App">
       <Header />
-
-      <div className="row">
-        {!isLoginPage && (
-          <>
-            <div className="col-3 sideBar bgAppColor">
-              <MobileMenuToggle />
-              <Sidebar />
-            </div>
-            <div className="col-9 dataContainer pageWrapper">
-              <div className="ps-4">
-                <Routers />
-              </div>
-            </div>
-          </>
-        )}
-        {isLoginPage && (
-          <div className="col-12 dataContainer">
-            <Routers />
-          </div>
-        )}
-        <ToastContainer />
-      </div>
+      {!isLoginPage && <Sidebar />}
+      <ToastContainer />
+      <Routers />
+      {/* Check Commit */}
+      {/* <div style={{ height: "100vh" }}></div> */}
       <Footer />
     </div>
   );

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import forge from "node-forge";
-import Spinner from "../HtmlComponents/Spinner";
+
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -17,8 +17,6 @@ const Login = () => {
     username: "",
     password: "",
   };
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const [publicKey, setPublicKey] = useState("");
 
@@ -37,87 +35,57 @@ const Login = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    // if (!publicKey) {
-    //   console.error("Public key not available");
-    //   return;
-    // }
-    // const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
-    // console.log("object type :-", typeof publicKeyObject);
-    // const requestData = {
-    //   username: values.username,
-    //   password: values.password,
-    // };
-    // const encodedData = forge.util.encodeUtf8(values);
-    // console.log("login data", values);
-    // const encrypted = publicKeyObject.encrypt(encodedData, "RSA-OAEP");
-    // const encryptedValues = forge.util.encode64(encrypted);
-    // console.log(encryptedValues);
-    // const response = await axios.post("http://localhost:3007/api/auth/login", {
-    //   encrypted: requestData,
-    // });
-    // console.log(response.data);
-    // if (response.data) {
-    //   localStorage.setItem("UUID", response.data.session_id);
-    //   toast.success("Login successful!", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   navigate("/NHAI/Dashboard");
-    // } else {
-    //   toast.error("Login failed. Please try again.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //   });
-    // }
-    // if (values.username === "admin" && values.password === "admin123") {
-    //   toast.success("Login successful!", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   navigate("/Users");
-    // } else {
-    //   toast.error("Login failed. Please try again.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //   });
-    // }
-    if (values.username === "Siddhesh" && values.password === "admin@123") {
-      setIsLoading(true);
-
+    if (!publicKey) {
+      console.error("Public key not available");
+      return;
+    }
+    const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
+    console.log('object type :-', typeof(publicKeyObject));
+    const requestData = {
+      username: values.username,
+      password: values.password,
+    };
+    const encodedData = forge.util.encodeUtf8(values);
+    console.log('login data', values);
+    const encrypted = publicKeyObject.encrypt(encodedData, "RSA-OAEP");
+    const encryptedValues = forge.util.encode64(encrypted);
+    console.log(encryptedValues);
+    
+    const response = await axios.post("http://localhost:3007/api/auth/login", {
+      encrypted: requestData,
+    });
+    console.log(response.data);
+    if (response.data) {
+      localStorage.setItem("UUID", response.data.session_id);
       toast.success("Login successful!", {
         position: "top-right",
         autoClose: 3000,
       });
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/NHAI/Dashboard");
-      }, 1000);
-    } else if (
-      values.username === "Shantanu" &&
-      values.password === "admin@123"
-    ) {
-      setIsLoading(true);
-
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/NHAI/Dashboard");
-      }, 1000);
+      navigate("/NHAI/Dashboard");
     } else {
       toast.error("Login failed. Please try again.", {
         position: "top-right",
         autoClose: 5000,
       });
     }
+
+    // if(values.username === 'admin' && values.password === 'admin123'){
+    //     toast.success('Login successful!', {
+    //         position: 'top-right',
+    //         autoClose: 3000,
+    //       });
+    //       navigate('/UserList');
+    // }else{
+    //     toast.error('Login failed. Please try again.', {
+    //         position: 'top-right',
+    //         autoClose: 5000,
+    //       });
+    // }
   };
   const navigate = useNavigate();
 
   return (
     <div className="container loginContainer">
-      <Spinner isLoading={isLoading} />
       <div className="row">
         <div className="col-md-6">
           <img src={loginImage} alt="Login" className="img-fluid" />

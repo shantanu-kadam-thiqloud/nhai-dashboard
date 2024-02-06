@@ -1,125 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DataTable from "../HtmlComponents/DataTable";
 import "../../Assets/Css/Dashboard.css";
-import { v4 as uuid } from "uuid";
-import PieChart from "../Charts/PieChart";
-import BarChart from "../Charts/BarChart";
-import { useNavigate } from "react-router-dom";
-import { DashboardService } from "../../Service/DashboardService";
-import Spinner from "../HtmlComponents/Spinner";
 const Ageing = () => {
-  const [Decimal, setDecimal] = useState(true);
-  const [bankD, setBank] = useState("");
-  const [roD, setRo] = useState("");
-  const [zoneD, setZone] = useState("");
-  const [piuD, setPiu] = useState("");
   const title = "> 180 Days";
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const columns = [
     {
       Header: "Parameters",
-      id: "parameter",
       accessor: "parameter",
       Cell: ({ value }) => <div className="float-start">{value}</div>,
     },
     {
-      Header: <div className=" fw-bold">Total</div>,
-      id: "total",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a
-              href="#"
-              onClick={() => {
-                console.log("click618");
-              }}
-              className="text-black"
-            >
-              {row.total}
-            </a>
-          );
-        } else {
-          return Decimal ? row.decimal.total : row.crore.total;
-        }
-      },
+      Header: <div className="float-end fw-bold">Total</div>,
+      accessor: "total",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
-      Header: <div className=" fw-bold">0-30 Days</div>,
-      id: "belowThirtyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.belowThirtyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.belowThirtyDays
-            : row.crore.belowThirtyDays;
-        }
-      },
+      Header: <div className="float-end fw-bold">0-30 Days</div>,
+      accessor: "day30",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
-      Header: <div className=" fw-bold">31-90 Days</div>,
-      id: "belowNintyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.belowNintyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.belowNintyDays
-            : row.crore.belowNintyDays;
-        }
-      },
+      Header: <div className="float-end fw-bold">31-90 Days</div>,
+      accessor: "day90",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
-      Header: <div className=" fw-bold">91-180 Days</div>,
-      id: "belowOneEightyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.belowOneEightyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.belowOneEightyDays
-            : row.crore.belowOneEightyDays;
-        }
-      },
+      Header: <div className="float-end fw-bold">91-180 Days</div>,
+      accessor: "day180",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
-      Header: <div className=" fw-bold">{title}</div>,
-      id: "aboveOneEightyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.aboveOneEightyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.aboveOneEightyDays
-            : row.crore.aboveOneEightyDays;
-        }
-      },
+      Header: <div className="float-end fw-bold">{title}</div>,
+      accessor: "daymore",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Is Active",
-      accessor: "isActive",
     },
   ];
 
@@ -170,248 +83,23 @@ const Ageing = () => {
       daymore: "80.63%",
     },
   ];
-
-  //Mock----------------------------------------------------------------------
-  const reqBody = {
-    requestMetaData: {
-      applicationId: "nhai-dashboard",
-      correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
-    },
-    userName: "nhai",
-    bank: bankD, //"All", //Kotak,
-    zone: zoneD,
-    ro: roD,
-    piu: piuD,
-  };
-
-  const mockRes = {
-    responseMetaData: {
-      status: "200",
-      message: "Success",
-    },
-    ageingData: [
-      {
-        parameter: "No. of Subsidiary Accounts",
-        total: "618",
-        belowThirtyDays: "130",
-        belowNintyDays: "193",
-        belowOneEightyDays: "101",
-        aboveOneEightyDays: "193",
-      },
-      {
-        parameter: "Sanction Limit",
-        decimal: {
-          total: "3,71,77,040.11",
-          belowThirtyDays: "1,84,02,973.41",
-          belowNintyDays: "4,58,97,059.47",
-          belowOneEightyDays: "1,88,83,286.84",
-          aboveOneEightyDays: "1,25,79,247.00",
-        },
-        crore: {
-          total: "39,430.71",
-          belowThirtyDays: "3,610.84",
-          belowNintyDays: "11,644.58",
-          belowOneEightyDays: "13,071.88",
-          aboveOneEightyDays: "10,321.25",
-        },
-      },
-      {
-        parameter: "Utilized Limit",
-        decimal: {
-          total: "7,98,09,291.66",
-          belowThirtyDays: "3,89,50,336.32",
-          belowNintyDays: "7,13,16,033.40",
-          belowOneEightyDays: "9,91,99,443.94",
-          aboveOneEightyDays: "3,45,36,781.00",
-        },
-        crore: {
-          total: "29,297.98",
-          belowThirtyDays: "2,393.90",
-          belowNintyDays: "8,6171.31",
-          belowOneEightyDays: "9,569.91",
-          aboveOneEightyDays: "7,993.45",
-        },
-      },
-      {
-        parameter: "Un-Utilized Limit",
-        decimal: {
-          total: "2,73,67,748.45",
-          belowThirtyDays: "6,94,52,637.09",
-          belowNintyDays: "7,45,81,026.07",
-          belowOneEightyDays: "1,96,83,842.90",
-          aboveOneEightyDays: "7,80,42,466.00",
-        },
-        crore: {
-          total: "10,132.73",
-          belowThirtyDays: "1,216.95",
-          belowNintyDays: "3,027.45",
-          belowOneEightyDays: "3,501.96",
-          aboveOneEightyDays: "2,327.80",
-        },
-      },
-      {
-        parameter: "Utilized Percentage",
-        decimal: {
-          total: "74.30",
-          belowThirtyDays: "66.30",
-          belowNintyDays: "74.00",
-          belowOneEightyDays: "73.21",
-          aboveOneEightyDays: "77.45",
-        },
-        crore: {
-          total: "66.30",
-          belowThirtyDays: "66.30",
-          belowNintyDays: "74.00",
-          belowOneEightyDays: "73.21",
-          aboveOneEightyDays: "77.45",
-        },
-      },
-    ],
-  };
-
-  //---------------------------------------------------------------------------------------
-  function FetchAccountLevel() {
-    DashboardService.getAgeing(
-      reqBody,
-      (res) => {
-        if (res.status === 200) {
-          // setRows(res.data);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-      },
-      (error) => {
-        setIsLoading(false);
-        console.error("Error->", error);
-      }
-    );
-  }
-
-  function per(total, value) {
-    total = parseFloat(total.replace(/,/g, ""));
-    value = parseFloat(value.replace(/,/g, ""));
-    var per = 0;
-    per = (value / total) * 100;
-    console.log("Ans->", per);
-    return per;
-  }
-  const utilizationPercentage = mockRes.ageingData[4].decimal;
-  const BarchartData = [
-    {
-      category: "Total",
-      value: utilizationPercentage.total, //20,
-      color: "#E41A1C",
-    },
-    {
-      category: `0-30 \n Days`,
-      value: utilizationPercentage.belowThirtyDays, //15,
-      color: "#4DAF4A",
-    },
-    {
-      category: "31-90 \n Days",
-      value: utilizationPercentage.belowNintyDays, //8,
-      color: "#377EB8",
-    },
-    {
-      category: "91-180 \n Days",
-      value: utilizationPercentage.belowOneEightyDays, //13,
-      color: "#FF7F00",
-    },
-    {
-      category: title,
-      value: utilizationPercentage.aboveOneEightyDays, //10,
-      color: "#984EA3",
-    },
-  ];
-  const AccountPercentage = mockRes.ageingData[0];
-  const AccountchartData = [
-    {
-      category: "Total",
-      value: per(AccountPercentage.total, AccountPercentage.total), //20,
-      color: "#E41A1C",
-    },
-    {
-      category: "0-30 Days",
-      value: per(AccountPercentage.total, AccountPercentage.belowThirtyDays), //15,
-      color: "#4DAF4A",
-    },
-    {
-      category: "31-90 Days",
-      value: per(AccountPercentage.total, AccountPercentage.belowNintyDays), //8,
-      color: "#377EB8",
-    },
-    {
-      category: "91-180 Days",
-      value: per(AccountPercentage.total, AccountPercentage.belowOneEightyDays), //13,
-      color: "#FF7F00",
-    },
-    {
-      category: title,
-      value: per(AccountPercentage.total, AccountPercentage.aboveOneEightyDays), //10,
-      color: "#984EA3",
-    },
-  ];
-  const AllocatedPercentage = mockRes.ageingData[1].decimal;
-  const AllocatedchartData = [
-    {
-      category: "Total",
-      value: per(AllocatedPercentage.total, AllocatedPercentage.total), //20,
-      color: "#E41A1C",
-    },
-    {
-      category: "0-30 Days",
-      value: per(
-        AllocatedPercentage.total,
-        AllocatedPercentage.belowThirtyDays
-      ), //15,
-      color: "#4DAF4A",
-    },
-    {
-      category: "31-90 Days",
-      value: per(AllocatedPercentage.total, AllocatedPercentage.belowNintyDays), //8,
-      color: "#377EB8",
-    },
-    {
-      category: "91-180 Days",
-      value: per(
-        AllocatedPercentage.total,
-        AllocatedPercentage.belowOneEightyDays
-      ), //13,
-      color: "#FF7F00",
-    },
-    {
-      category: title,
-      value: per(
-        AllocatedPercentage.total,
-        AllocatedPercentage.aboveOneEightyDays
-      ), //10,
-      color: "#984EA3",
-    },
-  ];
-  const [rows, setRows] = useState(mockRes.ageingData); //mockRes.zones//data
-
   return (
     <div>
       <div className="row">
-        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="p-1">
-            {/* <label className="float-start pageTitle">Ageing</label> */}
-            <div className="float-start dashboardLabels">
+            <label className="float-start pageTitle">Ageing</label>
+            <div className="float-end">
+              <label className="statusOn">Bank :</label>{" "}
+              <select name="bank" className="inputDate">
+                <option value="Kotak">Kotak</option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+              </select>
               {"  "}
-              <label className="statusOn">Zone : </label>{" "}
-              <select
-                name="zone"
-                className="inputDate"
-                onChange={(e) => {
-                  setZone(e.target.value);
-                }}
-              >
+              <label className="statusOn">Zone :</label>{" "}
+              <select name="zone" className="inputDate">
                 <option value="All">All</option>
                 <option value="East">East</option>
                 <option value="West">West</option>
@@ -422,51 +110,33 @@ const Ageing = () => {
                 <option value="Unmapped">Unmapped</option>
               </select>
               {"  "}
-              <label className="statusOn">RO : </label>{" "}
-              <select
-                name="ro"
-                className="inputDate"
-                onChange={(e) => {
-                  setRo(e.target.value);
-                }}
-              >
+              <label className="statusOn">RO :</label>{" "}
+              <select name="ro" className="inputDate">
                 <option value="All">All</option>
                 <option value=""></option>
                 <option value=""></option>
                 <option value=""></option>
               </select>
               {"  "}
-              <label className="statusOn">PIU : </label>{" "}
-              <select
-                name="piu"
-                className="inputDate"
-                onChange={(e) => {
-                  setPiu(e.target.value);
-                }}
-              >
+              <label className="statusOn">PIU :</label>{" "}
+              <select name="piu" className="inputDate">
                 <option value="All">All</option>
                 <option value=""></option>
                 <option value=""></option>
                 <option value=""></option>
               </select>
               {"  "}
-            </div>
-            <div className="float-end dashboardLabels">
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {
-                  setDecimal(false);
-                }}
+                onClick={() => {}}
               >
-                Crore
+                Core
               </button>{" "}
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {
-                  setDecimal(true);
-                }}
+                onClick={() => {}}
               >
                 Decimal
               </button>{" "}
@@ -479,34 +149,11 @@ const Ageing = () => {
         <div className="p-2">
           <DataTable
             columns={columns}
-            data={rows} //{data}
+            data={data}
             customClass="AgeingTable"
             showSearchBar={false}
           />{" "}
         </div>
-        {/* -------------------------------------------------------------------------- */}
-        <div className="row mb-5">
-          <div className="col-lg-4 col-md-4 mb-4 mt-4">
-            <div className="statusOn">Utilization %</div>
-
-            <BarChart
-              chartdata={BarchartData}
-              name="Ageing"
-              chartid="account"
-            />
-          </div>
-          <div className="col-lg-4 col-md-4 mb-4 mt-4">
-            <div classname="statusOn">No. of Account %</div>
-
-            <PieChart data={AccountchartData} chartid="account" />
-          </div>
-          <div className="col-lg-4 col-md-4 mb-4 mt-4">
-            <div classname="statusOn">Allocated Limit. %</div>
-
-            <PieChart data={AllocatedchartData} chartid="allocated" />
-          </div>
-        </div>
-        {/* ---------------------------------------------------------------------------------- */}
       </div>
     </div>
   );

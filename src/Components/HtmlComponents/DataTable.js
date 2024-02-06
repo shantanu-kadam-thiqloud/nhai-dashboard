@@ -4,15 +4,12 @@ import Switch from "@mui/material/Switch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import AddUser from "../User/AddUser";
 
 const DataTable = ({
   columns,
   data,
   customClass,
   detailpage,
-  editpage,
-  deletepage,
   showSearchBar,
 }) => {
   const {
@@ -37,16 +34,8 @@ const DataTable = ({
   const [switchStates, setSwitchStates] = useState({});
   const navigate = useNavigate();
   const handleEyeAction = (user) => {
-    //navigate(`/NHAI/UserDetails/${user.userId}`);
+    // navigate(`/NHAI/UserDetails/${user.userId}`);
     navigate(`/NHAI/${detailpage}/${user.id}`);
-  };
-  const handleEditAction = (user) => {
-    // navigate(`/NHAI/UserDetails/${user.userId}`);
-    navigate(`/NHAI/${editpage}/${user.id}`);
-  };
-  const handleTrashAction = (user) => {
-    // navigate(`/NHAI/UserDetails/${user.userId}`);
-    navigate(`/NHAI/${deletepage}/${user.id}`);
   };
 
   useEffect(() => {
@@ -75,7 +64,11 @@ const DataTable = ({
           placeholder="Search..."
         />
       )}
-      <table {...getTableProps()} className={`${customClass} tableBorder`}>
+      <table
+        {...getTableProps()}
+        className={customClass}
+        style={{ border: "1px solid black" }}
+      >
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -98,16 +91,15 @@ const DataTable = ({
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr className="tableBorder" {...row.getRowProps()}>
+              <tr
+                {...row.getRowProps()}
+                style={{ borderBottom: "1px solid black" }}
+              >
                 {row.cells.map((cell) => {
                   if (cell.column.Header === "Is Active") {
                     const rowId = row.original.id;
                     return (
-                      <td
-                        className="text-center"
-                        {...cell.getCellProps()}
-                        title={cell.value}
-                      >
+                      <td {...cell.getCellProps()}>
                         <Switch
                           id={`flexSwitchCheckChecked-${rowId}`}
                           checked={switchStates[rowId] || false}
@@ -118,35 +110,27 @@ const DataTable = ({
                     );
                   } else if (cell.column.Header === "Action") {
                     return (
-                      <td
-                        className="text-center"
-                        {...cell.getCellProps()}
-                        title={cell.value}
-                      >
+                      <td {...cell.getCellProps()}>
                         {/* Add icons for eye, edit, and delete actions */}
-
+                        {/* <FontAwesomeIcon icon={faEye} onClick={() => handleEyeAction(cell.row.original)} style={{ cursor: 'pointer', marginRight: '8px' }} /> */}
                         <FontAwesomeIcon
-                          className="tableIcon"
                           icon={faEye}
                           onClick={() => handleEyeAction(cell.row.original)}
+                          style={{ cursor: "pointer", marginRight: "8px" }}
                         />
                         <FontAwesomeIcon
-                          className="tableIcon"
                           icon={faEdit}
-                          onClick={() => handleEditAction(cell.row.original)}
+                          style={{ cursor: "pointer", marginRight: "8px" }}
                         />
                         <FontAwesomeIcon
-                          className="tablePointer"
                           icon={faTrash}
-                          onClick={() => handleTrashAction(cell.row.original)}
+                          style={{ cursor: "pointer" }}
                         />
                       </td>
                     );
                   } else {
                     return (
-                      <td {...cell.getCellProps()} title={cell.value}>
-                        {cell.render("Cell")}
-                      </td>
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                     );
                   }
                 })}

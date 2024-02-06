@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("Snapshot");
   const getActiveTab = (x) => {
     setActiveTab(x);
+    // console.log("tyytyy", activeTab);
   };
   return (
     <>
@@ -28,10 +29,7 @@ const Dashboard = () => {
             <div className="col">
               <div className="p-1">
                 {/* <TabsComponent /> */}
-                <TabsComponent
-                  ActiveTab={getActiveTab}
-                  active={{ name: activeTab }}
-                />
+                <TabsComponent ActiveTab={getActiveTab} />
               </div>
             </div>
           </div>
@@ -42,7 +40,7 @@ const Dashboard = () => {
           {activeTab === "Financial" && <Financial />}
           {activeTab === "Financial(D)" && <FinanacialD />}
           {activeTab === "Bank" && <Bank />}
-          {activeTab === "Zone" && <Zone setTab={setActiveTab} />}
+          {activeTab === "Zone" && <Zone />}
           {activeTab === "RO" && <RO />}
           {activeTab === "PIU" && <PIU />}
           {activeTab === "Account Level" && <AccountLevel />}
