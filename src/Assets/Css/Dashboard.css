@@ -1,103 +1,106 @@
-.tcolor{
-    color:#003366;
+.tcolor {
+  color: #003366;
 }
-.bgBox{
+.bgBox {
   overflow: hidden !important;
   position: relative !important;
   height: auto;
-  background-color:#dee2e661;
+  background-color: #dee2e661;
 }
-.bg{
+.bg {
   margin-top: 15%;
   width: 100%;
 }
 
-.bgCard{
-    position: relative;
+.bgCard {
+  position: relative;
 }
-.inputDate{
-    width: 110px;
-    height: 27px;
-    border-radius: 3px;
-    border: 1px solid #EE1C25;
-    padding: 5px;
+.inputDate {
+  vertical-align: middle;
+  width: 110px;
+  height: 27px;
+  border-radius: 3px;
+  border: 1px solid #ee1c25;
+  padding: 5px;
 }
-hr{
-    margin: 5px !important;
+hr {
+  margin: 5px !important;
 }
 /* Scroller tab css */
 .tabs-container {
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-  }
-  
-  .tabs {
-    scroll-behavior: smooth;
-    padding: 10px;   
-    display: flex;
-    overflow-x: hidden;
-  }  
-  .tab {
-    min-width: 100px;
-    padding: 5px 20px;
-    border: 1px solid #EE1C25;
-    background-color: transparent;
-    text-align: center;
-    white-space: nowrap;
-    cursor: pointer;
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-right: 10px;
-    font-size: 14px !important;
-    color: #EE1C25 !important;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
-  
-  .tab:last-child {
-    margin-right: 0;
-  }
-  
-  .tab.active {
-    background-color: #EE1C25 !important;
-    color: white !important;
-    font-weight: bold;
-  }
-  .scrollbtn {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-  }
-  button.scrollbtn {
-    background: none;
-    border: unset;
+
+.tabs {
+  scroll-behavior: smooth;
+  padding: 10px;
+  display: flex;
+  overflow-x: hidden;
 }
-.dashbutton{
+.tab {
+  min-width: 100px;
+  padding: 5px 20px;
+  border: 1px solid #ee1c25;
+  background-color: transparent;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-right: 10px;
+  font-size: 14px !important;
+  color: #ee1c25 !important;
+}
+
+.tab:last-child {
+  margin-right: 0;
+}
+
+.tab.active {
+  background-color: #ee1c25 !important;
+  color: white !important;
+  font-weight: bold;
+}
+.scrollbtn {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+button.scrollbtn {
+  background: none;
+  border: unset;
+}
+.dashbutton {
   padding: 2px !important;
   min-width: 70px;
   border-radius: 3px !important;
   font-size: 14px !important;
- }
- .subTitle {
-    text-align: left;
-    margin-left: 15px;
-    font-size: 16x;
-    font-weight: 500;
+  margin-left: 5px;
 }
-.bankDetail{
-    min-width: 200px !important;
-    padding-bottom: 20px;
-}
-
-.fieldLabel:disabled{
-  background-color: #DFE7EB !important;
-}
-.statusOn{
+.subTitle {
+  text-align: left;
+  margin-left: 15px;
   font-size: 16x;
   font-weight: 500;
 }
+.bankDetail {
+  min-width: 200px !important;
+  padding-bottom: 20px;
+}
 
-.snapshotForm input{
+.fieldLabel:disabled {
+  background-color: #dfe7eb !important;
+}
+.statusOn {
+  font-size: 16x;
+  font-weight: 500;
+  /* vertical-align: bottom; */
+}
+
+.snapshotForm input {
   height: 48px;
   top: 34px !important;
   border-radius: 2px;
@@ -106,21 +109,133 @@ hr{
   font-size: 14px !important;
 }
 
-.selectBoxDashbord{
+.selectBoxDashbord {
   width: 110px;
   height: 27px;
-    border-radius: 3px;
-    border: 1px solid #EE1C25;
-    padding: 5px;
-    vertical-align: middle;
+  border-radius: 3px;
+  border: 1px solid #ee1c25;
+  padding: 5px;
+  vertical-align: middle;
+  margin-left: 2px;
 }
 
-.dashboardLabels label{
-  margin-left: 5px;
+.dashboardLabels label {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+.dashboardLabels {
+  margin-bottom: 8px;
+  margin-top: 5px;
 }
 
 /* Chart Css */
-#balance > div > svg > g > g:nth-child(2) > g:nth-child(2) > g > g:nth-child(3) {
+#balance
+  > div
+  > svg
+  > g
+  > g:nth-child(2)
+  > g:nth-child(2)
+  > g
+  > g:nth-child(3) {
   display: none;
 }
 
+/* responsive css */
+@media screen and (max-width: 1200px) and (min-width: 1024px) {
+  .kotakDiv {
+    width: 70% !important;
+  }
+  .nhaiDiv {
+    width: 30% !important;
+  }
+}
+@media (max-width: 1024px) {
+  .sideBar {
+    display: block !important;
+  }
+  .kotakDiv {
+    width: 70% !important;
+  }
+  .nhaiDiv {
+    width: 30% !important;
+  }
+}
+@media (max-width: 768px) {
+  .wrapper {
+    margin-left: 0; /* Remove left margin for smaller screens */
+    padding: 8px; /* Adjust padding for smaller screens */
+  }
+  .headerLogo {
+    margin-left: 0px;
+  }
+  .lastLogin {
+    display: none;
+  }
+  .NHAIText {
+    margin: 15px 10px;
+  }
+  .mobile-menu-toggle {
+    margin-bottom: 20px;
+  }
+  .menu-icon {
+    float: left;
+    background-color: #003366;
+  }
+  nav#sidebarMenu {
+    height: auto !important;
+  }
+  .mobile-menu-toggle {
+    display: block;
+  }
+  .NHAILogo {
+    margin-left: 0px;
+  }
+  .sideBar {
+    width: 100% !important;
+  }
+  .dataContainer {
+    width: 100% !important;
+  }
+  .kotakDiv {
+    width: 70% !important;
+  }
+  .nhaiDiv {
+    width: 30% !important;
+  }
+  nav#sidebarMenu {
+    height: auto !important;
+  }
+}
+@media screen and (max-width: 600px) and (min-width: 480px) {
+  .kotakDiv {
+    width: 50% !important;
+  }
+  .nhaiDiv {
+    width: 50% !important;
+  }
+  nav#sidebarMenu {
+    height: auto !important;
+  }
+}
+@media (max-width: 480px) {
+  .kotakDiv {
+    width: 50% !important;
+  }
+  .nhaiDiv {
+    width: 50% !important;
+  }
+  nav#sidebarMenu {
+    height: auto !important;
+  }
+}
+
+/* .tableDiv {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+} */
+
+/* Optional: Add a max-width to limit the width of the tableDiv */
+/* .tableDiv {
+  max-width: 100%;
+} */

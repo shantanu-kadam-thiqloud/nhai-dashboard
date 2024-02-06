@@ -1,10 +1,12 @@
-import React from 'react';
+import React from "react";
 
 function Footer() {
   return (
-    <footer className="text-center footer">
-      <p>Kotak Bank &copy; {new Date().getFullYear()}</p>
-    </footer>
+    <div className="footerbar">
+      <footer className="text-center footer">
+        <p>Kotak Bank &copy; {new Date().getFullYear()}</p>
+      </footer>
+    </div>
   );
 }
 
