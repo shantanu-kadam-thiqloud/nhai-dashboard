@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import forge from "node-forge";
 import Spinner from "../HtmlComponents/Spinner";
+import { LoginService } from "../../Service/LoginService";
+import { v4 as uuid } from "uuid";
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -17,9 +19,9 @@ const Login = () => {
     username: "",
     password: "",
   };
-
+  const [userDetails, setUserDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState("");
 
   React.useEffect(() => {
@@ -36,7 +38,57 @@ const Login = () => {
     fetchPublicKey();
   }, []);
 
+  function Login(values) {
+    LoginService.userLogin(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
+        },
+        email: values.username, //"ro_telang@nhai.com",
+      },
+      (res) => {
+        if (res.status == 200) {
+          toast.success("Login successful!", {
+            //"Request raised successful!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          var userData = res.data.responseObject;
+          setUserDetails(userData);
+          console.log(
+            "User Data = > ",
+            userData.userName,
+            userData.userId,
+            userData.profileId
+          );
+          setIsLoading(false);
+          navigate("/NHAI/Dashboard");
+        } else if (res.status == 404) {
+          toast.error("404 Not found !", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          toast.error("Request failed 500. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+
   const handleSubmit = async (values) => {
+    Login(values);
     // if (!publicKey) {
     //   console.error("Public key not available");
     //   return;
@@ -81,39 +133,39 @@ const Login = () => {
     //     autoClose: 5000,
     //   });
     // }
-    if (values.username === "Siddhesh" && values.password === "admin@123") {
-      setIsLoading(true);
+    //---------------------------------------------------------------------------
+    // if (values.username === "Siddhesh" && values.password === "admin@123") {
+    //   setIsLoading(true);
 
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/NHAI/Dashboard");
-      }, 1000);
-    } else if (
-      values.username === "Shantanu" &&
-      values.password === "admin@123"
-    ) {
-      setIsLoading(true);
+    //   toast.success("Login successful!", {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //   });
+    //   setTimeout(() => {
+    //     setIsLoading(false);
+    //     navigate("/NHAI/Dashboard");
+    //   }, 1000);
+    // } else if (
+    //   values.username === "Shantanu" &&
+    //   values.password === "admin@123"
+    // ) {
+    //   setIsLoading(true);
 
-      toast.success("Login successful!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate("/NHAI/Dashboard");
-      }, 1000);
-    } else {
-      toast.error("Login failed. Please try again.", {
-        position: "top-right",
-        autoClose: 5000,
-      });
-    }
+    //   toast.success("Login successful!", {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //   });
+    //   setTimeout(() => {
+    //     setIsLoading(false);
+    //     navigate("/NHAI/Dashboard");
+    //   }, 1000);
+    // } else {
+    //   toast.error("Login failed. Please try again.", {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //   });
+    // }
   };
-  const navigate = useNavigate();
 
   return (
     <div className="container loginContainer">
@@ -128,7 +180,7 @@ const Login = () => {
             validationSchema={LoginSchema}
             onSubmit={handleSubmit}
           >
-            {() => (
+            {(values) => (
               <Form className="d-flex flex-column justify-content-center loginForm">
                 <h2 className="mb-3 pageTitle">Login</h2>
                 <hr class="hr mb-3" />

@@ -10,12 +10,12 @@ import Spinner from "../HtmlComponents/Spinner";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { ProfileService } from "../../Service/ProfileService";
 import { toast } from "react-toastify";
 import sideData from "../Checker/sideBarData";
 import { GroupService } from "../../Service/GroupService";
-
+import { v4 as uuid } from "uuid";
 const AddProfile = () => {
   const [isAllCheck, setAllCheck] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -265,6 +265,22 @@ const AddProfile = () => {
   // ---------------------------------------------------------------------------------
   const [menuData, setMenuData] = useState(sideData[0].data);
 
+  // const handleCheckAll = () => {
+  //   const updatedMenuData = menuData.map((menu) => ({
+  //     ...menu,
+  //     subMenu: menu.subMenu.map((subMenu) => ({
+  //       ...subMenu,
+  //       check: true,
+  //       action: subMenu.action.map((action) => ({
+  //         ...action,
+  //         check: true,
+  //       })),
+  //     })),
+  //   }));
+
+  //   setMenuData(updatedMenuData);
+  // };
+
   const handleCheckAll = () => {
     const updatedMenuData = menuData.map((menu) => ({
       ...menu,
@@ -273,6 +289,7 @@ const AddProfile = () => {
         check: true,
         action: subMenu.action.map((action) => ({
           ...action,
+          oldCheck: action.check, // Store old check value
           check: true,
         })),
       })),
@@ -280,6 +297,22 @@ const AddProfile = () => {
 
     setMenuData(updatedMenuData);
   };
+
+  // const handleUnCheckAll = () => {
+  //   const updatedMenuData = menuData.map((menu) => ({
+  //     ...menu,
+  //     subMenu: menu.subMenu.map((subMenu) => ({
+  //       ...subMenu,
+  //       check: false,
+  //       action: subMenu.action.map((action) => ({
+  //         ...action,
+  //         check: false,
+  //       })),
+  //     })),
+  //   }));
+
+  //   setMenuData(updatedMenuData);
+  // };
 
   const handleUnCheckAll = () => {
     const updatedMenuData = menuData.map((menu) => ({
@@ -289,6 +322,7 @@ const AddProfile = () => {
         check: false,
         action: subMenu.action.map((action) => ({
           ...action,
+          oldCheck: action.check, // Store old check value
           check: false,
         })),
       })),
@@ -296,6 +330,40 @@ const AddProfile = () => {
 
     setMenuData(updatedMenuData);
   };
+
+  // const handleCheckboxChange = (menuIndex, subMenuIndex, actionIndex) => {
+  //   const updatedMenuData = [...menuData];
+
+  //   if (
+  //     updatedMenuData[menuIndex] &&
+  //     updatedMenuData[menuIndex].subMenu &&
+  //     subMenuIndex !== undefined &&
+  //     updatedMenuData[menuIndex].subMenu[subMenuIndex]
+  //   ) {
+  //     // Checkbox in submenu item clicked
+  //     updatedMenuData[menuIndex].subMenu[subMenuIndex].check =
+  //       !updatedMenuData[menuIndex].subMenu[subMenuIndex].check;
+  //   }
+
+  //   if (
+  //     actionIndex !== undefined &&
+  //     updatedMenuData[menuIndex] &&
+  //     updatedMenuData[menuIndex].subMenu &&
+  //     subMenuIndex !== undefined &&
+  //     updatedMenuData[menuIndex].subMenu[subMenuIndex] &&
+  //     updatedMenuData[menuIndex].subMenu[subMenuIndex].action &&
+  //     updatedMenuData[menuIndex].subMenu[subMenuIndex].action[actionIndex]
+  //   ) {
+  //     // Checkbox in action item clicked
+  //     updatedMenuData[menuIndex].subMenu[subMenuIndex].action[
+  //       actionIndex
+  //     ].check =
+  //       !updatedMenuData[menuIndex].subMenu[subMenuIndex].action[actionIndex]
+  //         .check;
+  //   }
+
+  //   setMenuData(updatedMenuData);
+  // };
 
   const handleCheckboxChange = (menuIndex, subMenuIndex, actionIndex) => {
     const updatedMenuData = [...menuData];
@@ -307,8 +375,10 @@ const AddProfile = () => {
       updatedMenuData[menuIndex].subMenu[subMenuIndex]
     ) {
       // Checkbox in submenu item clicked
-      updatedMenuData[menuIndex].subMenu[subMenuIndex].check =
-        !updatedMenuData[menuIndex].subMenu[subMenuIndex].check;
+      const currentSubMenu = updatedMenuData[menuIndex].subMenu[subMenuIndex];
+      const oldCheckSubMenu = currentSubMenu.check;
+      currentSubMenu.oldCheck = oldCheckSubMenu; // Store old check value
+      currentSubMenu.check = !oldCheckSubMenu;
     }
 
     if (
@@ -321,15 +391,16 @@ const AddProfile = () => {
       updatedMenuData[menuIndex].subMenu[subMenuIndex].action[actionIndex]
     ) {
       // Checkbox in action item clicked
-      updatedMenuData[menuIndex].subMenu[subMenuIndex].action[
-        actionIndex
-      ].check =
-        !updatedMenuData[menuIndex].subMenu[subMenuIndex].action[actionIndex]
-          .check;
+      const currentAction =
+        updatedMenuData[menuIndex].subMenu[subMenuIndex].action[actionIndex];
+      const oldCheckAction = currentAction.check;
+      currentAction.oldCheck = oldCheckAction; // Store old check value
+      currentAction.check = !oldCheckAction;
     }
 
     setMenuData(updatedMenuData);
   };
+
   //-------------Handle Submit---------------------------------------------
   const handleSubmit = (values, { resetForm, setSubmitting }, actions) => {
     console.log(values);
@@ -347,7 +418,7 @@ const AddProfile = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
       },
@@ -380,7 +451,7 @@ const AddProfile = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
         requsterUserId: "35607",
@@ -435,9 +506,9 @@ const AddProfile = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
-        id: 47, //profileId,
+        id: profileId, // 47, //
         userName: "nhai",
       },
       (res) => {
@@ -448,9 +519,9 @@ const AddProfile = () => {
           //-------------------------------------
           setProfileName(profile.profileName);
           setProfileDescription(profile.profileDescription);
-          setGroupId(profile.group);
+          setGroupId(profile.groupId);
           setIsActive(profile.isActive);
-          //  setGroupName(profile.groupName);
+          setGroupName(profile.groupName);
           //-----------------------------------
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -473,7 +544,7 @@ const AddProfile = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requsterUserId: "35607",
         id: Number(userId),

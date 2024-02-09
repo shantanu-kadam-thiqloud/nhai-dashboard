@@ -6,19 +6,21 @@ import PieChart from "../Charts/PieChart";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
-
+import { v4 as uuid } from "uuid";
 const Bank = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const [dbdata, setDbdata] = useState([]);
-  const [bankTable, setBankTable] = useState([]);
+  // const [dbdata, setDbdata] = useState([]);
+  //const [bankTable, setBankTable] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [Decimal, setDecimal] = useState(true);
+
   const data = {
     decimal: {
       nodalAccountBalance: "10,360.07",
@@ -45,66 +47,165 @@ const Bank = () => {
   ];
 
   useEffect(() => {
+    // setIsLoading(true);
+    // FetchBank();
+    //-----------------------------------------------------------------
     // Initialize the data to "Core" when the component mounts
-    fetchCoreData("crore");
-  }, []);
+    //fetchCoreData("crore");
+  }, [asOnDate]);
 
-  const fetchCoreData = (type) => {
-    setDbdata(data.decimal);
-    // const apiUrl = "http://localhost:3007/api/secure/bank";
-    // const uuid = localStorage.getItem("UUID");
-    // const headers = {
-    //   XUuid: uuid,
-    // };
-    // // Make the Axios GET request with the headers
-    // axios
-    //   .get(apiUrl, { headers })
-    //   .then((response) => {
-    //     if (type === "crore") {
-    //       setDbdata(response.data.data.crore);
-    //     } else {
-    //       setDbdata(response.data.data.decimal);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
-  };
+  // const fetchCoreData = (type) => {
+  // setDbdata(data.decimal);
+  // const apiUrl = "http://localhost:3007/api/secure/bank";
+  // const uuid = localStorage.getItem("UUID");
+  // const headers = {
+  //   XUuid: uuid,
+  // };
+  // // Make the Axios GET request with the headers
+  // axios
+  //   .get(apiUrl, { headers })
+  //   .then((response) => {
+  //     if (type === "crore") {
+  //       setDbdata(response.data.data.crore);
+  //     } else {
+  //       setDbdata(response.data.data.decimal);
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error:", error);
+  //   });
+  //};
 
-  useEffect(() => {
-    if (dbdata && Object.keys(dbdata).length > 0) {
-      const bankData = Object.entries(dbdata).map(([key, value]) => ({
-        parameters: key,
-        total: value,
-        kotak: value,
-      }));
-      setBankTable(bankData);
-      console.log("bankData", bankData);
-    }
-  }, [dbdata]);
+  // useEffect(() => {
+  //   if (dbdata && Object.keys(dbdata).length > 0) {
+  //     const bankData = Object.entries(dbdata).map(([key, value]) => ({
+  //       parameters: key,
+  //       total: value,
+  //       kotak: value,
+  //     }));
+  //     //  setBankTable(bankData);
+  //     console.log("bankData", bankData);
+  //   }
+  // }, [dbdata]);
+
   const columns = [
     {
       Header: "Parameters",
-      accessor: "parameters",
+      accessor: "parameter",
     },
     {
       Header: "Total",
-      accessor: "total",
+      accessor: Decimal ? "decimal.total" : "crore.total",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
       Header: "Kotak",
-      accessor: "kotak",
+      accessor: Decimal ? "decimal.kotak" : "crore.kotak",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
   ];
 
+  const bankTable = {
+    responseMetaData: {
+      status: "200",
+      message: "Success",
+    },
+    bankItem: [
+      {
+        parameter: "Nodal Account Balance",
+        decimal: {
+          total: "0.00",
+          kotak: "0.00",
+        },
+        crore: {
+          total: "0.00",
+          kotak: "0.00",
+        },
+      },
+      {
+        parameter: "No. of Subsidiary Accounts",
+        decimal: {
+          total: "71",
+          kotak: "71",
+        },
+        crore: {
+          total: "71",
+          kotak: "71",
+        },
+      },
+      {
+        parameter: "Sanction limit",
+        decimal: {
+          total: "82,83,05,96,948.49",
+          kotak: "82,83,05,96,948.49",
+        },
+        crore: {
+          total: "8,283.06",
+          kotak: "8,283.06",
+        },
+      },
+      {
+        parameter: "Utilized Limit",
+        decimal: {
+          total: "57,86,30,56,581.49",
+          kotak: "57,86,30,56,581.49",
+        },
+        crore: {
+          total: "5,786.31",
+          kotak: "5,786.31",
+        },
+      },
+      {
+        parameter: "Un-Utilized Limit",
+        decimal: {
+          total: "24,96,75,40,367.00",
+          kotak: "24,96,75,40,367.00",
+        },
+        crore: {
+          total: "2,496.75",
+          kotak: "2,496.75",
+        },
+      },
+      {
+        parameter: "Utilized Percentage",
+        decimal: {
+          total: "69.86",
+          kotak: "69.86",
+        },
+        crore: {
+          total: "69.86",
+          kotak: "69.86",
+        },
+      },
+      {
+        parameter: "QTD Accrued Interest",
+        decimal: {
+          total: "",
+          kotak: "",
+        },
+        crore: {
+          total: "",
+          kotak: "",
+        },
+      },
+    ],
+  };
+
   //---------------------------------------------------------------------------------------
   function FetchBank() {
     DashboardService.getBankAndEvents(
-      {},
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        statusAsOn: ConvertFormat(asOnDate), //"21-05-2020",
+        bank: "Kotak",
+      },
       (res) => {
         if (res.status === 200) {
+          console.log(res.data.bankItem);
           // setRows(res.data);
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -159,14 +260,20 @@ const Bank = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => fetchCoreData("crore")}
+                onClick={() => {
+                  //fetchCoreData("crore")
+                  setDecimal(false);
+                }}
               >
                 Core
               </button>{" "}
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => fetchCoreData("decimal")}
+                onClick={() => {
+                  //fetchCoreData("decimal")
+                  setDecimal(true);
+                }}
               >
                 Decimal
               </button>{" "}
@@ -180,7 +287,7 @@ const Bank = () => {
           <div className="p-2">
             <DataTable
               columns={columns}
-              data={bankTable}
+              data={bankTable.bankItem}
               customClass="BankTable"
               showSearchBar={false}
             />{" "}

@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 
 const UserActiveInactiveReport = () => {
   const [fromDate, setFromDate] = useState(

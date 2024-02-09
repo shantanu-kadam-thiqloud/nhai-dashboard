@@ -7,6 +7,8 @@ import TablesDataChecker from "../Checker/fieldData";
 import sideBarDataChecker from "../Checker/sideBarData";
 import { UserService } from "../../Service/UserService";
 import Spinner from "../HtmlComponents/Spinner";
+import { v4 as uuid } from "uuid";
+import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
 const UserList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -21,21 +23,22 @@ const UserList = () => {
   );
   const sidebarMockData = sidejsonData.data;
 
-  const isAddUser =
-    (sidebarMockData || []).find((x) => {
-      if (x.menuName === "Admin") {
-        return (x.subMenu || []).find((s) => {
-          if (s.name === "User") {
-            return (s.action || []).find((a) => {
-              if (a.actionName === "Add") {
-                //console.log("Is add user ->", a.check);
-                return a.check;
-              }
-            });
-          }
-        });
-      }
-    }) !== undefined;
+  const isAddUser = getCheckValueByName(sidebarMockData, "User", "Add");
+  // (sidebarMockData || []).find((x) => {
+  //   if (x.menuName === "Admin") {
+  //     return (x.subMenu || []).find((s) => {
+  //       if (s.name === "User") {
+  //         return (s.action || []).find((a) => {
+  //           if (a.actionName === "Add") {
+  //             //console.log("Is add user ->", a.check);
+  //             return a.check;
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
+  // }) !== undefined;
+
   useEffect(() => {
     setIs(isAddUser);
   }, []);
@@ -75,7 +78,7 @@ const UserList = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
       },

@@ -5,9 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
-import { DateFormatFunction } from "../HtmlComponents/DateFunction";
+import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
 import { ProfileService } from "../../Service/ProfileService";
-
+import { v4 as uuid } from "uuid";
 const AddUser = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { userId } = useParams();
@@ -114,7 +114,7 @@ const AddUser = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567", //uuid
+          correlationId: uuid(), //uuid
         },
         requsterUserId: "35605",
         userName: values.userId, //"Shantanu",
@@ -172,7 +172,7 @@ const AddUser = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userId: userId,
         userName: "nhai",
@@ -216,7 +216,7 @@ const AddUser = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567", //uuid
+          correlationId: uuid(), //uuid
         },
         requsterUserId: "201",
         userName: values.userId, //"Shantanu",
@@ -231,10 +231,10 @@ const AddUser = () => {
         workNo: "", //"W123",
         isActive: Boolean(values.isActive),
         updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        updatedBy: "Admin User",
+        updatedBy: "Admin",
         requestType: "Update",
         status: "Initiated",
-        // profileId: Number(values.role),
+        profileId: Number(values.role),
       },
       (res) => {
         if (res.status == 200) {
@@ -274,7 +274,7 @@ const AddUser = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
       },

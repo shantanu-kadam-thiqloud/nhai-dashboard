@@ -5,20 +5,22 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
+
 const PIU = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const [bankD, setBank] = useState("");
-  const [roD, setRo] = useState("");
-  const [zoneD, setZone] = useState("");
+  const [bankD, setBank] = useState("All");
+  const [roD, setRo] = useState("All");
+  const [zoneD, setZone] = useState("All");
   const [Decimal, setDecimal] = useState(true);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [rows, setRows] = useState([]);
   const columns = [
     {
       Header: "PIU",
@@ -59,15 +61,18 @@ const PIU = () => {
     },
     {
       Header: "Un-Utilized Limit",
-      accessor: Decimal ? "decimal.unUtilizedLimit" : "crore.unUtilizedLimit",
+      accessor: Decimal ? "decimal.unutilizedLimit" : "crore.unutilizedLimit",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
       Header: "Utilized Percentage",
-      accessor: Decimal ? "decimal.utilizedPercent" : "crore.utilizedPercent",
+      accessor: Decimal
+        ? "decimal.utilizationPercentage"
+        : "crore.utilizationPercentage",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
   ];
+
   const data = [
     {
       id: 1,
@@ -127,22 +132,9 @@ const PIU = () => {
   ];
 
   useEffect(() => {
-    console.log("reqBody-->", reqBody);
-  }, [asOnDate]);
-
-  //Mock----------------------------------------------------------------------
-
-  const reqBody = {
-    requestMetaData: {
-      applicationId: "nhai-dashboard",
-      correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
-    },
-    userName: "nhai",
-    statusAsOn: ConvertFormat(asOnDate), //"28-09-2023",
-    bank: bankD, //"All", //Kotak,
-    ro: roD, //"All", // Bhubaneswar
-    zone: zoneD, //"All", //East,West,North South
-  };
+    setIsLoading(true);
+    FetchPIU();
+  }, [asOnDate, zoneD, roD]);
 
   const mockRes = {
     responseMetaData: {
@@ -193,11 +185,22 @@ const PIU = () => {
 
   //---------------------------------------------------------------------------------------
   function FetchPIU() {
+    debugger;
     DashboardService.getPIU(
-      {},
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
+        ro: roD, //"All",
+        bank: bankD, //"All",
+        zone: zoneD, //"North",
+      },
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data);
+          setRows(res.data.regionWiseData);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -214,7 +217,6 @@ const PIU = () => {
     );
   }
 
-  const [rows, setRows] = useState(mockRes.regionWiseData);
   return (
     <div>
       <div className="row">

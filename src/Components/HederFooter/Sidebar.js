@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../Assets/Css/Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,13 +11,18 @@ import {
   faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 import sideBarDataChecker from "../Checker/sideBarData";
+import { ProfileService } from "../../Service/ProfileService";
+import { v4 as uuid } from "uuid";
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState("Home"); // Initialize with the default active item
   const [isToggleA, setToggleA] = useState(false);
   const [isToggleP, setToggleP] = useState(false);
   const [isToggleR, setToggleR] = useState(false);
+  const [mappingData, setMappingData] = useState([]);
   // Create a state object to hold the dynamic toggle states
   const [toggleStates, setToggleStates] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const simpleCss = "alink list-group-item list-group-item-action py-2 ripple";
   const activeCss =
     "alink list-group-item list-group-item-action py-2 ripple active";
@@ -42,6 +47,7 @@ const Sidebar = () => {
 
   // Call the initialization function when the component mounts
   React.useEffect(() => {
+    // fetchProfileById();
     initializeToggleStates();
   }, []);
 
@@ -52,6 +58,40 @@ const Sidebar = () => {
     }));
   };
 
+  //-----------Get Profile----------------------------------------------
+  function fetchProfileById() {
+    var profile = {};
+    //  var profileId = parseInt(userId, 10);
+    ProfileService.getProfileById(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        id: "", //profileId, //47,
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status == 200) {
+          profile = res.data;
+          console.log("Profile ->", profile);
+          setMappingData(res.data.mapping);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          prompt("500 Internal Server Error...!");
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      }
+    );
+    console.log("profile->", profile);
+    return profile;
+  }
+
   return (
     <nav
       id="sidebarMenu"
@@ -59,7 +99,7 @@ const Sidebar = () => {
     >
       <div className="position-sticky" key="0">
         <div className="list-group list-group-flush" key="0">
-          {(data || []).map((x, index) => {
+          {(data || data).map((x, index) => {
             return (
               <>
                 <Link

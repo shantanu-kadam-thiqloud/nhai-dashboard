@@ -6,9 +6,10 @@ import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
+
 const LimitLedger = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
@@ -19,13 +20,13 @@ const LimitLedger = () => {
     "2023-04-01" // new Date().toISOString().split("T")[0]
   );
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
-
-  const [bankD, setBank] = useState("");
-  const [roD, setRo] = useState("");
-  const [zoneD, setZone] = useState("");
-  const [piuD, setPiu] = useState("");
+  const [rows, setRows] = useState([]);
+  const [bankD, setBank] = useState("All");
+  const [roD, setRo] = useState("All");
+  const [zoneD, setZone] = useState("All");
+  const [piuD, setPiu] = useState("All");
   const [accNo, setAccNo] = useState("");
-  const [typeTransaction, setTypeTransaction] = useState("");
+  const [typeTransaction, setTypeTransaction] = useState(0);
   const columns = [
     {
       Header: "Bank",
@@ -171,6 +172,8 @@ const LimitLedger = () => {
   ];
 
   useEffect(() => {
+    //setIsLoading(true);
+    FetchLimitLedger();
     console.log("reqBody-->", reqBody);
   }, [fromDate, toDate]);
 
@@ -181,15 +184,19 @@ const LimitLedger = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "nhai",
+    userName: "NHAI",
     bank: bankD, //"All", //Kotak,
     ro: roD, //"All", // Bhubaneswar
     zone: zoneD, //"All", //East,West,North South
     piu: piuD,
+
     accountNumber: accNo,
-    fromDate: ConvertFormat(fromDate), //"01-04-2017",
-    toData: ConvertFormat(toDate), //"01-09-2023",
+
+    fromDate: "21-05-2020", //ConvertFormat(fromDate), //"01-04-2017",
+    toData: "21-05-2023", //ConvertFormat(toDate), //"01-09-2023",
     transactionType: typeTransaction, //"All",
+    dateFilter: 0,
+    isActive: "All",
   };
 
   const mockRes = {
@@ -231,11 +238,12 @@ const LimitLedger = () => {
     ],
   };
   //---------------------------------------------------------------------------------------
-  function FetchEvents() {
+  function FetchLimitLedger() {
     DashboardService.getLimitledger(
-      {},
+      reqBody,
       (res) => {
         if (res.status === 200) {
+          debugger;
           // setRows(res.data);
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -252,7 +260,7 @@ const LimitLedger = () => {
       }
     );
   }
-  const [rows, setRows] = useState(mockRes.limitLedgerDetails);
+
   return (
     <div>
       <div className="row p-1">
@@ -390,7 +398,8 @@ const LimitLedger = () => {
               }}
             >
               <option value="All">All</option>
-              <option value="Kotak">Kotak</option>
+              <option value="All Except OD/SD">All Except OD/SD</option>
+              <option value="OD/SD">OD/SD</option>
             </select>
             {"  "}
           </div>

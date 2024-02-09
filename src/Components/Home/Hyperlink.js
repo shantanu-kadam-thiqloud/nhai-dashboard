@@ -9,12 +9,12 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 const Hyperlink = ({ isOpen, setModal, row }) => {
   const customStyles = {
     content: {
-      width: "90%",
-      height: "90%",
-      margin: "auto",
+      width: "90%", // Set desired width
+      height: "90%", // Set desired height
+      margin: "auto", // Center the modal horizontally
       //   borderRadius: "8px",
       //   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-      backgroundColor: "#325b84",
+      backgroundColor: "#325b84", //"#003366",
     },
   };
 

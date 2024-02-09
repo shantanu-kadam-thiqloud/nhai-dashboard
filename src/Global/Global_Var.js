@@ -1,6 +1,7 @@
 export const Global_var = {
   BASEURL: "http://172.16.16.99:8091", //Amol local with VPN
-  BASEURL1: "http://172.16.16.99:8085",
+  BASEURL1: "http://172.16.16.99:8085", //Ayush
+  BASEURL2: "http://172.16.16.99:7091", //Sumit
   //--------Login----------------------------------------
   URL_LOGIN: "/usermanagement/login/v1",
   //--------Users----------------------------------
@@ -45,10 +46,19 @@ export const Global_var = {
   //--------Dashboard API----------------------------------------------------------------------------------------
   URL_BANK_AND_EVENTS: "/dashboard/events/v1",
   URL_SNAPSHOT: "/dashboard/snapshort/v1",
+  URL_FINANCIAL: "/dashboard/financial/v1",
   URL_VELOCITY: "/dashboard/velocity/v1",
   URL_AGEING: "/dashboard/ageingitem/v1",
   URL_LIMITLEDGER: "/dashboard/limit-ledger/v1",
   URL_RO: "/dashboard/regional-office/v1",
   URL_PIU: "/dashboard/piu/v1",
   URL_ACCOUNT_LEVEL: "/dashboard/acc-level/v1",
+  //---------Report API-------------------------------------------------------------------------------------------------
+  URL_REPORT_LOGIN: "/report/userLogin/v1",
+  URL_REPORT_ACTIVE_INACTIVE: "/report/userStatus/v1",
+  URL_REPORT_FIFO: "/report/fifoAgeing/v1",
+  URL_DOWNLOAD_LOGIN: "",
+  URL_DOWNLOAD_ACTIVE_INACTIVE: "",
+  URL_DOWNLOAD_FIFO: "/report/fifoAgeing/download/v1",
+  //---------Dropdown API-----------------------------------------------------------------------------------------------
 };

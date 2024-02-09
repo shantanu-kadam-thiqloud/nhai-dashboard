@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { useEffect } from "react";
 const JobExecutionLog = () => {
   const [asOnDate, setAsOnDate] = useState(

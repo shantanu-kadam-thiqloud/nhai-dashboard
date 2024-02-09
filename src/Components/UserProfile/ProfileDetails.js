@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
-import { ConvertFormat } from "../HtmlComponents/DateFunction";
+import { ConvertFormat } from "../HtmlComponents/CommonFunction";
 import { toast } from "react-toastify";
-
+import { v4 as uuid } from "uuid";
 function UserDetails() {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -219,7 +219,7 @@ function UserDetails() {
   const path = window.location.pathname;
   const isDelete = path.includes("DeleteProfile") ? true : false;
   if (!profile) {
-    return <p>Function not found.</p>;
+    return <p>Profile not found.</p>;
   }
 
   //-----------Get Profile----------------------------------------------
@@ -230,7 +230,7 @@ function UserDetails() {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         id: profileId, //47,
         userName: "nhai",
@@ -262,7 +262,7 @@ function UserDetails() {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requsterUserId: "35607",
         id: Number(userId),
@@ -273,7 +273,7 @@ function UserDetails() {
         profileName: profile.profileName,
         profileDescription: profile.profileDescription,
         //group: values.group,
-        groupId: Number(profile.group),
+        groupId: Number(profile.groupId),
         groupName: profile.groupName,
         isActive: profile.isActive,
         createdDate: profile.createdDate,

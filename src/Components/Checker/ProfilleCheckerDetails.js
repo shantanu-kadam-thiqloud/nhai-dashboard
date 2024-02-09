@@ -9,12 +9,14 @@ import { CheckerProfileService } from "../../Service/CheckerService/CheckerProfi
 import {
   ConvertFormat,
   DateFormatFunction,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
+import { v4 as uuid } from "uuid";
 const ProfilleCheckerDetails = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState({});
+  const [mapping, setMapping] = useState([]);
   const [currentValue, setCurrentValue] = useState({});
   const [oldValue, setOldValue] = useState({});
   const [req, setReq] = useState({});
@@ -312,7 +314,7 @@ const ProfilleCheckerDetails = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
         requestId: userId, //"1697eece-b424-4fb4-95e6-03f946871c38000",
@@ -323,6 +325,7 @@ const ProfilleCheckerDetails = () => {
       (res) => {
         if (res.status === 200) {
           setReq(res.data);
+          setMapping(res.data.mapping);
           setProfile(res.data.requestData);
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -345,7 +348,7 @@ const ProfilleCheckerDetails = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
         requestId: userId, //"7ba67c86-aad4-4214-ba01-aca6955c2be8",
@@ -377,7 +380,7 @@ const ProfilleCheckerDetails = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requestId: userId,
         requestType: path.includes("profileAddRequestDetails")
@@ -492,16 +495,14 @@ const ProfilleCheckerDetails = () => {
               <div className="col-md-6 UDCoulmns">
                 <strong>Created Date:</strong>
               </div>
-              <div className="col-md-6 UDCoulmns">
-                {ConvertFormat(profile.createdDate)}
-              </div>
+              <div className="col-md-6 UDCoulmns">{profile.createdDate}</div>
             </div>
             {/* -------------------------------------------------------- */}
             <div className="col-md-5">
               <div className="col-md-6 UDCoulmns">
                 <strong>Group:</strong>
               </div>
-              <div className="col-md-6 UDCoulmns">{profile.group}</div>
+              <div className="col-md-6 UDCoulmns">{profile.groupName}</div>
               <div className="col-md-6 UDCoulmns">
                 <strong>Active:</strong>
               </div>
@@ -593,7 +594,8 @@ const ProfilleCheckerDetails = () => {
                 </div>
               </div>
             )}
-            {(sidebarData || []).map((m, mindex) => {
+            {(mapping || []).map((m, mindex) => {
+              //sidebarData
               return (
                 <div className="row p-1" key={m.id}>
                   <div className="row menuColor">

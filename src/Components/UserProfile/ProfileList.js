@@ -5,6 +5,7 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
 import Spinner from "../HtmlComponents/Spinner";
+import { v4 as uuid } from "uuid";
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const UserList = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
       },

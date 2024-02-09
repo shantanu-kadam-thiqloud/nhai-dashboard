@@ -6,7 +6,7 @@ import AddGroup from "./AddGroup";
 import { useNavigate } from "react-router-dom";
 import { GroupService } from "../../Service/GroupService";
 import Spinner from "../HtmlComponents/Spinner";
-
+import { v4 as uuid } from "uuid";
 const GroupList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +75,7 @@ const GroupList = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
       },

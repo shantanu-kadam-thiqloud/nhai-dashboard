@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
@@ -24,6 +24,7 @@ const Snapshot = () => {
   const [dbdata, setDbdata] = useState(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [snapData, setSnapData] = useState("");
   const columns = [
     {
       Header: "Bank",
@@ -73,101 +74,84 @@ const Snapshot = () => {
     //   .catch((error) => {
     //     console.error("Error:", error);
     //   });
-    FetchSnapshot();
+    // FetchSnapshot();
   }, []);
 
   useEffect(() => {
-    console.log("reqBody-->", reqBody);
+    //  setIsLoading(true);
+    FetchSnapshot();
   }, [asOnDate]);
 
   //Mock----------------------------------------------------------------------
 
   const reqBody = {
-    requestMetaData: {
+    responseMetaData: {
       applicationId: "nhai-dashboard",
-      correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
+      correlationId: uuid(),
     },
     userName: "NHAI",
-    statusAsOn: ConvertFormat(asOnDate), //"28-09-2023",
+    statusAsOn: ConvertFormat(asOnDate), //"21-01-2020",
   };
 
-  const mockRes = {
-    responseMetaData: {
-      status: "200",
-      message: "Success",
-    },
-    decimal: {
-      nodalAccountBalance: "10,360.07",
-      subsidiaryAccountsCount: 618,
-      sanctionLimit: "39,430.72",
-      utilizedLimit: "29,297.98",
-      unutilizedLimit: "10,132.74",
-      utilizationPercentage: "74.30%",
-      qtdAccruedInterest: "0.00",
-    },
-    crore: {
-      nodalAccountBalance: "11,111.07", // "10,360.07",
-      subsidiaryAccountsCount: 618,
-      sanctionLimit: "39,430.72",
-      utilizedLimit: "29,297.98",
-      unutilizedLimit: "10,132.74",
-      utilizationPercentage: "74.30%",
-      qtdAccruedInterest: "0.00",
-    },
-    lastUpdateBankInfo: {
-      bank: "Kotak",
-      subsidiarySummary: "21-05-2020",
-      mainTransactions: "21-05-2020",
-      calaPDTransactions: "21-05-2020",
-    },
-  };
-  const [rows, setRows] = useState([mockRes.lastUpdateBankInfo]);
+  // const snapData =
+  //   //  {
+  //   //   responseMetaData: {
+  //   //     status: "200",
+  //   //     message: "Success",
+  //   //   },
+  //   //   decimal: {
+  //   //     nodalAccountBalance: "10,360.07",
+  //   //     subsidiaryAccountsCount: 618,
+  //   //     sanctionLimit: "39,430.72",
+  //   //     utilizedLimit: "29,297.98",
+  //   //     unutilizedLimit: "10,132.74",
+  //   //     utilizationPercentage: "74.30%",
+  //   //     qtdAccruedInterest: "0.00",
+  //   //   },
+  //   //   crore: {
+  //   //     nodalAccountBalance: "11,111.07", // "10,360.07",
+  //   //     subsidiaryAccountsCount: 618,
+  //   //     sanctionLimit: "39,430.72",
+  //   //     utilizedLimit: "29,297.98",
+  //   //     unutilizedLimit: "10,132.74",
+  //   //     utilizationPercentage: "74.30%",
+  //   //     qtdAccruedInterest: "0.00",
+  //   //   },
+  //   //   lastUpdateBankInfo: {
+  //   //     bank: "Kotak",
+  //   //     subsidiarySummary: "21-05-2020",
+  //   //     mainTransactions: "21-05-2020",
+  //   //     calaPDTransactions: "21-05-2020",
+  //   //   },
+  //   // };
+
+  //   {
+  //     responseMetaData: {
+  //       status: "200",
+  //       message: "Success",
+  //     },
+  //     decimal: {
+  //       nodalAccountBalance: "0.00",
+  //       subsidiaryAccountsCount: "278",
+  //       sanctionLimit: "2,75,54,88,85,658.32",
+  //       utilizedLimit: "2,07,89,95,03,520.40",
+  //       unutilizedLimit: "67,64,93,82,137.92",
+  //       utilizationPercentage: "75",
+  //       qtdAccruedInterest: "",
+  //     },
+  //     crore: {
+  //       nodalAccountBalance: "0.00",
+  //       subsidiaryAccountsCount: "278",
+  //       sanctionLimit: "27,554.89",
+  //       utilizedLimit: "20,789.95",
+  //       unutilizedLimit: "6,764.94",
+  //       utilizationPercentage: "75",
+  //       qtdAccruedInterest: "",
+  //     },
+  //   };
+  const [rows, setRows] = useState([]); //[snapData.lastUpdateBankInfo]
 
   //-------------------------------------------------------------------------------------------------------
-  const cardData = [
-    {
-      title: "Nodal Account Balance",
-      count: Decimal
-        ? mockRes.decimal.nodalAccountBalance
-        : mockRes.crore.nodalAccountBalance, //"₹10,360,07",
-    },
-    {
-      title: "No of Subsidiary Accounts",
-      count: Decimal
-        ? mockRes.decimal.subsidiaryAccountsCount
-        : mockRes.crore.subsidiaryAccountsCount, //"618",
-    },
-    {
-      title: "Sanction Limit",
-      count: Decimal
-        ? mockRes.decimal.sanctionLimit
-        : mockRes.crore.sanctionLimit, //"₹39,430.72",
-    },
-    {
-      title: "Utilized Limit",
-      count: Decimal
-        ? mockRes.decimal.utilizedLimit
-        : mockRes.crore.utilizedLimit, //"₹29,927.98",
-    },
-    {
-      title: "Un-Utilized Limit",
-      count: Decimal
-        ? mockRes.decimal.unutilizedLimit
-        : mockRes.crore.unutilizedLimit, //"₹10,132,74",
-    },
-    {
-      title: "Utilization Percentage",
-      count: Decimal
-        ? mockRes.decimal.utilizationPercentage
-        : mockRes.crore.utilizationPercentage, //"74.30%",
-    },
-    {
-      title: "QTD Accued Intrest",
-      count: Decimal
-        ? mockRes.decimal.qtdAccruedInterest
-        : mockRes.crore.qtdAccruedInterest, //"₹0.00",
-    },
-  ];
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -307,8 +291,7 @@ const Snapshot = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          debugger;
-          setRows(res.data);
+          setSnapData(res.data);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -324,7 +307,71 @@ const Snapshot = () => {
       }
     );
   }
-
+  const cardData = [
+    {
+      title: "Nodal Account Balance",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.nodalAccountBalance
+          : snapData.crore.nodalAccountBalance, //"₹10,360,07",
+    },
+    {
+      title: "No of Subsidiary Accounts",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.subsidiaryAccountsCount
+          : snapData.crore.subsidiaryAccountsCount, //"618",
+    },
+    {
+      title: "Sanction Limit",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.sanctionLimit
+          : snapData.crore.sanctionLimit, //"₹39,430.72",
+    },
+    {
+      title: "Utilized Limit",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.utilizedLimit
+          : snapData.crore.utilizedLimit, //"₹29,927.98",
+    },
+    {
+      title: "Un-Utilized Limit",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.unutilizedLimit
+          : snapData.crore.unutilizedLimit, //"₹10,132,74",
+    },
+    {
+      title: "Utilization Percentage",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.utilizationPercentage
+          : snapData.crore.utilizationPercentage, //"74.30%",
+    },
+    {
+      title: "QTD Accued Intrest",
+      count:
+        snapData == ""
+          ? ""
+          : Decimal
+          ? snapData.decimal.qtdAccruedInterest
+          : snapData.crore.qtdAccruedInterest, //"₹0.00",
+    },
+  ];
   return (
     <div>
       <div className="row">
@@ -403,7 +450,7 @@ const Snapshot = () => {
                   className="form-control m-1 fieldInput inputType1 inputType2"
                   type="text"
                   name="count"
-                  value={x.count}
+                  value={x.count || ""}
                   disabled
                 />
               </div>

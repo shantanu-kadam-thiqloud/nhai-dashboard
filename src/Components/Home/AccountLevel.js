@@ -5,7 +5,7 @@ import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";

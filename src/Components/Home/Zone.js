@@ -7,7 +7,7 @@ import BarChart from "../Charts/BarChart";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 
 const Zone = ({ setTab }) => {
   const [asOnDate, setAsOnDate] = useState(

@@ -5,9 +5,10 @@ import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
+import Spinner from "../HtmlComponents/Spinner";
 
 const Velocity = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -19,12 +20,13 @@ const Velocity = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  const [bankD, setBank] = useState("");
-  const [roD, setRo] = useState("");
-  const [zoneD, setZone] = useState("");
-  const [piuD, setPiu] = useState("");
+  const [bankD, setBank] = useState("All");
+  const [roD, setRo] = useState("All");
+  const [zoneD, setZone] = useState("All");
+  const [piuD, setPiu] = useState("All");
   const [accNo, setAccNo] = useState("");
   const [Decimal, setDecimal] = useState(true);
+  const [rows, setRows] = useState([]);
   const columns = [
     {
       Header: "Bank",
@@ -81,7 +83,7 @@ const Velocity = () => {
     },
     {
       Header: "Limit Utilization %",
-      accessor: "limitUtilization",
+      accessor: "limitUtilized",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
@@ -149,8 +151,11 @@ const Velocity = () => {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
+    setRows([]);
+    FetchVelocity();
     console.log("reqBody-->", reqBody);
-  }, [asOnDate]);
+  }, [asOnDate, bankD, roD, zoneD, piuD, accNo]);
 
   //Mock----------------------------------------------------------------------
 
@@ -159,8 +164,8 @@ const Velocity = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "nhai",
-    asOnDate: ConvertFormat(asOnDate), //"28-09-2023",
+    userName: "NHAI",
+    asOnDate: ConvertFormat(asOnDate), //"21-05-2020", //
     bank: bankD, //"All", //Kotak,
     ro: roD, //"All", // Bhubaneswar
     zone: zoneD, //"All", //East,West,North South
@@ -200,10 +205,11 @@ const Velocity = () => {
   //---------------------------------------------------------------------------------------
   function FetchVelocity() {
     DashboardService.getVelocity(
-      {},
+      reqBody,
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data);
+          debugger;
+          setRows(res.data.velocities);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -219,10 +225,11 @@ const Velocity = () => {
       }
     );
   }
-  const [rows, setRows] = useState(mockRes.velocityDetails);
+
   return (
     <div>
       <div className="row">
+        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="float-end">
             <label className="statusOn">As On Date :</label>

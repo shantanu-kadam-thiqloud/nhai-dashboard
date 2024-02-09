@@ -9,7 +9,8 @@ import { CheckerGroupService } from "../../Service/CheckerService/CheckerGroupSe
 import {
   ConvertFormat,
   DateFormatFunction,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
+import { v4 as uuid } from "uuid";
 const GroupCheckerDetails = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ const GroupCheckerDetails = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
         requestId: userId, //"1697eece-b424-4fb4-95e6-03f946871c38000",
@@ -155,7 +156,7 @@ const GroupCheckerDetails = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: "nhai",
         requestId: userId, //"7ba67c86-aad4-4214-ba01-aca6955c2be8",
@@ -163,7 +164,6 @@ const GroupCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          debugger;
           setReq(res.data);
           setCurrentValue(res.data.requestData.existingValue);
           setOldValue(res.data.requestData.oldVlaue);
@@ -188,7 +188,7 @@ const GroupCheckerDetails = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requestId: userId,
         requestType: path.includes("groupAddRequestDetails")

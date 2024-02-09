@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
-import { ConvertFormat } from "../HtmlComponents/DateFunction";
-
+import { ConvertFormat } from "../HtmlComponents/CommonFunction";
+import { v4 as uuid } from "uuid";
 function UserDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
@@ -81,7 +81,7 @@ function UserDetails() {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userId: userId,
         userName: "nhai",
@@ -111,7 +111,7 @@ function UserDetails() {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         userName: user.userId, //"nhai",
         requsterUserId: "35611",
@@ -123,6 +123,7 @@ function UserDetails() {
         fullName: user.fullName,
         employeeNumber: user.employeeNumber, //"12345",
         userRole: user.userRole, //"Administrator",
+        profileId: user.profileId,
         email: user.email, //"shantanu@example.com",
         mobileNumber: user.mobileNumber, //"123-456-7890",
         createdDate: ConvertFormat(user.createdDate),

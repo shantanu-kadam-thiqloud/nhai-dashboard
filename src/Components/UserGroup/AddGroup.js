@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { GroupService } from "../../Service/GroupService";
-import { DateFormatFunction } from "../HtmlComponents/DateFunction";
+import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
-
+import { v4 as uuid } from "uuid";
 const AddGroup = () => {
   const { userId } = useParams();
   const path = window.location.pathname;
@@ -93,10 +93,10 @@ const AddGroup = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requsterUserId: "35605",
-        id: 903,
+        //id: 903,
         groupName: values.groupName, //"Backend Developer",
         groupDescription: values.groupDescription, //"Developer Group",
         isActive: false,
@@ -143,7 +143,7 @@ const AddGroup = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         id: Number(userId),
         userName: "nhai",
@@ -187,7 +187,7 @@ const AddGroup = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requsterUserId: "35605",
         id: Number(userId),

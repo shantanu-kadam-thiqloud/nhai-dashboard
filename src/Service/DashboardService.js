@@ -10,6 +10,7 @@ export const DashboardService = {
   getRO,
   getPIU,
   getAccountLevel,
+  getFinancial,
 };
 
 function getSnapshot(mfaInfo, fn, fnError) {
@@ -153,6 +154,24 @@ function getPIU(mfaInfo, fn, fnError) {
 }
 function getAccountLevel(mfaInfo, fn, fnError) {
   var url = Global_var.BASEURL1 + Global_var.URL_ACCOUNT_LEVEL;
+  return new RestDataSource(url, fn).Store(
+    mfaInfo,
+    (res) => {
+      if (res != null) {
+        // If you had other headers to handle, you can do so here
+        fn(res);
+      }
+    },
+    (err) => {
+      // Handle error
+      if (fnError) {
+        fnError(err);
+      }
+    }
+  );
+}
+function getFinancial(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_FINANCIAL;
   return new RestDataSource(url, fn).Store(
     mfaInfo,
     (res) => {

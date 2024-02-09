@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AddGroup from "./AddGroup";
 import { GroupService } from "../../Service/GroupService";
-import { ConvertFormat } from "../HtmlComponents/DateFunction";
+import { ConvertFormat } from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
-
+import { v4 as uuid } from "uuid";
 function GroupDetails() {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ function GroupDetails() {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         id: Number(userId),
         userName: "nhai",
@@ -98,7 +98,7 @@ function GroupDetails() {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(),
         },
         requsterUserId: "6789",
         id: Number(userId),

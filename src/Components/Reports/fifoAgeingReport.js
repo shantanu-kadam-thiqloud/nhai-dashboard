@@ -4,12 +4,16 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
+} from "../HtmlComponents/CommonFunction";
+import { ReportService } from "../../Service/ReportService";
+import { useNavigate } from "react-router-dom";
 
 const FifoAgeingReport = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const columns = [
     {
@@ -117,6 +121,35 @@ const FifoAgeingReport = () => {
     },
   ];
   const [rows, setRows] = useState(data);
+
+  function DownloadFifoAgeingReport() {
+    ReportService.downloadFIFOReport(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status == 200) {
+          debugger;
+          data = res.data;
+          console.log("UserList->", data);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          prompt("500 Internal Server Error...!");
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      }
+    );
+  }
+
   return (
     <>
       <div className="wrapper">
@@ -143,7 +176,9 @@ const FifoAgeingReport = () => {
                 <button
                   className="btn addUser dashbutton  ms-5"
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => {
+                    DownloadFifoAgeingReport();
+                  }}
                 >
                   Download
                 </button>{" "}

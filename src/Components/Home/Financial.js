@@ -7,11 +7,14 @@ import jsPDF from "jspdf";
 import {
   DateFormatFunction,
   ConvertFormat,
-} from "../HtmlComponents/DateFunction";
-
+} from "../HtmlComponents/CommonFunction";
+import { v4 as uuid } from "uuid";
+import Spinner from "../HtmlComponents/Spinner";
+import { useNavigate } from "react-router-dom";
+import { DashboardService } from "../../Service/DashboardService";
 const Financial = () => {
   const [dbdata, setDbdata] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [fromDate, setFromDate] = useState(
     "2023-04-01" // new Date().toISOString().split("T")[0]
   );
@@ -20,34 +23,37 @@ const Financial = () => {
   const [disbursementsTable, setDisbursementsTable] = useState([]);
   const [summaryTable, setSummaryTable] = useState([]);
   const [apiData, setApiData] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
-    const apiUrl = "http://localhost:3007/api/secure/financial";
-    const uuid = localStorage.getItem("UUID");
-    const headers = {
-      XUuid: uuid,
-    };
-
-    // Make the Axios GET request with the headers
-    axios
-      .get(apiUrl, { headers })
-      .then((response) => {
-        setDbdata(response.data.data);
-        setApiData(response.data.data.deposits);
-        //setDisbursementsTable(response.data.data.disbursements)
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    setIsLoading(true);
+    FetchFinancial();
+    // const apiUrl = "http://localhost:3007/api/secure/financial";
+    // const uuid = localStorage.getItem("UUID");
+    // const headers = {
+    //   XUuid: uuid,
+    // };
+    // // Make the Axios GET request with the headers
+    // axios
+    //   .get(apiUrl, { headers })
+    //   .then((response) => {
+    //     setDbdata(response.data.data);
+    //     setApiData(response.data.data.deposits);
+    //     //setDisbursementsTable(response.data.data.disbursements)
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
   }, []); // Only run this effect once when the component mounts
 
   // Transform dbdata into depositsTable when dbdata changes
   useEffect(() => {
-    console.log("apiData", typeof apiData, apiData);
+    // console.log("apiData", typeof apiData, apiData);
+
     if (apiData && Object.keys(apiData).length > 0) {
       const depositsData = Object.entries(dbdata.deposits).map(
         ([key, value]) => ({
           deposits: key,
-          amount: value,
+          amount: value == null ? "null" : value,
         })
       );
       setdepositsTable(depositsData);
@@ -55,7 +61,7 @@ const Financial = () => {
       const disbursementsTableData = Object.entries(dbdata.disbursements).map(
         ([key, value]) => ({
           disbursements: key,
-          amount: value,
+          amount: value == null ? "null" : value,
         })
       );
       setDisbursementsTable(disbursementsTableData);
@@ -63,7 +69,7 @@ const Financial = () => {
       const summaryTableData = Object.entries(dbdata.summary).map(
         ([key, value]) => ({
           summary: key,
-          amount: value,
+          amount: value == null ? "null" : value,
         })
       );
       setSummaryTable(summaryTableData);
@@ -102,6 +108,15 @@ const Financial = () => {
     {
       Header: "Deposits",
       accessor: "deposits",
+      Cell: ({ value }) => (
+        <div className="float-start">
+          {value == "cumulativeDeposits"
+            ? "Cumulative Deposits"
+            : value == "interestCredited"
+            ? "Interest Credited"
+            : "Total Balance"}
+        </div>
+      ),
     },
     {
       Header: "Amount",
@@ -114,6 +129,23 @@ const Financial = () => {
     {
       Header: "Disbursements",
       accessor: "disbursements",
+      Cell: ({ value }) => (
+        <div className="float-start">
+          {value == "cumulativeDisbursements"
+            ? "Cumulative Disbursements"
+            : value == "paidtoBeneficiary"
+            ? "Paid to Beneficiary"
+            : value == "paidforAdminExpenses"
+            ? "Paid for Admin Expenses"
+            : value == "paidforTDS"
+            ? "Paid for TDS"
+            : value == "otherDebits"
+            ? "Other Debits"
+            : value == "interestTransfer"
+            ? "Interest Transfer"
+            : "Last day Transaction Return"}
+        </div>
+      ),
     },
     {
       Header: "Amount",
@@ -126,6 +158,21 @@ const Financial = () => {
     {
       Header: "Summary",
       accessor: "summary",
+      Cell: ({ value }) => (
+        <div className="float-start">
+          {value == "nodalAccountBalance"
+            ? "Nodal Account Balance"
+            : value == "cumulativeLimitAssigned"
+            ? "Cumulative Limit Assigned"
+            : value == "returnCreditinPDAccount"
+            ? "Return Credit in PD Account"
+            : value == "balanceLimittobeAssigned"
+            ? "Balance Limit to be Assigned"
+            : value == "interestAccruedtillNow"
+            ? "Interest Accrued till Now"
+            : "Credit Adjustment"}
+        </div>
+      ),
     },
     {
       Header: "Amount",
@@ -133,6 +180,37 @@ const Financial = () => {
       Cell: ({ value }) => <div className="amount float-end">{value}</div>,
     },
   ];
+
+  //-------Financial-------------------------------------------------------------------------------
+  function FetchFinancial() {
+    DashboardService.getFinancial(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        statusAsOn: "21-05-2020",
+      },
+      (res) => {
+        if (res.status === 200) {
+          setApiData(res.data);
+          setDbdata(res.data);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -268,6 +346,7 @@ const Financial = () => {
   return (
     <div className="">
       <div className="row">
+        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="p-1">
             <div className="float-start dashboardLabels">
@@ -344,7 +423,7 @@ const Financial = () => {
       </div>
       <hr />
       <div className="row snapshotForm fBgColor">
-        <div className="col-12">
+        <div className="col-12 mb-4">
           {depositsTable && (
             <div className="pt-2">
               <DataTable
@@ -366,7 +445,7 @@ const Financial = () => {
             </div>
           )}
           {disbursementsTable && (
-            <div>
+            <div className="mb-4">
               <DataTable
                 columns={columnsSummary}
                 data={summaryTable}
