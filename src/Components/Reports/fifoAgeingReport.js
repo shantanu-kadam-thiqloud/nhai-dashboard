@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
@@ -16,60 +16,20 @@ const FifoAgeingReport = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const columns = [
-    {
-      Header: "PIU Name",
-      accessor: "piu",
-    },
-    {
-      Header: "RO Name",
-      accessor: "ro",
-    },
-    {
-      Header: "Account No",
-      accessor: "accNum",
-    },
-    {
-      Header: "Account Name",
-      accessor: "accName",
-    },
-
-    {
-      Header: "Value",
-      accessor: "value",
-    },
-    {
-      Header: "Date of Request",
-      accessor: "requestDate",
-    },
-    {
-      Header: "Sanction Limit",
-      accessor: "sanctionLimit",
-    },
-    {
-      Header: "Utilized Limit",
-      accessor: "utilizedlimit",
-    },
-    {
-      Header: "Un Utilized Limit",
-      accessor: "unUtilizedLimit",
-    },
-    {
-      Header: `FIFO Amount`,
-      accessor: "fifoAmount",
-    },
-    {
-      Header: `Current Date`,
-      accessor: "currentDate",
-    },
-    {
-      Header: `No of Days`,
-      accessor: "days",
-    },
-    {
-      Header: `Ageing`,
-      accessor: "ageing",
-    },
-  ];
+    { field: "piu", sortable: true, filter: true, showFilterMenu: false, header: "PIU Name" },
+    { field: "ro", sortable: true, filter: true, showFilterMenu: false, header: "RO Name" },
+    { field: "accNum", sortable: true, filter: true, showFilterMenu: false, header: "Account No" },
+    { field: "accName", sortable: true, filter: true, showFilterMenu: false, header: "Account Name" },
+    { field: "value", sortable: true, filter: true, showFilterMenu: false, header: "Value" },
+    { field: "requestDate", sortable: true, filter: true, showFilterMenu: false, header: "Date of Request" },
+    { field: "sanctionLimit", sortable: true, filter: true, showFilterMenu: false, header: "Sanction Limit" },
+    { field: "utilizedlimit", sortable: true, filter: true, showFilterMenu: false, header: "Utilized Limit" },
+    { field: "unUtilizedLimit", sortable: true, filter: true, showFilterMenu: false, header: "Un Utilized Limit" },
+    { field: "fifoAmount", sortable: true, filter: true, showFilterMenu: false, header: "FIFO Amount" },
+    { field: "currentDate", sortable: true, filter: true, showFilterMenu: false, header: "Current Date" },
+    { field: "days", sortable: true, filter: true, showFilterMenu: false, header: "No of Days" },
+    { field: "ageing", sortable: true, filter: true, showFilterMenu: false, header: "Ageing" }
+  ]
   const data = [
     {
       id: 0,
@@ -188,13 +148,17 @@ const FifoAgeingReport = () => {
           </div>
         </div>
         <div className="row">
-          <div className="mt-2"></div>
-          <DataTable
+          <div className="mt-2 tableDiv"></div>
+          {/* <DataTable
             columns={columns}
             data={rows} //{data} //
             customClass="LoginReportTable"
             showSearchBar={false}
-          />{" "}
+          />{" "} */}
+          <GenericDataTable 
+          data={rows} 
+          columns={columns}                    
+              />
           <div className="mt-2"></div>
         </div>
       </div>

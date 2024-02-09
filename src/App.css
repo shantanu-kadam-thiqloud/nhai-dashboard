@@ -607,6 +607,26 @@ th {
   height: 30px;
 }
 
+.p-column-title{
+  width: 100%;
+  text-align: center;
+  font-family: Roboto !important;
+  font-weight: 700;
+  color: #212529;
+}
+
+ul.p-column-filter-row-items {
+  padding: 10px;
+  align-items: left !important;
+  font-size: 12px;
+  font-family: Roboto !important;
+  color: #212529;
+}
+
+.p-column-filter-clear-button{
+  display: none;
+}
+
 /* Profile Mapping */
 .menuColor {
   background-color: #dee2e6;
