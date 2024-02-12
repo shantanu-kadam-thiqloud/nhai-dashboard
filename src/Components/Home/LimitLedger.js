@@ -1,118 +1,47 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import { v4 as uuid } from "uuid";
 import { useNavigate } from "react-router-dom";
-import Hyperlink from "./Hyperlink";
-import {
-  DateFormatFunction,
-  ConvertFormat,
-} from "../HtmlComponents/CommonFunction";
-import { DashboardService } from "../../Service/DashboardService";
-import Spinner from "../HtmlComponents/Spinner";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const LimitLedger = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
 
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [fromDate, setFromDate] = useState(
-    "2023-04-01" // new Date().toISOString().split("T")[0]
+  const [formDate, setFormDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [dateFromValue, setDateFromValue] = useState(
+    new Date().toISOString().split("T")[0]
   );
-  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
-  const [rows, setRows] = useState([]);
-  const [bankD, setBank] = useState("All");
-  const [roD, setRo] = useState("All");
-  const [zoneD, setZone] = useState("All");
-  const [piuD, setPiu] = useState("All");
+  const [dateToValue, setDateToValue] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [bankD, setBank] = useState("");
+  const [roD, setRo] = useState("");
+  const [zoneD, setZone] = useState("");
+  const [piuD, setPiu] = useState("");
   const [accNo, setAccNo] = useState("");
-  const [typeTransaction, setTypeTransaction] = useState(0);
+  const [typeTransaction, setTypeTransaction] = useState("");
+
+  
   const columns = [
-    {
-      Header: "Bank",
-      accessor: "bank",
-    },
-    {
-      Header: "Zone",
-      accessor: "zone",
-    },
-    {
-      Header: "RO",
-      accessor: "ro",
-    },
-    {
-      Header: "PIU",
-      accessor: "PIU",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black"
-        >
-          {row.values.PIU}
-        </a>
-      ),
-    },
-
-    {
-      Header: "Account Number",
-      accessor: "accountNumber",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            //  navigate("/NHAI/Hyperlink");
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black float-end"
-        >
-          {row.values.accountNumber}
-        </a>
-      ),
-    },
-    {
-      Header: "Date",
-      accessor: "date",
-    },
-    {
-      Header: "PARTICULAR",
-      accessor: "particular",
-    },
-    {
-      Header: "Limit Loaded Amount",
-      accessor: "limitLoadedAmount",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Limit Reduced",
-      accessor: "limitReduced",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-
-    {
-      Header: "Limit Utilized",
-      accessor: "limitUtilized",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Returns",
-      accessor: "returns",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Limit Balance",
-      accessor: "limitBalance",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Transaction Type",
-      accessor: "transactionType",
-    },
-  ];
+    { "field": "bank", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Bank" },
+    { "field": "zone", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Zone" },
+    { "field": "ro", "sortable": true, "filter": true, "showFilterMenu": false, "header": "RO" },
+    { "field": "PIU", "sortable": true, "filter": true, "showFilterMenu": false, "header": "PIU", "body": "HyperLinkTemplate" },
+    { "field": "accountNumber", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Account Number", "body": "HyperLinkTemplate" },
+    { "field": "date", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Date" },
+    { "field": "particular", "sortable": true, "filter": true, "showFilterMenu": false, "header": "PARTICULAR" },
+    { "field": "limitLoadedAmount", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Limit Loaded Amount", },
+    { "field": "limitReduced", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Limit Reduced", },
+    { "field": "limitUtilized", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Limit Utilized", },
+    { "field": "returns", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Returns", },
+    { "field": "limitBalance", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Limit Balance", },
+    { "field": "transactionType", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Transaction Type" }
+  ]
+  ;
+  
   const data = [
     {
       id: 1,
@@ -172,31 +101,36 @@ const LimitLedger = () => {
   ];
 
   useEffect(() => {
-    //setIsLoading(true);
-    FetchLimitLedger();
     console.log("reqBody-->", reqBody);
-  }, [fromDate, toDate]);
+  }, [toDate]);
 
   //Mock----------------------------------------------------------------------
+  function formatDate(inputDate) {
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]) - 1;
+    const day = parseInt(dateParts[2]);
+    const formattedDate = new Date(year, month, day);
+    const dd = String(formattedDate.getDate()).padStart(2, "0");
+    const mm = String(formattedDate.getMonth() + 1).padStart(2, "0"); // Add 1 to the month (zero-based)
+    const yyyy = formattedDate.getFullYear();
+    return `${dd}-${mm}-${yyyy}`;
+  }
 
   const reqBody = {
     requestMetaData: {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: "nhai",
     bank: bankD, //"All", //Kotak,
     ro: roD, //"All", // Bhubaneswar
     zone: zoneD, //"All", //East,West,North South
     piu: piuD,
-
     accountNumber: accNo,
-
-    fromDate: "21-05-2020", //ConvertFormat(fromDate), //"01-04-2017",
-    toData: "21-05-2023", //ConvertFormat(toDate), //"01-09-2023",
+    fromDate: formDate, //"01-04-2017",
+    toData: toDate, //"01-09-2023",
     transactionType: typeTransaction, //"All",
-    dateFilter: 0,
-    isActive: "All",
   };
 
   const mockRes = {
@@ -237,34 +171,10 @@ const LimitLedger = () => {
       },
     ],
   };
-  //---------------------------------------------------------------------------------------
-  function FetchLimitLedger() {
-    DashboardService.getLimitledger(
-      reqBody,
-      (res) => {
-        if (res.status === 200) {
-          debugger;
-          // setRows(res.data);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-      },
-      (error) => {
-        setIsLoading(false);
-        console.error("Error->", error);
-      }
-    );
-  }
-
+  const [rows, setRows] = useState(mockRes.limitLedgerDetails);
   return (
     <div>
       <div className="row p-1">
-        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="float-end ">
             <label className="statusOn">From :</label>
@@ -273,10 +183,12 @@ const LimitLedger = () => {
               id="dateInput"
               className="inputDate"
               type="date"
-              value={fromDate || ""}
+              value={dateFromValue || ""}
               onChange={(e) => {
-                setFromDate(e.target.value);
-                console.log("->", ConvertFormat(e.target.value));
+                const E = formatDate(e.target.value);
+                setDateFromValue(e.target.value);
+                console.log("----->", E);
+                setFormDate(E);
               }}
             />{" "}
           </div>
@@ -289,16 +201,31 @@ const LimitLedger = () => {
               id="dateInput"
               className="inputDate"
               type="date"
-              value={toDate || ""}
+              value={dateToValue || ""}
               onChange={(e) => {
-                setToDate(e.target.value);
-                console.log("->", ConvertFormat(e.target.value));
+                setDateToValue(e.target.value);
+                const E = formatDate(e.target.value);
+                console.log("----->", E);
+                setToDate(E);
               }}
             />{" "}
           </div>
         </div>
         <div className="col">
-          <div className="float-end">{"  "}</div>
+          <div className="float-end">
+            <label className="statusOn">Bank :</label>{" "}
+            <select
+              name="bank"
+              className="inputDate"
+              onChange={(e) => {
+                setBank(e.target.value);
+              }}
+            >
+              <option value="All">All</option>
+              <option value="Kotak">Kotak</option>
+            </select>
+            {"  "}
+          </div>
         </div>
         <div className="col">
           {" "}
@@ -398,8 +325,7 @@ const LimitLedger = () => {
               }}
             >
               <option value="All">All</option>
-              <option value="All Except OD/SD">All Except OD/SD</option>
-              <option value="OD/SD">OD/SD</option>
+              <option value="Kotak">Kotak</option>
             </select>
             {"  "}
           </div>
@@ -407,16 +333,20 @@ const LimitLedger = () => {
         <div className="col"></div>
         <div className="col">{/* </div> */}</div> <hr />
         <div className="row">
-          <div className="p-2">
-            <DataTable
+          <div className="p-2 tableDiv">
+            {/* <DataTable
               columns={columns}
               data={rows} //{data} //
               customClass="LimitTable"
               showSearchBar={false}
-            />{" "}
+            />{" "} */}
+
+            <GenericDataTable 
+            data={rows} 
+            columns={columns}    
+              />
           </div>
-        </div>
-        <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
+        </div>       
       </div>
     </div>
   );

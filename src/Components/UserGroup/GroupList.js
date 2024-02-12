@@ -1,17 +1,59 @@
-import React, { useEffect, useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+import React, { useState, useEffect } from "react";
+//import DataTable from "../HtmlComponents/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import AddGroup from "./AddGroup";
 import { useNavigate } from "react-router-dom";
-import { GroupService } from "../../Service/GroupService";
-import Spinner from "../HtmlComponents/Spinner";
-import { v4 as uuid } from "uuid";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
+
 const GroupList = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [groupList, setGroupList] = useState([]);
+
+  const columns = [
+    {
+      "field": "id",
+      "sortable": true,
+      "filter": true,
+      "filterPlaceholder": "Search",
+      "showGridlines": true,
+      "showFilterMenu": false,
+      "header": "ID"
+    },
+    {
+      "field": "GroupName",
+      "sortable": true,
+      "filter": true,
+      "filterPlaceholder": "Search",
+      "showFilterMenu": false,
+      "header": "Group Description"
+    },
+    {
+      "field": "groupDescription",
+      "sortable": true,
+      "filter": true,
+      "filterPlaceholder": "Search",
+      "showFilterMenu": false,
+      "header": "Profile Description"
+    },
+    {
+      "field": "isActive",
+      "sortable": true,
+      "filter": true,
+      "filterPlaceholder": "Search",
+      "showFilterMenu": false,
+      "header": "Is Active",
+      "className": "text-center p-0",
+      "body": "switchTemplate"
+    },
+    {
+      "field": "",
+      "header": "Action",
+      "body": "buttonsTemplate",
+      "className": "text-center"
+    }
+  ]
+  
   const data = [
     {
       id: 1,
@@ -39,77 +81,30 @@ const GroupList = () => {
     },
   ];
 
-  const columns = [
-    { Header: "Group Name", accessor: "groupName" },
-    { Header: "Group Description", accessor: "groupDescription" },
-    {
-      Header: "Is Active",
-      accessor: "isActive",
-      Cell: ({ value }) => (
-        <input
-          className="form-check-input"
-          type="checkbox"
-          id="flexSwitchCheckChecked"
-          checked={value}
-        />
-      ),
-    },
-    {
-      Header: "Action",
-      accessor: "id",
-      Cell: ({ row }) => {
-        return row.values.id;
-      },
-    },
-  ];
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchGroupList();
-  }, []);
-
-  function fetchGroupList() {
-    var GroupList = [];
-
-    GroupService.getGroupList(
-      {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: uuid(),
-        },
-        userName: "nhai",
-      },
-      (res) => {
-        if (res.status === 200) {
-          GroupList = res.data.groups;
-          // console.log("UserList->", UserList);
-          setGroupList(GroupList);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          prompt("500 Internal Server Error..!");
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-      },
-      (err) => {
-        setIsLoading(false);
-        console.error("Exception - >", err);
-        navigate("/NHAI/Error/500");
-      }
-    );
-    return GroupList;
-  }
-
-  function handleAction(id) {
-    // Implement your action logic here based on the id
-  }
+  // const columns = [
+  //   { Header: "Group Name", accessor: "groupName" },
+  //   { Header: "Group Description", accessor: "groupDescription" },
+  //   {
+  //     Header: "Is Active",
+  //     accessor: "isActive",
+  //     Cell: ({ value }) => (
+  //       <input
+  //         className="form-check-input"
+  //         type="checkbox"
+  //         id="flexSwitchCheckChecked"
+  //         checked={value}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     Header: "Action",
+  //     accessor: "id",
+  //   },
+  // ];
+  
 
   return (
     <div className="wrapper">
-      <Spinner isLoading={isLoading} />
       <div className="container">
         <div className="ULContainer">
           <div className="row">
@@ -131,15 +126,28 @@ const GroupList = () => {
             </div>
           </div>
           <div className="row">
-            <div className="p-2">
+            <div className="p-2 tableDiv">
               {/* col-md-11 mx-auto flex */}
-              <DataTable
+              {/* <DataTable
                 columns={columns}
-                data={groupList || data} //{groupList} //{data}
+                data={data}
                 //  customClass="ULTable"
                 detailpage="GroupDetails"
                 editpage="EditGroup"
                 deletepage="DeleteGroup"
+              /> */}
+
+          {/* <DataTable value={data} removableSort filterDisplay="row" showGridlines tableStyle={{ minWidth: '50rem' }}>
+            <Column field="id" sortable filter filterPlaceholder="Search" showGridlines showFilterMenu={false} header="ID"></Column>
+            <Column field="Group Name" sortable filter filterPlaceholder="Search" showFilterMenu={false} header="Group Description"></Column>
+            <Column field="groupDescription" sortable filter filterPlaceholder="Search" showFilterMenu={false} header="Profile Description" ></Column>
+            <Column field="isActive" sortable filter filterPlaceholder="Search" showFilterMenu={false} header="Is Active" className="text-center p-0" body={switchTemplate}></Column>
+            <Column field=""  header="Action" body={buttonsTemplate} className="text-center"></Column>
+          </DataTable> */}
+          <GenericDataTable data={data} columns={columns}
+              detailpage="GroupDetails"
+              editpage="EditGroup"
+              deletepage="DeleteGroup"       
               />
             </div>
           </div>

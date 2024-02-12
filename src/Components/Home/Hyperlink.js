@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import NHAILogo from "../../Assets/images/NHAI-Logo-VECTOR.png";
 
 import ReactModal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const Hyperlink = ({ isOpen, setModal, row }) => {
   const customStyles = {
@@ -18,70 +19,89 @@ const Hyperlink = ({ isOpen, setModal, row }) => {
     },
   };
 
+  // const columns = [
+  //   {
+  //     Header: "Bank",
+  //     accessor: "bank",
+  //   },
+  //   {
+  //     Header: "Zone",
+  //     accessor: "zone",
+  //   },
+  //   {
+  //     Header: "RO",
+  //     accessor: "ro",
+  //   },
+  //   {
+  //     Header: "PIU",
+  //     accessor: "PIU",
+  //   },
+
+  //   {
+  //     Header: "Account Number",
+  //     accessor: "accountNumber",
+  //   },
+  //   {
+  //     Header: "Account Name",
+  //     accessor: "accountName",
+  //   },
+  //   {
+  //     Header: "Account Opening Date",
+  //     accessor: "accountOpenDate",
+  //   },
+  //   {
+  //     Header: "Date",
+  //     accessor: "date",
+  //   },
+  //   {
+  //     Header: "PARTICULAR",
+  //     accessor: "particular",
+  //   },
+  //   {
+  //     Header: "Limit Loaded Amount",
+  //     accessor: "limitLoadedAmount",
+  //   },
+  //   {
+  //     Header: "Limit Reduced",
+  //     accessor: "limitReduced",
+  //   },
+
+  //   {
+  //     Header: "Limit Utilized",
+  //     accessor: "limitUtilized",
+  //   },
+  //   {
+  //     Header: "Returns",
+  //     accessor: "returns",
+  //   },
+  //   {
+  //     Header: "Limit Balance",
+  //     accessor: "limitBalance",
+  //   },
+  //   {
+  //     Header: "Transaction Type",
+  //     accessor: "transactionType",
+  //   },
+  // ];
+  
   const columns = [
-    {
-      Header: "Bank",
-      accessor: "bank",
-    },
-    {
-      Header: "Zone",
-      accessor: "zone",
-    },
-    {
-      Header: "RO",
-      accessor: "ro",
-    },
-    {
-      Header: "PIU",
-      accessor: "PIU",
-    },
-
-    {
-      Header: "Account Number",
-      accessor: "accountNumber",
-    },
-    {
-      Header: "Account Name",
-      accessor: "accountName",
-    },
-    {
-      Header: "Account Opening Date",
-      accessor: "accountOpenDate",
-    },
-    {
-      Header: "Date",
-      accessor: "date",
-    },
-    {
-      Header: "PARTICULAR",
-      accessor: "particular",
-    },
-    {
-      Header: "Limit Loaded Amount",
-      accessor: "limitLoadedAmount",
-    },
-    {
-      Header: "Limit Reduced",
-      accessor: "limitReduced",
-    },
-
-    {
-      Header: "Limit Utilized",
-      accessor: "limitUtilized",
-    },
-    {
-      Header: "Returns",
-      accessor: "returns",
-    },
-    {
-      Header: "Limit Balance",
-      accessor: "limitBalance",
-    },
-    {
-      Header: "Transaction Type",
-      accessor: "transactionType",
-    },
-  ];
+    { field: "bank", sortable: true, filter: true, showFilterMenu: false, header: "Bank" },
+    { field: "zone", sortable: true, filter: true, showFilterMenu: false, header: "Zone" },
+    { field: "ro", sortable: true, filter: true, showFilterMenu: false, header: "RO" },
+    { field: "PIU", sortable: true, filter: true, showFilterMenu: false, header: "PIU" },
+    { field: "accountNumber", sortable: true, filter: true, showFilterMenu: false, header: "Account Number" },
+    { field: "accountName", sortable: true, filter: true, showFilterMenu: false, header: "Account Name" },
+    { field: "accountOpenDate", sortable: true, filter: true, showFilterMenu: false, header: "Account Opening Date" },
+    { field: "date", sortable: true, filter: true, showFilterMenu: false, header: "Date" },
+    { field: "particular", sortable: true, filter: true, showFilterMenu: false, header: "PARTICULAR" },
+    { field: "limitLoadedAmount", sortable: true, filter: true, showFilterMenu: false, header: "Limit Loaded Amount" },
+    { field: "limitReduced", sortable: true, filter: true, showFilterMenu: false, header: "Limit Reduced" },
+    { field: "limitUtilized", sortable: true, filter: true, showFilterMenu: false, header: "Limit Utilized" },
+    { field: "returns", sortable: true, filter: true, showFilterMenu: false, header: "Returns" },
+    { field: "limitBalance", sortable: true, filter: true, showFilterMenu: false, header: "Limit Balance" },
+    { field: "transactionType", sortable: true, filter: true, showFilterMenu: false, header: "Transaction Type" }
+  ]
+  
   const mockRes = {
     responseMetaData: {
       status: "200",
@@ -134,7 +154,12 @@ const Hyperlink = ({ isOpen, setModal, row }) => {
           <div className="float-end">
             <FontAwesomeIcon
               icon={faTimes}
-              className="closeIconPopupWhite"
+              style={{
+                cursor: "pointer",
+                marginRight: "8px",
+                color: "#ffffff",
+                float: "right",
+              }}
               onClick={() => {
                 setModal(false);
               }}
@@ -179,13 +204,17 @@ const Hyperlink = ({ isOpen, setModal, row }) => {
                 </div>
               </div>{" "}
               <div className="row p-2">
-                <div className="p-2">
-                  <DataTable
+                <div className="p-2 tableDiv">
+                  {/* <DataTable
                     columns={columns}
                     data={rows} //{data} //
                     customClass="LimitTable"
                     showSearchBar={false}
-                  />{" "}
+                  />{" "} */}
+                  <GenericDataTable 
+                  data={rows} 
+                  columns={columns}                    
+                      />
                 </div>
               </div>
               {/*------------------------------------------------------------------------*/}

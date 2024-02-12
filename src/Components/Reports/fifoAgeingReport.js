@@ -1,20 +1,87 @@
 import React, { useState } from "react";
-import GenericDataTable from "../HtmlComponents/GenericDataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import { v4 as uuid } from "uuid";
-import {
-  DateFormatFunction,
-  ConvertFormat,
-} from "../HtmlComponents/CommonFunction";
-import { ReportService } from "../../Service/ReportService";
-import { useNavigate } from "react-router-dom";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const FifoAgeingReport = () => {
-  const [asOnDate, setAsOnDate] = useState(
+  const [formDate, setFormDate] = useState("");
+
+  const [dateFromValue, setDateFromValue] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
 
+  function formatDate(inputDate) {
+    // Parse the input date string into a Date object
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]) - 1; // JavaScript months are zero-based
+    const day = parseInt(dateParts[2]);
+    const formattedDate = new Date(year, month, day);
+
+    // Extract day, month, and year components
+    const dd = String(formattedDate.getDate()).padStart(2, "0");
+    const mm = String(formattedDate.getMonth() + 1).padStart(2, "0"); // Add 1 to the month (zero-based)
+    const yyyy = formattedDate.getFullYear();
+
+    // Format the date in "dd-mm-yyyy" format
+    return `${dd}-${mm}-${yyyy}`;
+  }
+  // const columns = [
+  //   {
+  //     Header: "PIU Name",
+  //     accessor: "piu",
+  //   },
+  //   {
+  //     Header: "RO Name",
+  //     accessor: "ro",
+  //   },
+  //   {
+  //     Header: "Account No",
+  //     accessor: "accNum",
+  //   },
+  //   {
+  //     Header: "Account Name",
+  //     accessor: "accName",
+  //   },
+
+  //   {
+  //     Header: "Value",
+  //     accessor: "value",
+  //   },
+  //   {
+  //     Header: "Date of Request",
+  //     accessor: "requestDate",
+  //   },
+  //   {
+  //     Header: "Sanction Limit",
+  //     accessor: "sanctionLimit",
+  //   },
+  //   {
+  //     Header: "Utilized Limit",
+  //     accessor: "utilizedlimit",
+  //   },
+  //   {
+  //     Header: "Un Utilized Limit",
+  //     accessor: "unUtilizedLimit",
+  //   },
+  //   {
+  //     Header: `FIFO Amount`,
+  //     accessor: "fifoAmount",
+  //   },
+  //   {
+  //     Header: `Current Date`,
+  //     accessor: "currentDate",
+  //   },
+  //   {
+  //     Header: `No of Days`,
+  //     accessor: "days",
+  //   },
+  //   {
+  //     Header: `Ageing`,
+  //     accessor: "ageing",
+  //   },
+  // ];
+ 
   const columns = [
     { field: "piu", sortable: true, filter: true, showFilterMenu: false, header: "PIU Name" },
     { field: "ro", sortable: true, filter: true, showFilterMenu: false, header: "RO Name" },
@@ -30,6 +97,7 @@ const FifoAgeingReport = () => {
     { field: "days", sortable: true, filter: true, showFilterMenu: false, header: "No of Days" },
     { field: "ageing", sortable: true, filter: true, showFilterMenu: false, header: "Ageing" }
   ]
+  
   const data = [
     {
       id: 0,
@@ -81,35 +149,6 @@ const FifoAgeingReport = () => {
     },
   ];
   const [rows, setRows] = useState(data);
-
-  function DownloadFifoAgeingReport() {
-    ReportService.downloadFIFOReport(
-      {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
-        },
-        userName: "nhai",
-      },
-      (res) => {
-        if (res.status == 200) {
-          debugger;
-          data = res.data;
-          console.log("UserList->", data);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          prompt("500 Internal Server Error...!");
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-        //   return data;
-      }
-    );
-  }
-
   return (
     <>
       <div className="wrapper">
@@ -125,10 +164,12 @@ const FifoAgeingReport = () => {
                   id="dateInput"
                   className="inputDate"
                   type="date"
-                  value={asOnDate || ""}
+                  value={dateFromValue || ""}
                   onChange={(e) => {
-                    setAsOnDate(e.target.value);
-                    console.log("->", ConvertFormat(e.target.value));
+                    const E = formatDate(e.target.value);
+                    setDateFromValue(e.target.value);
+                    console.log("----->", E);
+                    setFormDate(E);
                   }}
                 />{" "}
               </div>
@@ -136,9 +177,7 @@ const FifoAgeingReport = () => {
                 <button
                   className="btn addUser dashbutton  ms-5"
                   type="button"
-                  onClick={() => {
-                    DownloadFifoAgeingReport();
-                  }}
+                  onClick={() => {}}
                 >
                   Download
                 </button>{" "}
@@ -148,7 +187,7 @@ const FifoAgeingReport = () => {
           </div>
         </div>
         <div className="row">
-          <div className="mt-2 tableDiv"></div>
+          <div className="mt-2 tableDiv">
           {/* <DataTable
             columns={columns}
             data={rows} //{data} //
@@ -159,6 +198,7 @@ const FifoAgeingReport = () => {
           data={rows} 
           columns={columns}                    
               />
+              </div>
           <div className="mt-2"></div>
         </div>
       </div>

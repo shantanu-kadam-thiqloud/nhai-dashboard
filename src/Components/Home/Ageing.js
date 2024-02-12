@@ -4,21 +4,13 @@ import "../../Assets/Css/Dashboard.css";
 import { v4 as uuid } from "uuid";
 import PieChart from "../Charts/PieChart";
 import BarChart from "../Charts/BarChart";
-import { useNavigate } from "react-router-dom";
-import { DashboardService } from "../../Service/DashboardService";
-import Spinner from "../HtmlComponents/Spinner";
-
 const Ageing = () => {
   const [Decimal, setDecimal] = useState(true);
   const [bankD, setBank] = useState("");
-  const [roD, setRo] = useState("All");
-  const [zoneD, setZone] = useState("All");
-  const [piuD, setPiu] = useState("All");
+  const [roD, setRo] = useState("");
+  const [zoneD, setZone] = useState("");
+  const [piuD, setPiu] = useState("");
   const title = "> 180 Days";
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const [mockRes, setMockRes] = useState("");
-  const [rows, setRows] = useState([]); //mockRes.zones//data
   const columns = [
     {
       Header: "Parameters",
@@ -37,7 +29,7 @@ const Ageing = () => {
               onClick={() => {
                 console.log("click618");
               }}
-              className="text-black"
+              style={{ color: "black" }}
             >
               {row.total}
             </a>
@@ -54,7 +46,7 @@ const Ageing = () => {
       accessor: (row) => {
         if (row.parameter === "No. of Subsidiary Accounts") {
           return (
-            <a href="#" onClick={() => {}} className="text-black">
+            <a href="#" onClick={() => {}} style={{ color: "black" }}>
               {row.belowThirtyDays}
             </a>
           );
@@ -72,7 +64,7 @@ const Ageing = () => {
       accessor: (row) => {
         if (row.parameter === "No. of Subsidiary Accounts") {
           return (
-            <a href="#" onClick={() => {}} className="text-black">
+            <a href="#" onClick={() => {}} style={{ color: "black" }}>
               {row.belowNintyDays}
             </a>
           );
@@ -90,7 +82,7 @@ const Ageing = () => {
       accessor: (row) => {
         if (row.parameter === "No. of Subsidiary Accounts") {
           return (
-            <a href="#" onClick={() => {}} className="text-black">
+            <a href="#" onClick={() => {}} style={{ color: "black" }}>
               {row.belowOneEightyDays}
             </a>
           );
@@ -108,7 +100,7 @@ const Ageing = () => {
       accessor: (row) => {
         if (row.parameter === "No. of Subsidiary Accounts") {
           return (
-            <a href="#" onClick={() => {}} className="text-black">
+            <a href="#" onClick={() => {}} style={{ color: "black" }}>
               {row.aboveOneEightyDays}
             </a>
           );
@@ -120,10 +112,10 @@ const Ageing = () => {
       },
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
-    // {
-    //   Header: "Is Active",
-    //   accessor: "isActive",
-    // },
+    {
+      Header: "Is Active",
+      accessor: "isActive",
+    },
   ];
 
   const data = [
@@ -174,148 +166,113 @@ const Ageing = () => {
     },
   ];
 
-  useEffect(() => {
-    setIsLoading(true);
-    FetchAgeing();
-  }, []);
-
   //Mock----------------------------------------------------------------------
   const reqBody = {
     requestMetaData: {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
-    date: "21-01-2020",
-    bank: "All", //Kotak,
+    userName: "nhai",
+    bank: bankD, //"All", //Kotak,
     zone: zoneD,
     ro: roD,
     piu: piuD,
   };
 
-  // const mockRes = {
-  //   responseMetaData: {
-  //     status: "200",
-  //     message: "Success",
-  //   },
-  //   ageingItem: [
-  //     {
-  //       parameter: "No. of Subsidiary Accounts",
-  //       total: "618",
-  //       belowThirtyDays: "130",
-  //       belowNintyDays: "193",
-  //       belowOneEightyDays: "101",
-  //       aboveOneEightyDays: "193",
-  //     },
-  //     {
-  //       parameter: "Sanction Limit",
-  //       decimal: {
-  //         total: "3,71,77,040.11",
-  //         belowThirtyDays: "1,84,02,973.41",
-  //         belowNintyDays: "4,58,97,059.47",
-  //         belowOneEightyDays: "1,88,83,286.84",
-  //         aboveOneEightyDays: "1,25,79,247.00",
-  //       },
-  //       crore: {
-  //         total: "39,430.71",
-  //         belowThirtyDays: "3,610.84",
-  //         belowNintyDays: "11,644.58",
-  //         belowOneEightyDays: "13,071.88",
-  //         aboveOneEightyDays: "10,321.25",
-  //       },
-  //     },
-  //     {
-  //       parameter: "Utilized Limit",
-  //       decimal: {
-  //         total: "7,98,09,291.66",
-  //         belowThirtyDays: "3,89,50,336.32",
-  //         belowNintyDays: "7,13,16,033.40",
-  //         belowOneEightyDays: "9,91,99,443.94",
-  //         aboveOneEightyDays: "3,45,36,781.00",
-  //       },
-  //       crore: {
-  //         total: "29,297.98",
-  //         belowThirtyDays: "2,393.90",
-  //         belowNintyDays: "8,6171.31",
-  //         belowOneEightyDays: "9,569.91",
-  //         aboveOneEightyDays: "7,993.45",
-  //       },
-  //     },
-  //     {
-  //       parameter: "Un-Utilized Limit",
-  //       decimal: {
-  //         total: "2,73,67,748.45",
-  //         belowThirtyDays: "6,94,52,637.09",
-  //         belowNintyDays: "7,45,81,026.07",
-  //         belowOneEightyDays: "1,96,83,842.90",
-  //         aboveOneEightyDays: "7,80,42,466.00",
-  //       },
-  //       crore: {
-  //         total: "10,132.73",
-  //         belowThirtyDays: "1,216.95",
-  //         belowNintyDays: "3,027.45",
-  //         belowOneEightyDays: "3,501.96",
-  //         aboveOneEightyDays: "2,327.80",
-  //       },
-  //     },
-  //     {
-  //       parameter: "Utilized Percentage",
-  //       decimal: {
-  //         total: "74.30",
-  //         belowThirtyDays: "66.30",
-  //         belowNintyDays: "74.00",
-  //         belowOneEightyDays: "73.21",
-  //         aboveOneEightyDays: "77.45",
-  //       },
-  //       crore: {
-  //         total: "66.30",
-  //         belowThirtyDays: "66.30",
-  //         belowNintyDays: "74.00",
-  //         belowOneEightyDays: "73.21",
-  //         aboveOneEightyDays: "77.45",
-  //       },
-  //     },
-  //   ],
-  // };
-
-  //---------------------------------------------------------------------------------------
-  function FetchAgeing() {
-    DashboardService.getAgeing(
-      reqBody,
-      (res) => {
-        if (res.status === 200) {
-          setMockRes(res.data);
-          setRows(res.data.ageingItem);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
+  const mockRes = {
+    responseMetaData: {
+      status: "200",
+      message: "Success",
+    },
+    ageingData: [
+      {
+        parameter: "No. of Subsidiary Accounts",
+        total: "618",
+        belowThirtyDays: "130",
+        belowNintyDays: "193",
+        belowOneEightyDays: "101",
+        aboveOneEightyDays: "193",
       },
-      (error) => {
-        setIsLoading(false);
-        console.error("Error->", error);
-      }
-    );
-  }
+      {
+        parameter: "Sanction Limit",
+        decimal: {
+          total: "3,71,77,040.11",
+          belowThirtyDays: "1,84,02,973.41",
+          belowNintyDays: "4,58,97,059.47",
+          belowOneEightyDays: "1,88,83,286.84",
+          aboveOneEightyDays: "1,25,79,247.00",
+        },
+        crore: {
+          total: "39,430.71",
+          belowThirtyDays: "3,610.84",
+          belowNintyDays: "11,644.58",
+          belowOneEightyDays: "13,071.88",
+          aboveOneEightyDays: "10,321.25",
+        },
+      },
+      {
+        parameter: "Utilized Limit",
+        decimal: {
+          total: "7,98,09,291.66",
+          belowThirtyDays: "3,89,50,336.32",
+          belowNintyDays: "7,13,16,033.40",
+          belowOneEightyDays: "9,91,99,443.94",
+          aboveOneEightyDays: "3,45,36,781.00",
+        },
+        crore: {
+          total: "29,297.98",
+          belowThirtyDays: "2,393.90",
+          belowNintyDays: "8,6171.31",
+          belowOneEightyDays: "9,569.91",
+          aboveOneEightyDays: "7,993.45",
+        },
+      },
+      {
+        parameter: "Un-Utilized Limit",
+        decimal: {
+          total: "2,73,67,748.45",
+          belowThirtyDays: "6,94,52,637.09",
+          belowNintyDays: "7,45,81,026.07",
+          belowOneEightyDays: "1,96,83,842.90",
+          aboveOneEightyDays: "7,80,42,466.00",
+        },
+        crore: {
+          total: "10,132.73",
+          belowThirtyDays: "1,216.95",
+          belowNintyDays: "3,027.45",
+          belowOneEightyDays: "3,501.96",
+          aboveOneEightyDays: "2,327.80",
+        },
+      },
+      {
+        parameter: "Utilized Percentage",
+        decimal: {
+          total: "74.30",
+          belowThirtyDays: "66.30",
+          belowNintyDays: "74.00",
+          belowOneEightyDays: "73.21",
+          aboveOneEightyDays: "77.45",
+        },
+        crore: {
+          total: "66.30",
+          belowThirtyDays: "66.30",
+          belowNintyDays: "74.00",
+          belowOneEightyDays: "73.21",
+          aboveOneEightyDays: "77.45",
+        },
+      },
+    ],
+  };
 
   function per(total, value) {
-    if (total && value) {
-      total = parseFloat(total.replace(/,/g, ""));
-      value = parseFloat(value.replace(/,/g, ""));
-      var per = 0;
-      per = (value / total) * 100;
-      console.log("Ans->", per);
-      return per;
-    } else {
-      return 0;
-    }
+    total = parseFloat(total.replace(/,/g, ""));
+    value = parseFloat(value.replace(/,/g, ""));
+    var per = 0;
+    per = (value / total) * 100;
+    console.log("Ans->", per);
+    return per;
   }
-  const utilizationPercentage =
-    mockRes == "" ? "" : mockRes.ageingItem[4].decimal;
+  const utilizationPercentage = mockRes.ageingData[4].decimal;
   const BarchartData = [
     {
       category: "Total",
@@ -343,7 +300,7 @@ const Ageing = () => {
       color: "#984EA3",
     },
   ];
-  const AccountPercentage = mockRes == "" ? "" : mockRes.ageingItem[0];
+  const AccountPercentage = mockRes.ageingData[0];
   const AccountchartData = [
     {
       category: "Total",
@@ -371,8 +328,7 @@ const Ageing = () => {
       color: "#984EA3",
     },
   ];
-  const AllocatedPercentage =
-    mockRes == "" ? "" : mockRes.ageingItem[1].decimal;
+  const AllocatedPercentage = mockRes.ageingData[1].decimal;
   const AllocatedchartData = [
     {
       category: "Total",
@@ -409,15 +365,28 @@ const Ageing = () => {
       color: "#984EA3",
     },
   ];
+  const [rows, setRows] = useState(mockRes.ageingData); //mockRes.zones//data
 
   return (
     <div>
       <div className="row">
-        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="p-1">
             {/* <label className="float-start pageTitle">Ageing</label> */}
             <div className="float-start dashboardLabels">
+              <label className="statusOn">Bank : </label>{" "}
+              <select
+                name="bank"
+                className="inputDate"
+                onChange={(e) => {
+                  setBank(e.target.value);
+                }}
+              >
+                <option value="Kotak">Kotak</option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+              </select>
               {"  "}
               <label className="statusOn">Zone : </label>{" "}
               <select

@@ -1,60 +1,90 @@
 import React, { useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import { v4 as uuid } from "uuid";
-import {
-  DateFormatFunction,
-  ConvertFormat,
-} from "../HtmlComponents/CommonFunction";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const UserActiveInactiveReport = () => {
-  const [fromDate, setFromDate] = useState(
-    "2023-04-01" //  new Date().toISOString().split("T")[0]
+  const [formDate, setFormDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [dateFromValue, setDateFromValue] = useState(
+    new Date().toISOString().split("T")[0]
   );
-  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
+  const [dateToValue, setDateToValue] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  function formatDate(inputDate) {
+    // Parse the input date string into a Date object
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]) - 1; // JavaScript months are zero-based
+    const day = parseInt(dateParts[2]);
+    const formattedDate = new Date(year, month, day);
 
-  const columns = [
-    {
-      Header: "User ID",
-      accessor: "userId",
-    },
-    {
-      Header: "User Type",
-      accessor: "userType",
-    },
-    {
-      Header: "Bank ID",
-      accessor: "bankId",
-    },
-    {
-      Header: "PDID",
-      accessor: "pdid",
-    },
+    // Extract day, month, and year components
+    const dd = String(formattedDate.getDate()).padStart(2, "0");
+    const mm = String(formattedDate.getMonth() + 1).padStart(2, "0"); // Add 1 to the month (zero-based)
+    const yyyy = formattedDate.getFullYear();
 
-    {
-      Header: "ROID",
-      accessor: "roid",
-    },
-    {
-      Header: "Domain User Name",
-      accessor: "domainUserName",
-    },
-    {
-      Header: "User Full Name",
-      accessor: "fullName",
-    },
-    {
-      Header: "Status",
-      accessor: "status",
-    },
-    {
-      Header: "Role",
-      accessor: "role",
-    },
-    {
-      Header: `Logged in \n Date & Time`,
-      accessor: "loggedTime",
-    },
-  ];
+    // Format the date in "dd-mm-yyyy" format
+    return `${dd}-${mm}-${yyyy}`;
+  }
+  // const columns = [
+  //   {
+  //     Header: "User ID",
+  //     accessor: "userId",
+  //   },
+  //   {
+  //     Header: "User Type",
+  //     accessor: "userType",
+  //   },
+  //   {
+  //     Header: "Bank ID",
+  //     accessor: "bankId",
+  //   },
+  //   {
+  //     Header: "PDID",
+  //     accessor: "pdid",
+  //   },
+
+  //   {
+  //     Header: "ROID",
+  //     accessor: "roid",
+  //   },
+  //   {
+  //     Header: "Domain User Name",
+  //     accessor: "domainUserName",
+  //   },
+  //   {
+  //     Header: "User Full Name",
+  //     accessor: "fullName",
+  //   },
+  //   {
+  //     Header: "Status",
+  //     accessor: "status",
+  //   },
+  //   {
+  //     Header: "Role",
+  //     accessor: "role",
+  //   },
+  //   {
+  //     Header: `Logged in \n Date & Time`,
+  //     accessor: "loggedTime",
+  //   },
+  // ];
+  
+  const columns =  [
+    { field: "userId", sortable: true, filter: true, showFilterMenu: false, header: "User ID" },
+    { field: "userType", sortable: true, filter: true, showFilterMenu: false, header: "User Type" },
+    { field: "bankId", sortable: true, filter: true, showFilterMenu: false, header: "Bank ID" },
+    { field: "pdid", sortable: true, filter: true, showFilterMenu: false, header: "PDID" },
+    { field: "roid", sortable: true, filter: true, showFilterMenu: false, header: "ROID" },
+    { field: "domainUserName", sortable: true, filter: true, showFilterMenu: false, header: "Domain User Name" },
+    { field: "fullName", sortable: true, filter: true, showFilterMenu: false, header: "User Full Name" },
+    { field: "status", sortable: true, filter: true, showFilterMenu: false, header: "Status" },
+    { field: "role", sortable: true, filter: true, showFilterMenu: false, header: "Role" },
+    { field: "loggedTime", sortable: true, filter: true, showFilterMenu: false, header: "Logged in Date & Time" }
+  ]
+  
   const data = [
     {
       id: 1,
@@ -68,6 +98,7 @@ const UserActiveInactiveReport = () => {
       status: "Active",
       role: "AdminRole",
       loggedTime: "27-10-2023 \n 09:53:30",
+      ipAddress: "10.53.80.21",
     },
     {
       id: 2,
@@ -81,6 +112,7 @@ const UserActiveInactiveReport = () => {
       status: "Inactive",
       role: "AdminRole",
       loggedTime: "27-10-2023 \n 09:53:30",
+      ipAddress: "10.53.80.21",
     },
     {
       id: 3,
@@ -91,9 +123,10 @@ const UserActiveInactiveReport = () => {
       roid: "",
       domainUserName: "NHAI",
       fullName: "NHAI User",
-      status: "Active",
+      status: "Inactive",
       role: "AdminRole",
       loggedTime: "27-10-2023 \n 09:53:30",
+      ipAddress: "10.53.80.21",
     },
   ];
   const [rows, setRows] = useState(data);
@@ -112,10 +145,12 @@ const UserActiveInactiveReport = () => {
                   id="dateInput"
                   className="inputDate"
                   type="date"
-                  value={fromDate || ""}
+                  value={dateFromValue || ""}
                   onChange={(e) => {
-                    setFromDate(e.target.value);
-                    console.log("->", ConvertFormat(e.target.value));
+                    const E = formatDate(e.target.value);
+                    setDateFromValue(e.target.value);
+                    console.log("----->", E);
+                    setFormDate(E);
                   }}
                 />{" "}
                 <label className="statusOn ms-5">To :</label>
@@ -124,10 +159,12 @@ const UserActiveInactiveReport = () => {
                   id="dateInput"
                   className="inputDate"
                   type="date"
-                  value={toDate || ""}
+                  value={dateToValue || ""}
                   onChange={(e) => {
-                    setToDate(e.target.value);
-                    console.log("->", ConvertFormat(e.target.value));
+                    setDateToValue(e.target.value);
+                    const E = formatDate(e.target.value);
+                    console.log("----->", E);
+                    setToDate(E);
                   }}
                 />{" "}
                 <label className="statusOn  ms-5">Status :</label>{" "}
@@ -156,13 +193,19 @@ const UserActiveInactiveReport = () => {
           </div>
         </div>
         <div className="row">
-          <div className="mt-2"></div>
-          <DataTable
+          <div className="mt-2 tableDiv">
+          {/* <DataTable
             columns={columns}
             data={rows} //{data} //
             customClass="LoginReportTable"
             showSearchBar={false}
-          />{" "}
+          />{" "} */}
+
+          <GenericDataTable 
+          data={rows} 
+          columns={columns}                    
+              />
+              </div>
           <div className="mt-2"></div>
         </div>
       </div>

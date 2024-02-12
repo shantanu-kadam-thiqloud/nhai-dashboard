@@ -1,32 +1,20 @@
 import React, { useState, useEffect } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import "../../Assets/Css/Dashboard.css";
 import axios from "axios";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import {
-  DateFormatFunction,
-  ConvertFormat,
-} from "../HtmlComponents/CommonFunction";
-import { DashboardService } from "../../Service/DashboardService";
-import Spinner from "../HtmlComponents/Spinner";
-import { useNavigate } from "react-router-dom";
 
 const RO = () => {
-  const [asOnDate, setAsOnDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [dynamicDate, setDate] = useState(new Date());
+  const currentDate = new Date().toISOString().split("T")[0];
   const [dbdata, setDbdata] = useState([]);
   const [reginoalTable, setReginoalTable] = useState([]);
   const [corDecimalType, setcoreDecimalType] = useState("");
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    FetchRO();
     // Initialize the data to "Core" when the component mounts
-    // fetchCoreData("crore");
+    fetchCoreData("crore");
   }, []);
 
   const fetchCoreData = (type) => {
@@ -86,136 +74,67 @@ const RO = () => {
       console.log("reginoalTable", reginaolData);
     }
   }, [dbdata]);
-
-  // const columns = [
-  //   { field: "id", headerName: "Sr no", width: 90 },
-  //   {
-  //     field: "office",
-  //     headerName: "Regional Office",
-  //     width: 150,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "zone",
-  //     headerName: "Zone",
-  //     width: 150,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "piu",
-  //     headerName: "No. of PIU",
-  //     type: "number",
-  //     width: 110,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "subsidiaryAccounts",
-  //     headerName: "No. of Subsidiary Accounts",
-  //     sortable: true,
-  //     width: 160,
-  //   },
-  //   // Extra fields
-  //   {
-  //     field: "sanctionLimit",
-  //     headerName: "Sanction Limit",
-  //     type: "number",
-  //     width: 120,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "utilizedLimit",
-  //     headerName: "Utilized Limit",
-  //     type: "number",
-  //     width: 120,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "unutilizedLimit", // Field for "Un-Utilized Limit"
-  //     headerName: "Un-Utilized Limit",
-  //     type: "number",
-  //     width: 120,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "percentage", // Field for "Utilized Percentage"
-  //     headerName: "Utilized Percentage",
-  //     type: "number",
-  //     width: 120,
-  //     editable: true,
-  //   },
-  // ];
-
-  //---------------------------------------------------------------------------------------
-
   const columns = [
+    { field: "id", headerName: "Sr no", width: 90 },
     {
-      accessor: "office",
-      Header: "Regional Office",
+      field: "office",
+      headerName: "Regional Office",
+      width: 150,
+      editable: true,
     },
     {
-      accessor: "zone",
-      Header: "Zone",
+      field: "zone",
+      headerName: "Zone",
+      width: 150,
+      editable: true,
     },
     {
-      accessor: "piu",
-      Header: "No. of PIU",
+      field: "piu",
+      headerName: "No. of PIU",
+      type: "number",
+      width: 110,
+      editable: true,
     },
     {
-      accessor: "subsidiaryAccounts",
-      Header: "No. of Subsidiary Accounts",
+      field: "subsidiaryAccounts",
+      headerName: "No. of Subsidiary Accounts",
+      sortable: true,
+      width: 160,
     },
-    // Extra accessors
+    // Extra fields
     {
-      accessor: "sanctionLimit",
-      Header: "Sanction Limit",
-    },
-    {
-      accessor: "utilizedLimit",
-      Header: "Utilized Limit",
-    },
-    {
-      accessor: "unutilizedLimit", // accessor for "Un-Utilized Limit"
-      Header: "Un-Utilized Limit",
+      field: "sanctionLimit",
+      headerName: "Sanction Limit",
+      type: "number",
+      width: 120,
+      editable: true,
     },
     {
-      accessor: "percentage", // accessor for "Utilized Percentage"
-      Header: "Utilized Percentage",
+      field: "utilizedLimit",
+      headerName: "Utilized Limit",
+      type: "number",
+      width: 120,
+      editable: true,
+    },
+    {
+      field: "unutilizedLimit", // Field for "Un-Utilized Limit"
+      headerName: "Un-Utilized Limit",
+      type: "number",
+      width: 120,
+      editable: true,
+    },
+    {
+      field: "percentage", // Field for "Utilized Percentage"
+      headerName: "Utilized Percentage",
+      type: "number",
+      width: 120,
+      editable: true,
     },
   ];
-  function FetchRO() {
-    DashboardService.getRO(
-      {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
-        },
-        userName: "NHAI",
-        statusAsOn: "21-05-2020", //ConvertFormat(asOnDate),
-        ro: "All",
-      },
-      (res) => {
-        if (res.status === 200) {
-          // setRows(res.data);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-      },
-      (error) => {
-        setIsLoading(false);
-        console.error("Error->", error);
-      }
-    );
-  }
 
   return (
     <div>
       <div className="row">
-        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="p-1">
             {/* <label className="float-start pageTitle">RO</label> */}
@@ -226,12 +145,19 @@ const RO = () => {
                 id="dateInput"
                 className="inputDate"
                 type="date"
-                value={asOnDate || ""}
-                onChange={(e) => {
-                  setAsOnDate(e.target.value);
-                  console.log("->", ConvertFormat(e.target.value));
-                }}
+                // onChange={(e) => {
+                //   setDate(e.target.value);
+                // }}
+                defaultValue={currentDate}
               />{" "}
+              <label className="statusOn">Bank : </label>{" "}
+              <select name="bank" className="inputDate">
+                <option value="Kotak">Kotak</option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+              </select>
+              {"  "}
               <label className="statusOn">Zone : </label>{" "}
               <select name="zone" className="inputDate">
                 <option value="All">All</option>
@@ -274,13 +200,13 @@ const RO = () => {
       <hr />
       <div className="row">
         <div className="p-2">
-          <DataTable
+          {/* <DataTable
             columns={columns}
             data={reginoalTable}
             customClass="ROTable"
             showSearchBar={false}
-          />{" "}
-          {/* <Box sx={{ height: 400, width: "100%" }}>
+          />{" "} */}
+          <Box sx={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={reginoalTable}
               columns={columns}
@@ -302,7 +228,7 @@ const RO = () => {
                 },
               }}
             />
-          </Box> */}
+          </Box>
         </div>
       </div>
     </div>

@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import { v4 as uuid } from "uuid";
-import Hyperlink from "./Hyperlink";
-import {
-  DateFormatFunction,
-  ConvertFormat,
-} from "../HtmlComponents/CommonFunction";
-import { DashboardService } from "../../Service/DashboardService";
-import Spinner from "../HtmlComponents/Spinner";
-import { useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const AccountLevel = () => {
-  const [asOnDate, setAsOnDate] = useState(
+  const currentDate = new Date().toISOString().split("T")[0];
+  const cdate = formatDate(currentDate);
+  const [dynamicDate, setDate] = useState(cdate);
+  const [dateValue, setDateValue] = useState(
     new Date().toISOString().split("T")[0]
   );
+
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
 
@@ -21,185 +19,203 @@ const AccountLevel = () => {
   const [roD, setRo] = useState("");
   const [zoneD, setZone] = useState("");
   const [Decimal, setDecimal] = useState(true);
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-  const columns = [
-    {
-      Header: "Bank",
-      accessor: "bank",
-    },
-    {
-      Header: "PIU",
-      accessor: "piu",
-
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black"
-        >
-          {row.values.piu}
-        </a>
-      ),
-    },
-    {
-      Header: "Regional Office",
-      accessor: "regionalOffice",
-    },
-    {
-      Header: "Zone",
-      accessor: "zone",
-    },
-    {
-      Header: "Account Number",
-      accessor: "accNum",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black float-end"
-        >
-          {row.values.accNum}
-        </a>
-      ),
-    },
-    {
-      Header: "Project Name",
-      accessor: "projectName",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black"
-        >
-          {row.values.projectName}
-        </a>
-      ),
-    },
-    {
-      Header: "Account Open Date",
-      accessor: "accountOpeningData",
-    },
-    {
-      Header: "Limit Sanction Date",
-      accessor: "limitSancationDate",
-    },
-    {
-      Header: "Sanction Limit",
-      accessor: "crore.sanctionLimit", // Decimal ? "decimal.sanctionLimit" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Utilized Limit",
-      accessor: "crore.utilizedLimit", //Decimal ? "decimal.utilizedLimit" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Un-Utilized Limit",
-      accessor: "crore.unUtilizedLimit", // Decimal ? "decimal.unUtilizedLimit" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Utilization %",
-      accessor: "crore.utilizedPercent", // Decimal ? "decimal.utilizedPercent" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-    {
-      Header: "Active/Inactive",
-      accessor: "status",
-      Cell: ({ value }) => (
-        <div className="mx-auto">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckIndeterminate"
-            checked={value}
-          />
-        </div>
-      ),
-    },
-    {
-      Header: "Project Director(PD) Name",
-      accessor: "directorName",
-    },
-    {
-      Header: "PMIS Code",
-      accessor: "pmisCode",
-    },
+   const columns =[
+    { "field": "bank", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Bank", "width": 150, "editable": false, "type": "string" },
+    { "field": "piu", "sortable": true, "filter": true, "showFilterMenu": false, "header": "PIU", "width": 150, "editable": false, "type": "string", "body": "HyperLinkTemplate" },
+    { "field": "regionalOffice", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Regional Office", "width": 150, "editable": false, "type": "string" },
+    { "field": "zone", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Zone", "width": 150, "editable": false, "type": "string" },
+    { "field": "accNum", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Account Number", "width": 150, "editable": false, "type": "string", "body": "HyperLinkTemplate", "class": "text-end" },
+    { "field": "projectName", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Project Name", "width": 150, "editable": false, "type": "string", "body": "HyperLinkTemplate" },
+    { "field": "accountOpeningData", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Account Opening Date", "width": 150, "editable": false, "type": "date" },
+    { "field": "limitSancationDate", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Limit Sanction Date", "width": 150, "editable": false, "type": "date" },
+    { "field": "crore.sanctionLimit", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Sanction Limit (Crore)", "width": 150, "editable": false, "type": "number" },
+    { "field": "crore.utilizedLimit", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Utilized Limit (Crore)", "width": 150, "editable": false, "type": "number" },
+    { "field": "crore.unUtilizedLimit", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Unutilized Limit (Crore)", "width": 150, "editable": false, "type": "number" },
+    { "field": "crore.utilizedPercent", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Utilized Percentage", "width": 150, "editable": false, "type": "string" },
+    { "field": "status", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Status", "width": 150, "editable": false, "type": "boolean" },
+    { "field": "directorName", "sortable": true, "filter": true, "showFilterMenu": false, "header": "Director Name", "width": 150, "editable": false, "type": "string" },
+    { "field": "pmisCode", "sortable": true, "filter": true, "showFilterMenu": false, "header": "PMIS Code", "width": 150, "editable": false, "type": "string" }
   ];
+   
+
+  // const columns = [
+  //   {
+  //     Header: "Bank",
+  //     accessor: "bank",
+  //   },
+  //   {
+  //     Header: "PIU",
+  //     accessor: "piu",
+
+  //     // Cell: ({ row }) => (
+  //     //   <a
+  //     //     href="#"
+  //     //     onClick={() => {
+  //     //       setRData(row.values);
+  //     //       setIsOpen(true);
+  //     //     }}
+  //     //     style={{ color: "black" }}
+  //     //   >
+  //     //     {row.values.piu}
+  //     //   </a>
+  //     // ),
+  //   },
+  //   {
+  //     Header: "Regional Office",
+  //     accessor: "regionalOffice",
+  //   },
+  //   {
+  //     Header: "Zone",
+  //     accessor: "zone",
+  //   },
+  //   {
+  //     Header: "Account Number",
+  //     accessor: "accNum",
+  //     // Cell: ({ row }) => (
+  //     //   <a
+  //     //     href="#"
+  //     //     onClick={() => {
+  //     //       setRData(row.values);
+  //     //       setIsOpen(true);
+  //     //     }}
+  //     //     style={{ color: "black", float: "right" }}
+  //     //   >
+  //     //     {row.values.accNum}
+  //     //   </a>
+  //     // ),
+  //   },
+  //   {
+  //     Header: "Project Name",
+  //     accessor: "projectName",
+  //     // Cell: ({ row }) => (
+  //     //   <a
+  //     //     href="#"
+  //     //     onClick={() => {
+  //     //       setRData(row.values);
+  //     //       setIsOpen(true);
+  //     //     }}
+  //     //     style={{ color: "black" }}
+  //     //   >
+  //     //     {row.values.projectName}
+  //     //   </a>
+  //     // ),
+  //   },
+  //   {
+  //     Header: "Account Open Date",
+  //     accessor: "accountOpeningData",
+  //   },
+  //   {
+  //     Header: "Limit Sanction Date",
+  //     accessor: "limitSancationDate",
+  //   },
+  //   {
+  //     Header: "Sanction Limit",
+  //     accessor: "crore.sanctionLimit", // Decimal ? "decimal.sanctionLimit" :
+  //     // Cell: ({ value }) => <div style={{ float: "right" }}>{value}</div>,
+  //   },
+  //   {
+  //     Header: "Utilized Limit",
+  //     accessor: "crore.utilizedLimit", //Decimal ? "decimal.utilizedLimit" :
+  //     // Cell: ({ value }) => <div style={{ float: "right" }}>{value}</div>,
+  //   },
+  //   {
+  //     Header: "Un-Utilized Limit",
+  //     accessor: "crore.unUtilizedLimit", // Decimal ? "decimal.unUtilizedLimit" :
+  //     // Cell: ({ value }) => <div style={{ float: "right" }}>{value}</div>,
+  //   },
+  //   {
+  //     Header: "Utilization %",
+  //     accessor: "crore.utilizedPercent", // Decimal ? "decimal.utilizedPercent" :
+  //     // Cell: ({ value }) => <div style={{ float: "right" }}>{value}</div>,
+  //   },
+  //   {
+  //     Header: "Active/Inactive",
+  //     accessor: "status",
+  //     // Cell: ({ value }) => (
+  //     //   <div style={{ float: "center" }}>
+  //     //     <input
+  //     //       class="form-check-input"
+  //     //       type="checkbox"
+  //     //       value=""
+  //     //       id="flexCheckIndeterminate"
+  //     //       checked={value}
+  //     //     />
+  //     //   </div>
+  //     // ),
+  //   },
+  //   {
+  //     Header: "Project Director(PD) Name",
+  //     accessor: "directorName",
+  //   },
+  //   {
+  //     Header: "PMIS Code",
+  //     accessor: "pmisCode",
+  //   },
+  // ];
   const data = [
     {
-      id: 1,
+      bank: "Kotak",
       piu: "Total",
-      office: "",
+	  regionalOffice: "Bhubaneswar",      
       zone: "",
-      subsidiaryAccounts: "793",
-      sanctionLimit: "64,251.97",
-      utilizedLimit: "56,544.68",
-      unutilizedLimit: "7,707.29",
-      percentage: "88.00%",
+	  accNum: "0715750979",
+	  projectName: "CALA KHURDHA AND PD NHAI PIU BALASORE",
+      accountOpeningData: "04-03-2020",
+        limitSancationDate: "",
+        crore: {
+          sanctionLimit: "39,430.72",
+          utilizedLimit: "29,297.98",
+          unUtilizedLimit: "10,132.74",
+          utilizedPercent: "74.30%",
+        },
+        status: true,
+        directorName: "Mr.Kotak",
+        pmisCode: "1A02D4",
     },
     {
-      id: 2,
-      piu: "Balasore",
-      office: "Bhubaneswar",
+      bank: "Kotak",
+      piu: "Balasore",      
       zone: "East",
-      subsidiaryAccounts: "6",
-      sanctionLimit: "10.58",
-      utilizedLimit: "6.82",
-      unutilizedLimit: "3.76",
-      percentage: "64.43%",
-    },
-    {
-      id: 3,
-      piu: "Berhampur",
-      office: "Bhubaneswar",
-      zone: "East",
-      subsidiaryAccounts: "2",
-      sanctionLimit: "13.45",
-      utilizedLimit: "13.45",
-      unutilizedLimit: "0.00",
-      percentage: "100.00%",
-    },
-    {
-      id: 4,
-      piu: "Bhubaneswar",
-      office: "Bhubaneswar",
-      zone: "East",
-      subsidiaryAccounts: "9",
-      sanctionLimit: "27.75",
-      utilizedLimit: "4.20",
-      unutilizedLimit: "23.55",
-      percentage: "15.12%",
-    },
-    {
-      id: 5,
-      piu: "Dhenkanal",
-      office: "Bhubaneswar",
-      zone: "East",
-      subsidiaryAccounts: "4",
-      sanctionLimit: "142.47",
-      utilizedLimit: "142.18",
-      unutilizedLimit: "0.28",
-      percentage: "99.80%",
-    },
+	  accNum: "0715750979",
+	  projectName: "CALA KHURDHA AND PD NHAI PIU BALASORE",
+      accountOpeningData: "04-03-2020",
+        limitSancationDate: "",
+        crore: {
+          sanctionLimit: "39,430.72",
+          utilizedLimit: "29,297.98",
+          unUtilizedLimit: "10,132.74",
+          utilizedPercent: "74.30%",
+        },
+        status: true,
+        directorName: "Mr.Kotak",
+        pmisCode: "1A02D4",
+    },    
   ];
-
+  useEffect(() => {
+    const d = formatDate(dateValue);
+    setDate(d);
+  }, [dateValue]);
   useEffect(() => {
     console.log("reqBody-->", reqBody);
-  }, [asOnDate]);
+  }, [dynamicDate]);
 
   //Mock----------------------------------------------------------------------
+  function formatDate(inputDate) {
+    // Parse the input date string into a Date object
+    const dateParts = inputDate.split("-");
+    const year = parseInt(dateParts[0]);
+    const month = parseInt(dateParts[1]) - 1; // JavaScript months are zero-based
+    const day = parseInt(dateParts[2]);
+    const formattedDate = new Date(year, month, day);
+
+    // Extract day, month, and year components
+    const dd = String(formattedDate.getDate()).padStart(2, "0");
+    const mm = String(formattedDate.getMonth() + 1).padStart(2, "0"); // Add 1 to the month (zero-based)
+    const yyyy = formattedDate.getFullYear();
+
+    // Format the date in "dd-mm-yyyy" format
+    return `${dd}-${mm}-${yyyy}`;
+  }
 
   const reqBody = {
     requestMetaData: {
@@ -207,7 +223,7 @@ const AccountLevel = () => {
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
     userName: "nhai",
-    statusAsOn: ConvertFormat(asOnDate), //"28-09-2023",
+    statusAsOn: dynamicDate, //"28-09-2023",
     bank: bankD, //"All", //Kotak,
   };
 
@@ -258,33 +274,9 @@ const AccountLevel = () => {
     ],
   };
   const [rows, setRows] = useState(mockRes.accWiseData);
-
-  //---------------------------------------------------------------------------------------
-  function FetchAccountLevel() {
-    DashboardService.getAccountLevel(
-      reqBody,
-      (res) => {
-        if (res.status === 200) {
-          // setRows(res.data);
-          setIsLoading(false);
-        } else if (res.status == 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-      },
-      (error) => {
-        setIsLoading(false);
-        console.error("Error->", error);
-      }
-    );
-  }
   return (
     <div>
       <div className="row">
-        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="p-1">
             {/* <label className="float-start pageTitle">Account Level</label> */}
@@ -295,12 +287,25 @@ const AccountLevel = () => {
                 id="dateInput"
                 className="inputDate"
                 type="date"
-                value={asOnDate || ""}
+                value={dateValue || ""}
                 onChange={(e) => {
-                  setAsOnDate(e.target.value);
-                  console.log("->", ConvertFormat(e.target.value));
+                  const E = e.target.value;
+                  console.log("----->", E);
+                  setDateValue(E);
                 }}
               />{" "}
+              <label className="statusOn">Bank : </label>{" "}
+              <select
+                name="bank"
+                className="inputDate"
+                onChange={(e) => {
+                  setBank(e.target.value);
+                }}
+              >
+                <option value="All">All</option>
+                <option value="Kotak">Kotak</option>
+              </select>
+              {"  "}
             </div>
             <div className="float-end dashboardLabels">
               <button
@@ -316,16 +321,44 @@ const AccountLevel = () => {
       </div>
       <hr />
       <div className="row">
-        <div className="p-2">
-          <DataTable
+        <div className="p-2 tableDiv">
+          {/* <DataTable
             columns={columns}
             data={rows} //{data}
             customClass="AccLevelable"
             showSearchBar={false}
-          />{" "}
+          />{" "} */}
+        {/* <DataTable
+                value={rows}
+                removableSort
+                filterDisplay="row"
+                showGridlines
+                tableStyle={{ width: '150px' }}
+              >
+                {columns.map((col) => (
+                  <Column
+                  key={col.field}
+                  field={col.field}
+                  sortable
+                  filter
+                  filterPlaceholder="Search"
+                  filterMatchMode="contains"
+                  showGridlines
+                  header={col.header}
+                  style={{ width: '150px', whiteSpace: 'normal' }}
+                  body={col.body}
+                  className= {col.class}
+                  />
+                ))}
+    </DataTable> */}
+
+            <GenericDataTable 
+            data={rows} 
+            columns={columns}    
+              />
+
         </div>
-      </div>
-      <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
+      </div>      
     </div>
   );
 };
