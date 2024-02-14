@@ -3,8 +3,9 @@ export const Global_var = {
   BASEURL: "http://172.16.16.99:8091", //Amol local with VPN
   BASEURL1: "http://172.16.16.201:8085", //Ayush
   BASEURL2: "http://172.16.16.201:7091", //Sumit
+  AUTH_BASE: "http://localhost:3007/api",
   //--------Login----------------------------------------
-  URL_LOGIN: "/usermanagement/login/v1",
+  URL_LOGIN: "http://localhost:3007/api/auth/login", //"/usermanagement/login/v1",
   //--------Users----------------------------------
   URL_GET_USERS: "/usermanagement/admin/users/v1",
   URL_GET_USER_BY_ID: "/usermanagement/admin/userDetails/v1",
@@ -45,7 +46,7 @@ export const Global_var = {
   URL_CHECKER_PROFILE_APPROVAL: "/usermanagement/checker/profile/action/v1",
   //-------------------------------------------------------------------------------------------------------------
   //--------Dashboard API----------------------------------------------------------------------------------------
-  URL_BANK: "/dashboard/bank/v1",
+  URL_BANK: "/secure/bank", //"http://172.16.16.201:8085/dashboard/bank/v1",
   URL_EVENTS: "/dashboard/events/v1",
   URL_SNAPSHOT: "/dashboard/snapshort/v1",
   URL_SNAPSHOT_STATUS: "/dashboard/snapshot-status/v1",
@@ -53,7 +54,7 @@ export const Global_var = {
   URL_VELOCITY: "/dashboard/velocity/v1",
   URL_AGEING: "/dashboard/ageingitem/v1",
   URL_LIMITLEDGER: "/dashboard/limit-ledger/v1",
-  URL_RO: "/dashboard/regional-office/v1",
+  URL_RO: "/secure/reginolOffice", //"/dashboard/regional-office/v1",
   URL_PIU: "/dashboard/piu/v1",
   URL_ACCOUNT_LEVEL: "/dashboard/acc-level/v1",
   URL_TRANSACTION: "/dashboard/transaction/v1",

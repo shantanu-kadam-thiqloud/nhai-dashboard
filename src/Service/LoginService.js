@@ -6,7 +6,7 @@ export const LoginService = {
 };
 
 function userLogin(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_LOGIN;
+  var url = Global_var.URL_LOGIN; // Global_var.BASEURL +
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

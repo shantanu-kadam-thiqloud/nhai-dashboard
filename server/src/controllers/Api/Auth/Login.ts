@@ -13,25 +13,25 @@ const BASE_URL = Locals.config().baseUrl;
 const ttlInSeconds = 180; // 30 min
 class Login {
   public static async login(req: any, res: any, next: any): Promise<any> {
+    // console.log("login API i/p -> ", req, res);
+    //   const privateKey = Crypto.getPrivateKeyPem();
+    //   const publicKey = Crypto.getPublicKeyPem();
 
-//   const privateKey = Crypto.getPrivateKeyPem();
-//   const publicKey = Crypto.getPublicKeyPem();
+    //   if (!privateKey || !publicKey) {
+    //     return res.status(500).json({ error: "Key pair is not available." });
+    //   }
+    //   console.log('decryption publicKeyPem :---', publicKey );
+    //   console.log('Decryption privateKeyPem :---', privateKey);
+    //   const base64EncodedEncryptedData = req.body.encrypted; // Replace with your received data
 
-//   if (!privateKey || !publicKey) {
-//     return res.status(500).json({ error: "Key pair is not available." });
-//   }
-//   console.log('decryption publicKeyPem :---', publicKey );
-//   console.log('Decryption privateKeyPem :---', privateKey);
-//   const base64EncodedEncryptedData = req.body.encrypted; // Replace with your received data
+    // const encryptedData = forge.util.decode64(base64EncodedEncryptedData);
 
-// const encryptedData = forge.util.decode64(base64EncodedEncryptedData);
-
-// const privateKeyObject = forge.pki.privateKeyFromPem(privateKey);
-// const decrypted = privateKeyObject.decrypt(encryptedData, "RSA-OAEP");
-// // Convert the decrypted binary data back to a UTF-8 string
-// const decryptedText = forge.util.decodeUtf8(JSON.parse(decrypted));
-// console.log('convert to object ',JSON.parse(decrypted));
-// console.log('Decrypted Data:',decryptedText);
+    // const privateKeyObject = forge.pki.privateKeyFromPem(privateKey);
+    // const decrypted = privateKeyObject.decrypt(encryptedData, "RSA-OAEP");
+    // // Convert the decrypted binary data back to a UTF-8 string
+    // const decryptedText = forge.util.decodeUtf8(JSON.parse(decrypted));
+    // console.log('convert to object ',JSON.parse(decrypted));
+    // console.log('Decrypted Data:',decryptedText);
 
     const unencryptedData = req.body.encrypted;
     const URL = BASE_URL + `/api/auth/generate-token`;
@@ -48,8 +48,8 @@ class Login {
 
     try {
       // Dummy login API
-      const LoginUser = await api.post('https://dummyjson.com/auth/login', unencryptedData, "");
-      //console.log('logindata', LoginUser.data)
+      const LoginUser = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+      console.log('Incoming Data-->', req.body);
       //Set to redis-----------------------------------------------------------------
       if (LoginUser) {
         const session_id = uuid();
@@ -69,6 +69,7 @@ class Login {
         // Sending the response after processing
         res.json({
           message: "User login successfully.",
+          data: LoginUser,
           session_id: session_id
         });
         // await useRedis.get(session_id);
@@ -79,11 +80,11 @@ class Login {
 
     } catch (error) {
       console.error('Error during POST request:', error);
-      res.status(500).json({ error: 'Error during POST request' });
+      res.status(500).json({ error: 'Error during POST request' + error });
     }
   }
 
-  public static async logout(req, res, next): Promise<any> {
+  public static async logout(req: any, res: any, next: any): Promise<any> {
     const session_id = req.body.encrypted;
     const redisRES = await useRedis.delete(session_id);
     //console.log(redisRES);       

@@ -197,7 +197,7 @@ const RO = () => {
       },
       (res) => {
         if (res.status === 200) {
-          var d = res.data.regionWiseData;
+          var d = res.data.data.regionWiseData;
           //   setRows(d);
           setReginoalTable(d);
           setIsLoading(false);

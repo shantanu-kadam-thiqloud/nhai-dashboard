@@ -71,6 +71,7 @@ function downloadFIFOReport(mfaInfo, fn, fnError) {
     }
   });
 }
+
 function downloadUserLoginReport(mfaInfo, fn, fnError) {
   var url = Global_var.BASEURL2 + Global_var.URL_DOWNLOAD_LOGIN;
 

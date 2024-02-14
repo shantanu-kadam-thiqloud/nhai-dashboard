@@ -48,20 +48,23 @@ const Login = () => {
         email: values.username, //"ro_telang@nhai.com",
       },
       (res) => {
+        debugger;
         if (res.status == 200) {
           toast.success("Login successful!", {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,
           });
-          var userData = res.data.responseObject;
+          var userData = res.data.data.responseObject;
+          localStorage.setItem("UUID", res.data.data.sessionId);
+          //res.data.data.responseObject
           setUserDetails(userData);
-          console.log(
-            "User Data = > ",
-            userData.userName,
-            userData.userId,
-            userData.profileId
-          );
+          // console.log(
+          //   "User Data = > ",
+          //   userData.userName,
+          //   userData.userId,
+          //   userData.profileId
+          // );
           setIsLoading(false);
           navigate("/NHAI/Dashboard");
         } else if (res.status == 404) {

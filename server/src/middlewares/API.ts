@@ -14,6 +14,7 @@ export const get = async (url: string) => {
 
 // Middleware function to make a POST request
 export const post = async (url: string, data: any, customHeaders: any) => {
+
   try {
     const response = await axios.post(url, data, customHeaders);
     return response.data;

@@ -21,6 +21,7 @@ const Bank = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [Decimal, setDecimal] = useState(true);
   const [zone, setZone] = useState("All");
+  const [rows, setRows] = useState([]);
   const data = {
     decimal: {
       nodalAccountBalance: "10,360.07",
@@ -53,28 +54,6 @@ const Bank = () => {
     // Initialize the data to "Core" when the component mounts
     //fetchCoreData("crore");
   }, [asOnDate, zone]);
-
-  // const fetchCoreData = (type) => {
-  // setDbdata(data.decimal);
-  // const apiUrl = "http://localhost:3007/api/secure/bank";
-  // const uuid = localStorage.getItem("UUID");
-  // const headers = {
-  //   XUuid: uuid,
-  // };
-  // // Make the Axios GET request with the headers
-  // axios
-  //   .get(apiUrl, { headers })
-  //   .then((response) => {
-  //     if (type === "crore") {
-  //       setDbdata(response.data.data.crore);
-  //     } else {
-  //       setDbdata(response.data.data.decimal);
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error:", error);
-  //   });
-  //};
 
   // useEffect(() => {
   //   if (dbdata && Object.keys(dbdata).length > 0) {
@@ -190,24 +169,47 @@ const Bank = () => {
       },
     ],
   };
+  const reqBody = {
+    requestMetaData: {
+      applicationId: "nhai-dashboard",
+      correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+    },
+    userName: "NHAI",
+    statusAsOn: ConvertFormat(asOnDate), //"21-05-2020",
+    bank: "Kotak",
+    zone: zone,
+  };
 
+  // const fetchCoreData = (type) => {
+  //   setDbdata(data.decimal);
+  //   const apiUrl = "http://localhost:3007/api/secure/bank";
+  //   const uuid = localStorage.getItem("UUID");
+  //   const headers = {
+  //     XUuid: uuid,
+  //   };
+  //   // Make the Axios GET request with the headers
+  //   axios
+  //     .get(apiUrl, { headers })
+  //     .then((response) => {
+  //       console.log(response.data.bankItem);
+  //       // if (type === "crore") {
+  //       //   setDbdata(response.data.data.crore);
+  //       // } else {
+  //       //   setDbdata(response.data.data.decimal);
+  //       // }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
   //---------------------------------------------------------------------------------------
   function FetchBank() {
     DashboardService.getBank(
-      {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
-        },
-        userName: "NHAI",
-        statusAsOn: ConvertFormat(asOnDate), //"21-05-2020",
-        bank: "Kotak",
-        zone: zone,
-      },
+      reqBody,
       (res) => {
         if (res.status === 200) {
-          console.log(res.data.bankItem);
-          // setRows(res.data);
+          console.log(res.data.data.bankItem);
+          setRows(res.data.data.bankItem);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -295,7 +297,7 @@ const Bank = () => {
           <div className="p-2">
             <DataTable
               columns={columns}
-              data={bankTable.bankItem}
+              data={rows} //{bankTable.bankItem}
               customClass="BankTable"
               showSearchBar={false}
             />{" "}

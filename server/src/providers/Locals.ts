@@ -26,6 +26,7 @@ class Locals {
 		const redisPrefix = process.env.REDIS_QUEUE_DB || 'q';
 		const redisDB = process.env.REDIS_QUEUE_PREFIX || 3;
 		const baseUrl = `http://localhost:${process.env.PORT || 3007}`;
+		const aBaseUrl = 'http://172.16.16.201:8085';
 
 		return {
 			appSecret,
@@ -43,7 +44,8 @@ class Locals {
 			redisHttpHost,
 			redisPrefix,
 			url,
-			baseUrl
+			baseUrl,
+			aBaseUrl
 		};
 	}
 

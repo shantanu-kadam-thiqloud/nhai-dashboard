@@ -31,11 +31,19 @@ export default class RestDataSource {
   }
 
   async SendRequest(method, url, callback, data) {
+    const uuid = localStorage.getItem("UUID");
+    debugger;
+    const headers = {
+      XUuid: uuid,
+    };
+    console.log(uuid, "from frontend");
+    debugger;
     try {
       let response = await Axios.request({
         method: method,
         url: url,
         data: data,
+        headers: headers, //localstorage uuid
       });
 
       // Check if callback is a function before calling it

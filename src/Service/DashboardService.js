@@ -49,7 +49,7 @@ function getSnapshotStatus(mfaInfo, fn, fnError) {
   });
 }
 function getBank(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_BANK;
+  var url = Global_var.AUTH_BASE + Global_var.URL_BANK;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -123,7 +123,7 @@ function getLimitledger(mfaInfo, fn, fnError) {
   });
 }
 function getRO(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_RO;
+  var url = Global_var.AUTH_BASE + Global_var.URL_RO;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
