@@ -7,6 +7,8 @@ import {
 } from "../HtmlComponents/CommonFunction";
 import { ReportService } from "../../Service/ReportService";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import Spinner from "../HtmlComponents/Spinner";
 
 const FifoAgeingReport = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -16,20 +18,98 @@ const FifoAgeingReport = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const columns = [
-    { field: "piu", sortable: true, filter: true, showFilterMenu: false, header: "PIU Name" },
-    { field: "ro", sortable: true, filter: true, showFilterMenu: false, header: "RO Name" },
-    { field: "accNum", sortable: true, filter: true, showFilterMenu: false, header: "Account No" },
-    { field: "accName", sortable: true, filter: true, showFilterMenu: false, header: "Account Name" },
-    { field: "value", sortable: true, filter: true, showFilterMenu: false, header: "Value" },
-    { field: "requestDate", sortable: true, filter: true, showFilterMenu: false, header: "Date of Request" },
-    { field: "sanctionLimit", sortable: true, filter: true, showFilterMenu: false, header: "Sanction Limit" },
-    { field: "utilizedlimit", sortable: true, filter: true, showFilterMenu: false, header: "Utilized Limit" },
-    { field: "unUtilizedLimit", sortable: true, filter: true, showFilterMenu: false, header: "Un Utilized Limit" },
-    { field: "fifoAmount", sortable: true, filter: true, showFilterMenu: false, header: "FIFO Amount" },
-    { field: "currentDate", sortable: true, filter: true, showFilterMenu: false, header: "Current Date" },
-    { field: "days", sortable: true, filter: true, showFilterMenu: false, header: "No of Days" },
-    { field: "ageing", sortable: true, filter: true, showFilterMenu: false, header: "Ageing" }
-  ]
+    {
+      field: "piu",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PIU Name",
+    },
+    {
+      field: "ro",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "RO Name",
+    },
+    {
+      field: "accNum",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account No",
+    },
+    {
+      field: "accName",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Name",
+    },
+    {
+      field: "value",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Value",
+    },
+    {
+      field: "requestDate",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Date of Request",
+    },
+    {
+      field: "sanctionLimit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Sanction Limit",
+    },
+    {
+      field: "utilizedlimit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Utilized Limit",
+    },
+    {
+      field: "unUtilizedLimit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Un Utilized Limit",
+    },
+    {
+      field: "fifoAmount",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "FIFO Amount",
+    },
+    {
+      field: "currentDate",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Current Date",
+    },
+    {
+      field: "days",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "No of Days",
+    },
+    {
+      field: "ageing",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Ageing",
+    },
+  ];
   const data = [
     {
       id: 0,
@@ -82,6 +162,43 @@ const FifoAgeingReport = () => {
   ];
   const [rows, setRows] = useState(data);
 
+  useEffect(() => {
+    setIsLoading(true);
+    FetchFIFOReport();
+  }, []);
+
+  //-------------Fetch Report--------------------------------------------------
+  function FetchFIFOReport() {
+    ReportService.downloadFIFOReport(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status == 200) {
+          data = res.data.responseObjectList;
+          console.log("->", data);
+          setRows(data);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //-------------Download Report-----------------------------------------------
   function DownloadFifoAgeingReport() {
     ReportService.downloadFIFOReport(
       {
@@ -93,19 +210,21 @@ const FifoAgeingReport = () => {
       },
       (res) => {
         if (res.status == 200) {
-          debugger;
           data = res.data;
-          console.log("UserList->", data);
+          console.log("->", data);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
         } else if (res.status == 500) {
-          prompt("500 Internal Server Error...!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
         //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
       }
     );
   }
@@ -113,6 +232,7 @@ const FifoAgeingReport = () => {
   return (
     <>
       <div className="wrapper">
+        <Spinner isLoading={isLoading} />
         <div className="row p-2">
           <div className="border border-dark rounded-1 bg-white p-2">
             {" "}
@@ -148,18 +268,15 @@ const FifoAgeingReport = () => {
           </div>
         </div>
         <div className="row">
-          <div className="mt-2 tableDiv"></div>
-          {/* <DataTable
+          <div className="mt-2 tableDiv">
+            {/* <DataTable
             columns={columns}
             data={rows} //{data} //
             customClass="LoginReportTable"
             showSearchBar={false}
           />{" "} */}
-          <GenericDataTable 
-          data={rows} 
-          columns={columns}                    
-              />
-          <div className="mt-2"></div>
+            <GenericDataTable data={rows} columns={columns} />
+          </div>
         </div>
       </div>
     </>

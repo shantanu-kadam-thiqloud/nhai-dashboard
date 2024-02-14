@@ -607,7 +607,7 @@ th {
   height: 30px;
 }
 
-.p-column-title{
+.p-column-title {
   width: 100%;
   text-align: center;
   font-family: Roboto !important;
@@ -623,7 +623,7 @@ ul.p-column-filter-row-items {
   color: #212529;
 }
 
-.p-column-filter-clear-button{
+.p-column-filter-clear-button {
   display: none;
 }
 

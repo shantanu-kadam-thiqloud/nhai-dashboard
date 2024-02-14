@@ -6,12 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
 import Spinner from "../HtmlComponents/Spinner";
 import { v4 as uuid } from "uuid";
-
+import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
+import sideBarDataChecker from "../Checker/sideBarData";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 const UserList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [profileList, setProfileList] = useState([]);
+
   const data = [
     {
       id: 1,
@@ -38,30 +41,84 @@ const UserList = () => {
       isActive: false,
     },
   ];
+  // const columns = [
+  //   { Header: "Profile Name", accessor: "profileName" },
+  //   { Header: "Profile Description", accessor: "profileDescription" },
+  //   {
+  //     Header: "Is Active",
+  //     accessor: "isActive",
+  //     Cell: ({ value }) => (
+  //       <input
+  //         className="form-check-input"
+  //         type="checkbox"
+  //         id="flexSwitchCheckChecked"
+  //         checked={value}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     Header: "Action",
+  //     accessor: "id",
+  //     Cell: ({ row }) => {
+  //       return row.values.id;
+  //     },
+  //   },
+  // ];
 
   const columns = [
-    { Header: "Profile Name", accessor: "profileName" },
-    { Header: "Profile Description", accessor: "profileDescription" },
     {
-      Header: "Is Active",
-      accessor: "isActive",
-      Cell: ({ value }) => (
-        <input
-          className="form-check-input"
-          type="checkbox"
-          id="flexSwitchCheckChecked"
-          checked={value}
-        />
-      ),
+      field: "id",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showGridlines: true,
+      showFilterMenu: false,
+      header: "ID",
     },
     {
-      Header: "Action",
-      accessor: "id",
-      Cell: ({ row }) => {
-        return row.values.id;
-      },
+      field: "profileName",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showFilterMenu: false,
+      header: "Profile Name",
+    },
+    {
+      field: "profileDescription",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showFilterMenu: false,
+      header: "Profile Description",
+    },
+    {
+      field: "isActive",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showFilterMenu: false,
+      header: "Is Active",
+      className: "text-center p-0",
+      body: "switchTemplate",
+    },
+    {
+      field: "",
+      header: "Action",
+      body: "buttonsTemplate",
+      className: "text-center",
     },
   ];
+
+  //Side bar Data
+  var sidejsonData = sideBarDataChecker.find(
+    (item) => item.type === "menuData"
+  );
+  const sidebarMockData = sidejsonData.data;
+  const isAddProfile = getCheckValueByName(
+    sidebarMockData,
+    "User Profile",
+    "Add"
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -88,7 +145,6 @@ const UserList = () => {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
         } else if (res.status == 500) {
-          prompt("500 Internal Server Error...!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -110,27 +166,38 @@ const UserList = () => {
             <div className="col-md-12">
               <h2 className="mb-3 mt-3 pageTitle">Profile Listing</h2>
               <div className="addUserBtnDiv  mt-3">
-                <button
-                  className="btn addUser"
-                  type="button"
-                  onClick={() => {
-                    // setIsOpen(true);
-                    navigate("/NHAI/AddProfile");
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPlusCircle} className="plusIcon" />
-                  Add New Profile
-                </button>
+                {isAddProfile ? (
+                  <button
+                    className="btn addUser"
+                    type="button"
+                    onClick={() => {
+                      // setIsOpen(true);
+                      navigate("/NHAI/AddProfile");
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPlusCircle} className="plusIcon" />
+                    Add New Profile
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
           <div className="row">
-            <div className="p-2">
+            <div className="p-2 tableDiv">
               {/* col-md-11 mx-auto flex */}
-              <DataTable
+              {/* <DataTable
                 columns={columns}
                 data={profileList} //{data}
                 // customClass="ULTable"
+                detailpage="ProfileDetails"
+                editpage="EditProfile"
+                deletepage="DeleteProfile"
+              /> */}
+              <GenericDataTable
+                data={profileList} //{data}
+                columns={columns}
                 detailpage="ProfileDetails"
                 editpage="EditProfile"
                 deletepage="DeleteProfile"

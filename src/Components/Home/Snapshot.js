@@ -25,26 +25,35 @@ const Snapshot = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [snapData, setSnapData] = useState("");
+  const [rows, setRows] = useState([]);
   const columns = [
     {
       Header: "Bank",
       accessor: "bank",
-      Cell: ({ value }) => <div className="">{value}</div>,
+      Cell: ({ value }) => (
+        <div className="">{value == null ? "Null" : value}</div>
+      ),
     },
     {
       Header: "Subsidiary Summary",
-      accessor: "subsidiarySummary",
-      Cell: ({ value }) => <div className="">{value}</div>,
+      accessor: "subsidarySummary",
+      Cell: ({ value }) => (
+        <div className="">{value == null ? "Null" : value}</div>
+      ),
     },
     {
       Header: "Main Transaction",
-      accessor: "mainTransactions",
-      Cell: ({ value }) => <div className="">{value}</div>,
+      accessor: "mainTransaction",
+      Cell: ({ value }) => (
+        <div className="">{value == null ? "Null" : value}</div>
+      ),
     },
     {
       Header: "CALA PD Transactions",
-      accessor: "calaPDTransactions",
-      Cell: ({ value }) => <div className="">{value}</div>,
+      accessor: "calaPdTransacation",
+      Cell: ({ value }) => (
+        <div className="">{value == null ? "Null" : value}</div>
+      ),
     },
   ];
 
@@ -78,8 +87,9 @@ const Snapshot = () => {
   }, []);
 
   useEffect(() => {
-    //  setIsLoading(true);
+    setIsLoading(true);
     FetchSnapshot();
+    FetchSnapshotStatus();
   }, [asOnDate]);
 
   //Mock----------------------------------------------------------------------
@@ -92,7 +102,13 @@ const Snapshot = () => {
     userName: "NHAI",
     statusAsOn: ConvertFormat(asOnDate), //"21-01-2020",
   };
-
+  const statusReqBody = {
+    requestMetaData: {
+      applicationId: "nhai-dashboard",
+      correlationId: uuid(),
+    },
+    userName: "NHAI",
+  };
   // const snapData =
   //   //  {
   //   //   responseMetaData: {
@@ -149,7 +165,7 @@ const Snapshot = () => {
   //       qtdAccruedInterest: "",
   //     },
   //   };
-  const [rows, setRows] = useState([]); //[snapData.lastUpdateBankInfo]
+  //[snapData.lastUpdateBankInfo]
 
   //-------------------------------------------------------------------------------------------------------
 
@@ -285,13 +301,35 @@ const Snapshot = () => {
     link.click();
   };
 
-  //---------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------
   function FetchSnapshot() {
     DashboardService.getSnapshot(
       reqBody,
       (res) => {
         if (res.status === 200) {
           setSnapData(res.data);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //------------------------------------------------------------------------
+  function FetchSnapshotStatus() {
+    DashboardService.getSnapshotStatus(
+      statusReqBody,
+      (res) => {
+        if (res.status === 200) {
+          setRows([res.data.data]);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -420,13 +458,13 @@ const Snapshot = () => {
               >
                 PDF
               </button>
-              <button
+              {/* <button
                 className="btn addUser dashbutton Cml-5"
                 type="button"
                 onClick={generateXLS} // Call the generateExcel function on button click
               >
                 Excel
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

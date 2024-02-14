@@ -9,6 +9,7 @@ import {
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const LimitLedger = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,93 +27,191 @@ const LimitLedger = () => {
   const [zoneD, setZone] = useState("All");
   const [piuD, setPiu] = useState("All");
   const [accNo, setAccNo] = useState("");
+  const [propPIU, setPropPIU] = useState("");
   const [typeTransaction, setTypeTransaction] = useState(0);
   const columns = [
     {
-      Header: "Bank",
-      accessor: "bank",
+      field: "bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Bank",
     },
     {
-      Header: "Zone",
-      accessor: "zone",
+      field: "zone",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Zone",
     },
     {
-      Header: "RO",
-      accessor: "ro",
+      field: "ro",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "RO",
     },
     {
-      Header: "PIU",
-      accessor: "PIU",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black"
-        >
-          {row.values.PIU}
-        </a>
-      ),
-    },
-
-    {
-      Header: "Account Number",
-      accessor: "accountNumber",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            //  navigate("/NHAI/Hyperlink");
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black float-end"
-        >
-          {row.values.accountNumber}
-        </a>
-      ),
+      field: "PIU",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PIU",
+      body: "HyperLinkTemplate",
     },
     {
-      Header: "Date",
-      accessor: "date",
+      field: "accountNumber",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Number",
+      body: "HyperLinkTemplate",
     },
     {
-      Header: "PARTICULAR",
-      accessor: "particular",
+      field: "date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Date",
     },
     {
-      Header: "Limit Loaded Amount",
-      accessor: "limitLoadedAmount",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "particular",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PARTICULAR",
     },
     {
-      Header: "Limit Reduced",
-      accessor: "limitReduced",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
-    },
-
-    {
-      Header: "Limit Utilized",
-      accessor: "limitUtilized",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "limitLoadedAmount",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Limit Loaded Amount",
     },
     {
-      Header: "Returns",
-      accessor: "returns",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "limitReduced",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Limit Reduced",
     },
     {
-      Header: "Limit Balance",
-      accessor: "limitBalance",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "limitUtilized",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Limit Utilized",
     },
     {
-      Header: "Transaction Type",
-      accessor: "transactionType",
+      field: "returns",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Returns",
+    },
+    {
+      field: "limitBalance",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Limit Balance",
+    },
+    {
+      field: "transactionType",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Transaction Type",
     },
   ];
+  // const columns = [
+  //   {
+  //     Header: "Bank",
+  //     accessor: "bank",
+  //   },
+  //   {
+  //     Header: "Zone",
+  //     accessor: "zone",
+  //   },
+  //   {
+  //     Header: "RO",
+  //     accessor: "ro",
+  //   },
+  //   {
+  //     Header: "PIU",
+  //     accessor: "PIU",
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         onClick={() => {
+  //           setRData(row.values);
+  //           setPropPIU(row.values.PIU);
+  //           setIsOpen(true);
+  //         }}
+  //         className="text-black"
+  //       >
+  //         {row.values.PIU}
+  //       </a>
+  //     ),
+  //   },
+
+  //   {
+  //     Header: "Account Number",
+  //     accessor: "accountNumber",
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         onClick={() => {
+  //           //  navigate("/NHAI/Hyperlink");
+  //           setRData(row.values);
+  //           setAccNo(row.values.accountNumber);
+  //           setIsOpen(true);
+  //         }}
+  //         className="text-black float-end"
+  //       >
+  //         {row.values.accountNumber}
+  //       </a>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Date",
+  //     accessor: "date",
+  //   },
+  //   {
+  //     Header: "PARTICULAR",
+  //     accessor: "particular",
+  //   },
+  //   {
+  //     Header: "Limit Loaded Amount",
+  //     accessor: "limitLoadedAmount",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Limit Reduced",
+  //     accessor: "limitReduced",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+
+  //   {
+  //     Header: "Limit Utilized",
+  //     accessor: "limitUtilized",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Returns",
+  //     accessor: "returns",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Limit Balance",
+  //     accessor: "limitBalance",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Transaction Type",
+  //     accessor: "transactionType",
+  //   },
+  // ];
   const data = [
     {
       id: 1,
@@ -172,7 +271,7 @@ const LimitLedger = () => {
   ];
 
   useEffect(() => {
-    //setIsLoading(true);
+    setIsLoading(true);
     FetchLimitLedger();
     console.log("reqBody-->", reqBody);
   }, [fromDate, toDate]);
@@ -195,7 +294,7 @@ const LimitLedger = () => {
     fromDate: "21-05-2020", //ConvertFormat(fromDate), //"01-04-2017",
     toData: "21-05-2023", //ConvertFormat(toDate), //"01-09-2023",
     transactionType: typeTransaction, //"All",
-    dateFilter: 0,
+    dateFilter: fromDate && toDate ? 1 : 0,
     isActive: "All",
   };
 
@@ -243,8 +342,8 @@ const LimitLedger = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          debugger;
-          // setRows(res.data);
+          //  setRows(res.data.limitLedgerDetails);
+          setRows(mockRes.limitLedgerDetails);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -407,16 +506,26 @@ const LimitLedger = () => {
         <div className="col"></div>
         <div className="col">{/* </div> */}</div> <hr />
         <div className="row">
-          <div className="p-2">
-            <DataTable
+          <div className="p-2 tableDiv">
+            {/* <DataTable
               columns={columns}
               data={rows} //{data} //
               customClass="LimitTable"
               showSearchBar={false}
-            />{" "}
+            />{" "} */}
+            <GenericDataTable
+              data={mockRes.limitLedgerDetails} //rows}
+              columns={columns}
+            />
           </div>
         </div>
-        <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
+        <Hyperlink
+          isOpen={isOpen}
+          setModal={setIsOpen}
+          row={rowdata}
+          accNum={accNo}
+          piu={propPIU}
+        />
       </div>
     </div>
   );

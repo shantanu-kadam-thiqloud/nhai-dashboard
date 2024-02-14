@@ -20,7 +20,7 @@ const Bank = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [Decimal, setDecimal] = useState(true);
-
+  const [zone, setZone] = useState("All");
   const data = {
     decimal: {
       nodalAccountBalance: "10,360.07",
@@ -47,12 +47,12 @@ const Bank = () => {
   ];
 
   useEffect(() => {
-    // setIsLoading(true);
-    // FetchBank();
+    setIsLoading(true);
+    FetchBank();
     //-----------------------------------------------------------------
     // Initialize the data to "Core" when the component mounts
     //fetchCoreData("crore");
-  }, [asOnDate]);
+  }, [asOnDate, zone]);
 
   // const fetchCoreData = (type) => {
   // setDbdata(data.decimal);
@@ -193,7 +193,7 @@ const Bank = () => {
 
   //---------------------------------------------------------------------------------------
   function FetchBank() {
-    DashboardService.getBankAndEvents(
+    DashboardService.getBank(
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
@@ -202,6 +202,7 @@ const Bank = () => {
         userName: "NHAI",
         statusAsOn: ConvertFormat(asOnDate), //"21-05-2020",
         bank: "Kotak",
+        zone: zone,
       },
       (res) => {
         if (res.status === 200) {
@@ -244,7 +245,14 @@ const Bank = () => {
                 }}
               />{" "}
               <label className="statusOn">Zone : </label>{" "}
-              <select name="zone" className="inputDate">
+              <select
+                name="zone"
+                className="inputDate"
+                onChange={(e) => {
+                  setZone(e.target.value);
+                  console.log("->", e.target.value);
+                }}
+              >
                 <option value="All">All</option>
                 <option value="East">East</option>
                 <option value="West">West</option>

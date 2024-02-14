@@ -5,60 +5,148 @@ import {
   DateFormatFunction,
   ConvertFormat,
 } from "../HtmlComponents/CommonFunction";
-
+import { ReportService } from "../../Service/ReportService";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import Spinner from "../HtmlComponents/Spinner";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 const UserLoginReport = () => {
   const [fromDate, setFromDate] = useState(
     "2023-04-01" // new Date().toISOString().split("T")[0]
   );
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userID, setUserID] = useState("");
+  const [userType, setUserType] = useState("ALL");
+  const navigate = useNavigate();
+  // const columns = [
+  //   {
+  //     Header: "User ID",
+  //     accessor: "userId",
+  //   },
+  //   {
+  //     Header: "User Type",
+  //     accessor: "userType",
+  //   },
+  //   {
+  //     Header: "Bank ID",
+  //     accessor: "bankId",
+  //   },
+  //   {
+  //     Header: "PDID",
+  //     accessor: "pdid",
+  //   },
+
+  //   {
+  //     Header: "ROID",
+  //     accessor: "roid",
+  //   },
+  //   {
+  //     Header: "Domain User Name",
+  //     accessor: "domainUserName",
+  //   },
+  //   {
+  //     Header: "User Full Name",
+  //     accessor: "fullName",
+  //   },
+  //   {
+  //     Header: "IsActive",
+  //     accessor: "isActive",
+  //   },
+  //   {
+  //     Header: "Role",
+  //     accessor: "role",
+  //   },
+  //   {
+  //     Header: `Logged in \n Date & Time`,
+  //     accessor: "loggedTime",
+  //   },
+  //   {
+  //     Header: `Login IP \n Address`,
+  //     accessor: "ipAddress",
+  //   },
+  // ];
 
   const columns = [
     {
-      Header: "User ID",
-      accessor: "userId",
+      field: "userId",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "User ID",
     },
     {
-      Header: "User Type",
-      accessor: "userType",
+      field: "userType",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "User Type",
     },
     {
-      Header: "Bank ID",
-      accessor: "bankId",
+      field: "bankId",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Bank ID",
     },
     {
-      Header: "PDID",
-      accessor: "pdid",
-    },
-
-    {
-      Header: "ROID",
-      accessor: "roid",
+      field: "pdid",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PDID",
     },
     {
-      Header: "Domain User Name",
-      accessor: "domainUserName",
+      field: "roid",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "ROID",
     },
     {
-      Header: "User Full Name",
-      accessor: "fullName",
+      field: "domainUserName",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Domain User Name",
     },
     {
-      Header: "IsActive",
-      accessor: "isActive",
+      field: "fullName",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "User Full Name",
     },
     {
-      Header: "Role",
-      accessor: "role",
+      field: "isActive",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "In Active",
     },
     {
-      Header: `Logged in \n Date & Time`,
-      accessor: "loggedTime",
+      field: "role",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Role",
     },
     {
-      Header: `Login IP \n Address`,
-      accessor: "ipAddress",
+      field: "loggedTime",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Logged in Date & Time",
+    },
+    {
+      field: "ipAddress",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Login IP Address",
     },
   ];
+
   const data = [
     {
       id: 1,
@@ -103,11 +191,83 @@ const UserLoginReport = () => {
       ipAddress: "10.53.80.21",
     },
   ];
-  const [rows, setRows] = useState(data);
+
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    setIsLoading(true);
+    FetchUserLoginReport();
+  }, []);
+  //-------------Fetch Report--------------------------------------------------
+  function FetchUserLoginReport() {
+    ReportService.getUserLoginReport(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+        fromDate: ConvertFormat(fromDate), //"01-01-2017",
+        toDate: ConvertFormat(toDate), //"31-12-2023",
+        userType: userType, //"ALL",
+        userId: userID, //"",
+      },
+      (res) => {
+        if (res.status == 200) {
+          var da = res.data.responseObjectList;
+          setRows(da);
+          console.log("->", da);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //-------------Download Report-----------------------------------------------
+  function DownloadUserLoginReport() {
+    ReportService.downloadUserLoginReport(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status == 200) {
+          var d = res.data;
+          console.log("->", d);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+
   return (
     <>
       <div className="wrapper">
         {" "}
+        <Spinner isLoading={isLoading} />
         <div className="row p-2">
           <div className="border border-dark rounded-1 bg-white p-2">
             {" "}
@@ -142,9 +302,11 @@ const UserLoginReport = () => {
                 <select
                   name="userType"
                   className="inputDate"
-                  onChange={(e) => {}}
+                  onChange={(e) => {
+                    setUserType(e.target.value);
+                  }}
                 >
-                  <option value="All">All</option>
+                  <option value="ALL">ALL</option>
                   <option value="Bank">Bank</option>
                   <option value="NHAI">NHAI</option>
                   <option value="PD">PD</option>
@@ -159,7 +321,7 @@ const UserLoginReport = () => {
                   type="text"
                   onChange={(e) => {
                     const E = e.target.value;
-                    console.log("----->", E);
+                    setUserID(E);
                   }}
                 />{" "}
               </div>
@@ -167,7 +329,9 @@ const UserLoginReport = () => {
                 <button
                   className="btn addUser dashbutton  ms-5"
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => {
+                    DownloadUserLoginReport();
+                  }}
                 >
                   Download
                 </button>{" "}
@@ -177,14 +341,15 @@ const UserLoginReport = () => {
           </div>
         </div>
         <div className="row">
-          <div className="mt-2"></div>
-          <DataTable
+          <div className="mt-2 tableDiv">
+            {/* <DataTable
             columns={columns}
             data={rows} //{data} //
             // customClass="LoginReportTable"
             showSearchBar={false}
-          />{" "}
-          <div className="mt-2"></div>
+          />{" "} */}
+            <GenericDataTable data={rows} columns={columns} />
+          </div>
         </div>
       </div>
     </>

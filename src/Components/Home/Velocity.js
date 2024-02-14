@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const Velocity = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -26,72 +27,143 @@ const Velocity = () => {
   const [piuD, setPiu] = useState("All");
   const [accNo, setAccNo] = useState("");
   const [Decimal, setDecimal] = useState(true);
+  const [propAccNo, setPropAccNo] = useState("");
+  const [propPIU, setPropPIU] = useState("");
   const [rows, setRows] = useState([]);
   const columns = [
     {
-      Header: "Bank",
-      accessor: "bank",
+      field: "bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Bank",
     },
     {
-      Header: "Zone",
-      accessor: "zone",
+      field: "zone",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Zone",
     },
     {
-      Header: "RO",
-      accessor: "ro",
+      field: "ro",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "RO",
     },
     {
-      Header: "PIU",
-      accessor: "PIU",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          //  target="_blank"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-            //  navigate("/NHAI/Hyperlink");
-            //window.open("/NHAI/Hyperlink", "_blank");
-          }}
-          className="text-black"
-        >
-          {row.values.PIU}
-        </a>
-      ),
-    },
-
-    {
-      Header: "Account Number",
-      accessor: "accountNumber",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            //  navigate("/NHAI/Hyperlink");
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black float-end"
-        >
-          {row.values.accountNumber}
-        </a>
-      ),
+      field: "PIU",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PIU",
+      body: "HyperLinkTemplate",
     },
     {
-      Header: "Date",
-      accessor: "date",
+      field: "accountNumber",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Number",
+      body: "HyperLinkTemplate",
     },
     {
-      Header: "Limit Utilization %",
-      accessor: "limitUtilized",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Date",
     },
     {
-      Header: "Velocity %",
-      accessor: "velocity",
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "limitUtilized",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Limit Utilization %",
+    },
+    {
+      field: "velocity",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Velocity %",
+    },
+    {
+      field: "transactionType",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Transaction Type",
     },
   ];
+  // const columns = [
+  //   {
+  //     Header: "Bank",
+  //     accessor: "bank",
+  //   },
+  //   {
+  //     Header: "Zone",
+  //     accessor: "zone",
+  //   },
+  //   {
+  //     Header: "RO",
+  //     accessor: "ro",
+  //   },
+  //   {
+  //     Header: "PIU",
+  //     accessor: "PIU",
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         //  target="_blank"
+  //         onClick={() => {
+  //           setRData(row.values);
+  //           setIsOpen(true);
+  //           setPropPIU(row.values.PIU);
+  //           //  navigate("/NHAI/Hyperlink");
+  //           //window.open("/NHAI/Hyperlink", "_blank");
+  //         }}
+  //         className="text-black"
+  //       >
+  //         {row.values.PIU}
+  //       </a>
+  //     ),
+  //   },
+
+  //   {
+  //     Header: "Account Number",
+  //     accessor: "accountNumber",
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         onClick={() => {
+  //           //  navigate("/NHAI/Hyperlink");
+  //           setRData(row.values);
+  //           setPropAccNo(row.values.accountNumber);
+  //           setIsOpen(true);
+  //         }}
+  //         className="text-black float-end"
+  //       >
+  //         {row.values.accountNumber}
+  //       </a>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Date",
+  //     accessor: "date",
+  //   },
+  //   {
+  //     Header: "Limit Utilization %",
+  //     accessor: "limitUtilized",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Velocity %",
+  //     accessor: "velocity",
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  // ];
   const data = [
     {
       id: 1,
@@ -208,7 +280,6 @@ const Velocity = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          debugger;
           setRows(res.data.velocities);
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -336,16 +407,23 @@ const Velocity = () => {
         <div className="col"></div>
         <hr />
         <div className="row">
-          <div className="p-2">
-            <DataTable
+          <div className="p-2 tableDiv">
+            {/* <DataTable
               columns={columns}
               data={rows} //{data} //
               customClass="velocityTable"
               showSearchBar={false}
-            />{" "}
+            />{" "} */}
+            <GenericDataTable data={rows} columns={columns} />
           </div>
         </div>
-        <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
+        <Hyperlink
+          isOpen={isOpen}
+          setModal={setIsOpen}
+          row={rowdata}
+          accNum={propAccNo}
+          piu={propPIU}
+        />
       </div>
     </div>
   );

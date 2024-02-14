@@ -18,27 +18,29 @@ const FinanacialD = () => {
   const [bankD, setBank] = useState("");
   const [yearD, setYear] = useState("");
 
-  // const generatePDF = () => {
-  //   const doc = new jsPDF();
-  //   doc.setFontSize(16);
-  //   doc.text("Snapshot", 10, 10);
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Financial(D)", 10, 10);
 
-  //   // Create a table for cardData
-  //   const tableData = [];
-  //   cardData.forEach((item) => {
-  //     tableData.push([item.title, item.count]);
-  //   });
+    // // Create a table for cardData
+    // const tableData = [];
+    // cardData.forEach((item) => {
+    //   tableData.push([item.title, item.count]);
+    // });
 
-  //   doc.autoTable({
-  //     head: [["Title", "Count"]],
-  //     body: tableData,
-  //     startY: 20,
-  //   });
+    // doc.autoTable({
+    //   head: [["Title", "Count"]],
+    //   body: tableData,
+    //   startY: 20,
+    // });
 
-  //   // Save the PDF with a unique name
-  //   const fileName = `snapshot_${currentDate}.pdf`;
-  //   doc.save(fileName);
-  // };
+    // Save the PDF with a unique name
+    const fileName = `Financial(D)_${ConvertFormat(
+      fromDate
+    )}_to_${ConvertFormat(toDate)}.pdf`;
+    doc.save(fileName);
+  };
 
   // Function to generate and download the Excel file
   // const generateCSV = () => {
@@ -353,7 +355,7 @@ const FinanacialD = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                //    onClick={generatePDF} // Call the generatePDF function on button click
+                onClick={generatePDF} // Call the generatePDF function on button click
               >
                 PDF
               </button>
@@ -364,13 +366,13 @@ const FinanacialD = () => {
           >
             Excel
           </button> */}
-              <button
+              {/* <button
                 className="btn addUser dashbutton Cml-5"
                 type="button"
                 //    onClick={generateCSV} // Call the generateExcel function on button click
               >
                 Excel
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

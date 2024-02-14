@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import UserList from "./Components/User/UserList";
 import UserDetails from "./Components/User/UserDetails";
@@ -43,33 +43,21 @@ const Routers = () => {
       {/* ------------USER------------------------------------------------------------- */}
       <Route path="/NHAI/Users" element={<UserList />}></Route>
       <Route path="/NHAI/AddUser" element={<AddUser />}></Route>
-      <Route path="/NHAI/EditUser/:userId" element={<AddUser />}></Route>
-      <Route path="/NHAI/UserDetails/:userId" element={<UserDetails />}></Route>
-      <Route path="/NHAI/DeleteUser/:userId" element={<UserDetails />}></Route>
+      <Route path="/NHAI/EditUser" element={<AddUser />}></Route>
+      <Route path="/NHAI/UserDetails" element={<UserDetails />}></Route>
+      <Route path="/NHAI/DeleteUser" element={<UserDetails />}></Route>
       {/* ------------USER Profile---------------------------------------------------------- */}
       <Route path="/NHAI/Profiles" element={<ProfileList />}></Route>
       <Route path="/NHAI/AddProfile" element={<AddProfile />}></Route>
-      <Route path="/NHAI/EditProfile/:userId" element={<AddProfile />}></Route>
-      <Route
-        path="/NHAI/ProfileDetails/:userId"
-        element={<ProfileDetails />}
-      ></Route>
-      <Route
-        path="/NHAI/DeleteProfile/:userId"
-        element={<ProfileDetails />}
-      ></Route>
+      <Route path="/NHAI/EditProfile" element={<AddProfile />}></Route>
+      <Route path="/NHAI/ProfileDetails" element={<ProfileDetails />}></Route>
+      <Route path="/NHAI/DeleteProfile" element={<ProfileDetails />}></Route>
       {/* ------------USER Group--------------------------------------------------------------- */}
       <Route path="/NHAI/Groups" element={<GroupList />}></Route>
       <Route path="/NHAI/AddGroup" element={<AddGroup />}></Route>
-      <Route path="/NHAI/EditGroup/:userId" element={<AddGroup />}></Route>
-      <Route
-        path="/NHAI/GroupDetails/:userId"
-        element={<GroupDetails />}
-      ></Route>
-      <Route
-        path="/NHAI/DeleteGroup/:userId"
-        element={<GroupDetails />}
-      ></Route>
+      <Route path="/NHAI/EditGroup" element={<AddGroup />}></Route>
+      <Route path="/NHAI/GroupDetails" element={<GroupDetails />}></Route>
+      <Route path="/NHAI/DeleteGroup" element={<GroupDetails />}></Route>
       <Route path="/NHAI/Logout" element={<Logout />}></Route>
       <Route path="/NHAI/ChangePassword" element={<ChangePassword />}></Route>
       <Route path="/NHAI/Hyperlink" element={<Hyperlink />}></Route>

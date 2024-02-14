@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import Switch from "@mui/material/Switch";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Hyperlink from "../Home/Hyperlink";
 
-const GenericDataTable = ({ data, columns, detailpage, editpage, deletepage }) => {
+const GenericDataTable = ({
+  data,
+  columns,
+  detailpage,
+  editpage,
+  deletepage,
+}) => {
   const [switchStates, setSwitchStates] = useState({});
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
-
+  const location = useLocation();
   const switchTemplate = (row) => (
     <Switch
       id={`flexSwitchCheckChecked-${row.id}`}
@@ -58,57 +64,67 @@ const GenericDataTable = ({ data, columns, detailpage, editpage, deletepage }) =
   };
 
   const handleEyeAction = (user) => {
-    navigate(`/NHAI/${detailpage}/${user.id}`);
+    navigate(`/NHAI/${detailpage}`, { state: { user } });
+    //${user.id}`);
   };
   const handleEditAction = (user) => {
-    navigate(`/NHAI/${editpage}/${user.id}`);
+    navigate(`/NHAI/${editpage}`, { state: { user } });
+    //${user.id}`);
   };
   const handleTrashAction = (user) => {
-    navigate(`/NHAI/${deletepage}/${user.id}`);
+    navigate(`/NHAI/${deletepage}`, { state: { user } });
+    //${user.id}`);
   };
 
   const getTemplate = (field, template) => {
-    if(field === "isActive"){
-    return switchTemplate;
-    }else if(field === ""){
-        return buttonsTemplate;
-    }else if(template === "HyperLinkTemplate"){
-       return createTemplate(field)
+    if (field === "isActive") {
+      return switchTemplate;
+    } else if (field === "") {
+      return buttonsTemplate;
+    } else if (template === "HyperLinkTemplate") {
+      return createTemplate(field);
     }
-  }
+  };
 
-  const createTemplate = (fieldName) => (row) => (
-    <a
-      href="#"
-      onClick={() => {
-        setRData(row);
-        setIsOpen(true);
-      }}
-      style={{ color: "black" }}
-    >
-      {row[fieldName]}
-    </a>
-  );
+  const createTemplate = (fieldName) => (row) =>
+    (
+      <a
+        href="#"
+        onClick={() => {
+          setRData(row);
+          setIsOpen(true);
+        }}
+        style={{ color: "black" }}
+      >
+        {row[fieldName]}
+      </a>
+    );
 
   return (
     <>
-    <DataTable value={data} removableSort filterDisplay="row" showGridlines tableStyle={{ minWidth: '50rem' }}>
-      {columns.map((column) => (
-        <Column
-          key={column.field}
-          field={column.field}
-          sortable={column.sortable}
-          filter={column.filter}
-          filterPlaceholder="Search"
-          showGridlines={column.showGridlines}
-          showFilterMenu={column.showFilterMenu}
-          header={column.header}
-          className={column.className}
-          body={getTemplate(column.field, column.body) }
-        ></Column>
-      ))}
-    </DataTable>
-    <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
+      <DataTable
+        value={data}
+        removableSort
+        filterDisplay="row"
+        showGridlines
+        tableStyle={{ minWidth: "50rem" }}
+      >
+        {columns.map((column) => (
+          <Column
+            key={column.field}
+            field={column.field}
+            sortable={column.sortable}
+            filter={column.filter}
+            filterPlaceholder="Search"
+            showGridlines={column.showGridlines}
+            showFilterMenu={column.showFilterMenu}
+            header={column.header}
+            className={column.className}
+            body={getTemplate(column.field, column.body)}
+          ></Column>
+        ))}
+      </DataTable>
+      <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
     </>
   );
 };

@@ -4,17 +4,34 @@ import "../../Assets/Css/Dashboard.css";
 import axios from "axios";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { DashboardService } from "../../Service/DashboardService";
+import { useNavigate } from "react-router-dom";
+import { ConvertFormat } from "../HtmlComponents/CommonFunction";
+import Spinner from "../HtmlComponents/Spinner";
+import Hyperlink from "./Hyperlink";
 const Transaction = () => {
-  const [dynamicDate, setDate] = useState(new Date());
-  const currentDate = new Date().toISOString().split("T")[0];
+  const [isOpen, setIsOpen] = useState(false);
+  const [rowdata, setRData] = useState("");
+  const [propPIU, setPropPIU] = useState("");
+  const [propAccNo, setPropAccNo] = useState("");
+  const navigate = useNavigate();
+  const [fromDate, setFromDate] = useState(
+    "2023-04-01" // new Date().toISOString().split("T")[0]
+  );
+  const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
+  const [filter, setFilter] = useState("0");
+  const [dataType, setDataType] = useState("Main");
+  const [isLoading, setIsLoading] = useState(false);
   // const [dbdata, setDbdata] = useState([]);
-  // const [transactionTable, settransactionTable] = useState([]);
+  const [transactionTable, settransactionTable] = useState([]);
 
-  // useEffect(() => {
-  //   // Initialize the data to "Core" when the component mounts
-  //   fetchCoreData('crore');
-  // }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    FetchTransaction();
+    //   // Initialize the data to "Core" when the component mounts
+    //   fetchCoreData('crore');
+  }, [dataType, toDate, filter]);
 
   // const fetchCoreData = (type) => {
   //   const apiUrl = 'http://localhost:3007/api/secure/reginolOffice';
@@ -56,179 +73,466 @@ const Transaction = () => {
   //   }
 
   // }, [dbdata]);
+  // const columns = [
+  //   { field: "id", headerName: "Sr no", width: 50 },
+  //   {
+  //     field: "accountName",
+  //     headerName: "Account Name",
+  //     width: 150,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "accountNumber",
+  //     headerName: "Account Number",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "transactionDate",
+  //     headerName: "Transaction Date",
+  //     width: 120,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "transactionDetails",
+  //     headerName: "Transaction Details",
+  //     width: 160,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "chequeRefNumber",
+  //     headerName: "Cheque Reference Number",
+  //     width: 150,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "valueDate",
+  //     headerName: "Value Date",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "amountDebit",
+  //     headerName: "Amount Debit",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "amountCredit",
+  //     headerName: "Amount Credit",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "transactionType",
+  //     headerName: "Transaction Type",
+  //     width: 120,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "reportingDate",
+  //     headerName: "Reporting Date",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "CRN",
+  //     headerName: "CRN",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "instructionNumber",
+  //     headerName: "Instruction Number",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "CCY",
+  //     headerName: "CCY",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "UTRSerialNumber",
+  //     headerName: "UTR Serial Number",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "beneficiaryName",
+  //     headerName: "Beneficiary Name",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "beneficiaryAccountNumber",
+  //     headerName: "Beneficiary Account Number",
+  //     width: 100,
+  //     editable: false,
+  //     type: "number",
+  //   },
+  //   {
+  //     field: "beneficiaryBank",
+  //     headerName: "Beneficiary Bank",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "beneficiaryBranch",
+  //     headerName: "Beneficiary Branch",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "beneficiaryCity",
+  //     headerName: "Beneficiary City",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "beneficiaryIFSCCode",
+  //     headerName: "Beneficiary IFSC Code",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "beneficiaryAccountType",
+  //     headerName: "Beneficiary Account Type",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "dataAsOn",
+  //     headerName: "Data As On",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "bank",
+  //     headerName: "Bank",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "transactionFor",
+  //     headerName: "Transaction For",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  //   {
+  //     field: "FMSUniqueId",
+  //     headerName: "FMS Unique ID",
+  //     width: 100,
+  //     editable: false,
+  //     type: "string",
+  //   },
+  // ];
+  function FetchTransaction() {
+    DashboardService.getTransaction(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        filter: filter, //"0",
+        dataType: dataType, //"CALAPD",
+        fromDate: ConvertFormat(fromDate), //"",
+        toData: ConvertFormat(toDate), //"",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var d = res.data.regionWiseData;
+          //   setRows(d);
+          settransactionTable(d);
+          setIsLoading(false);
+        } else if (res.status == 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status == 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
   const columns = [
-    { field: "id", headerName: "Sr no", width: 50 },
     {
       field: "accountName",
-      headerName: "Account Name",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Name",
       width: 150,
       editable: false,
       type: "string",
+      body: "HyperLinkTemplate",
     },
     {
       field: "accountNumber",
-      headerName: "Account Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Number",
       width: 100,
       editable: false,
       type: "number",
+      body: "HyperLinkTemplate",
     },
     {
       field: "transactionDate",
-      headerName: "Transaction Date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Transaction Date",
       width: 120,
       editable: false,
       type: "string",
     },
     {
       field: "transactionDetails",
-      headerName: "Transaction Details",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Transaction Details",
       width: 160,
       editable: false,
       type: "string",
     },
     {
       field: "chequeRefNumber",
-      headerName: "Cheque Reference Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Cheque Reference Number",
       width: 150,
       editable: false,
       type: "string",
     },
     {
       field: "valueDate",
-      headerName: "Value Date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Value Date",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "amountDebit",
-      headerName: "Amount Debit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Amount Debit",
       width: 100,
       editable: false,
       type: "number",
     },
     {
       field: "amountCredit",
-      headerName: "Amount Credit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Amount Credit",
       width: 100,
       editable: false,
       type: "number",
     },
     {
       field: "transactionType",
-      headerName: "Transaction Type",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Transaction Type",
       width: 120,
       editable: false,
       type: "string",
     },
     {
       field: "reportingDate",
-      headerName: "Reporting Date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Reporting Date",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "CRN",
-      headerName: "CRN",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "CRN",
       width: 100,
       editable: false,
       type: "number",
     },
     {
       field: "instructionNumber",
-      headerName: "Instruction Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Instruction Number",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "CCY",
-      headerName: "CCY",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "CCY",
       width: 100,
       editable: false,
       type: "number",
     },
     {
       field: "UTRSerialNumber",
-      headerName: "UTR Serial Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "UTR Serial Number",
       width: 100,
       editable: false,
       type: "number",
     },
     {
       field: "beneficiaryName",
-      headerName: "Beneficiary Name",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary Name",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "beneficiaryAccountNumber",
-      headerName: "Beneficiary Account Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary Account Number",
       width: 100,
       editable: false,
       type: "number",
     },
     {
       field: "beneficiaryBank",
-      headerName: "Beneficiary Bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary Bank",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "beneficiaryBranch",
-      headerName: "Beneficiary Branch",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary Branch",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "beneficiaryCity",
-      headerName: "Beneficiary City",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary City",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "beneficiaryIFSCCode",
-      headerName: "Beneficiary IFSC Code",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary IFSC Code",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "beneficiaryAccountType",
-      headerName: "Beneficiary Account Type",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Beneficiary Account Type",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "dataAsOn",
-      headerName: "Data As On",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Data As On",
       width: 100,
       editable: false,
-      type: "string",
+      type: "date",
     },
     {
       field: "bank",
-      headerName: "Bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Bank",
       width: 100,
       editable: false,
       type: "string",
     },
     {
-      field: "transactionFor",
-      headerName: "Transaction For",
+      field: "transactonFor",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Transaction For",
       width: 100,
       editable: false,
       type: "string",
     },
     {
       field: "FMSUniqueId",
-      headerName: "FMS Unique ID",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "FMS Unique ID",
       width: 100,
       editable: false,
       type: "string",
@@ -297,9 +601,59 @@ const Transaction = () => {
   return (
     <div>
       <div className="row">
+        <Spinner isLoading={isLoading} />
         <div className="col">
           <div className="p-1">
             {/* <label className="float-start pageTitle">Transaction</label> */}
+            <div className="float-start dashboardLabels">
+              <label className="statusOn">Filter : </label>
+              <select
+                id="financialYear"
+                className="selectBoxDashbord"
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
+              >
+                <option value="0">Transaction Date</option>
+                <option value="1">Value Date</option>
+                <option value="2">Reporting Date</option>
+                <option value="3">Date as on</option>
+              </select>{" "}
+              <label className="statusOn">From : </label>{" "}
+              <input
+                id="fromDate"
+                className="inputDate"
+                type="date"
+                value={fromDate || ""}
+                onChange={(e) => {
+                  setFromDate(e.target.value);
+                  console.log("->", ConvertFormat(e.target.value));
+                }}
+              />{" "}
+              <label className="statusOn">To : </label>{" "}
+              <input
+                id="toDate"
+                className="inputDate"
+                type="date"
+                value={toDate || ""}
+                onChange={(e) => {
+                  setToDate(e.target.value);
+                  console.log("->", ConvertFormat(e.target.value));
+                }}
+                // Add any necessary attributes or event handlers here
+              />{" "}
+              <label className="statusOn">Data Type : </label>{" "}
+              <select
+                id="financialYear"
+                className="selectBoxDashbord"
+                onChange={(e) => {
+                  setDataType(e.target.value);
+                }}
+              >
+                <option value="Main">Main</option>
+                <option value="CALAPD">CALAPD</option>
+              </select>{" "}
+            </div>
             <div className="float-end dashboardLabels">
               <button
                 className="btn addUser dashbutton"
@@ -314,14 +668,14 @@ const Transaction = () => {
       </div>
       <hr />
       <div className="row">
-        <div className="p-2">
+        <div className="p-2 tableDiv">
           {/* <DataTable
             columns={columns}
             data={reginoalTable}
             customClass="ROTable"
             showSearchBar={false}
           />{" "} */}
-          <Box sx={{ height: 400, width: "100%" }}>
+          {/* <Box sx={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={transactionTableData}
               columns={columns}
@@ -345,8 +699,16 @@ const Transaction = () => {
                 },
               }}
             />
-          </Box>
+          </Box> */}
+          <GenericDataTable data={transactionTableData} columns={columns} />
         </div>
+        <Hyperlink
+          isOpen={isOpen}
+          setModal={setIsOpen}
+          row={rowdata}
+          accNum={propAccNo}
+          piu={propPIU}
+        />
       </div>
     </div>
   );

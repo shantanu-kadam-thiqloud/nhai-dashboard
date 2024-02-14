@@ -124,7 +124,7 @@ const sideData = [
             url: "/NHAI/Users",
             check: true,
             action: [
-              { id: 3, actionName: "Add", oldCheck: false, check: false },
+              { id: 3, actionName: "Add", oldCheck: false, check: true },
               { id: 4, actionName: "View", oldCheck: false, check: true },
               { id: 2, actionName: "Update", oldCheck: false, check: true },
               { id: 5, actionName: "Delete", oldCheck: false, check: true },
@@ -136,10 +136,10 @@ const sideData = [
             url: "/NHAI/Profiles",
             check: true,
             action: [
-              { id: 3, actionName: "Add", oldCheck: false, check: false },
-              { id: 4, actionName: "View", oldCheck: false, check: false },
+              { id: 3, actionName: "Add", oldCheck: false, check: true },
+              { id: 4, actionName: "View", oldCheck: false, check: true },
               { id: 2, actionName: "Update", oldCheck: false, check: true },
-              { id: 5, actionName: "Delete", oldCheck: false, check: false },
+              { id: 5, actionName: "Delete", oldCheck: false, check: true },
             ],
           },
           {
@@ -148,10 +148,10 @@ const sideData = [
             url: "/NHAI/Groups",
             check: true,
             action: [
-              { id: 3, actionName: "Add", oldCheck: false, check: false },
-              { id: 4, actionName: "View", oldCheck: false, check: false },
+              { id: 3, actionName: "Add", oldCheck: false, check: true },
+              { id: 4, actionName: "View", oldCheck: false, check: true },
               { id: 2, actionName: "Update", oldCheck: false, check: true },
-              { id: 5, actionName: "Delete", oldCheck: false, check: false },
+              { id: 5, actionName: "Delete", oldCheck: false, check: true },
             ],
           },
           {

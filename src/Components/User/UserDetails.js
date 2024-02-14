@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
 import { ConvertFormat } from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
+import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
+
 function UserDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
-  const { userId } = useParams();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetchUserById();
-  }, []);
+  const navigate = useNavigate();
+  const location = useLocation();
   // const users = [
   //   {
   //     id: 1,
@@ -69,11 +67,20 @@ function UserDetails() {
 
   // const user = users.find((u) => u.id.toString() === userId);
   const path = window.location.pathname;
+  const userId = location.state ? location.state.user.id : ""; //useParams();
+  const locationData = location.state ? location.state.user : {};
   const isDelete = path.includes("DeleteUser") ? true : false;
+  const isEditUser = getCheckValueByName("", "User", "Update");
+  const isDeleteUser = getCheckValueByName("", "User", "Delete");
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchUserById();
+  }, []);
+
   if (!user) {
     return <p>User not found.</p>;
   }
-
   //----------------------Get User--------------------------------------------
   function fetchUserById() {
     var user = {};
@@ -83,7 +90,7 @@ function UserDetails() {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userId: userId,
+        userId: String(userId),
         userName: "nhai",
       },
       (res) => {
@@ -100,6 +107,10 @@ function UserDetails() {
           navigate("/NHAI/Error/500");
         }
         //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
       }
     );
     console.log("user->", user);
@@ -250,27 +261,34 @@ function UserDetails() {
             >
               Back to List
             </button>
-            <button
-              className="btn addUser"
-              type="button"
-              onClick={() => {
-                setIsLoading(true);
-                //setIsOpen(true);
-                // toast.success("Request raised successfully!", {
-                //   position: "top-right",
-                //   autoClose: 3000,
-                // });
-                // setTimeout(() => {
-                //   setIsLoading(false);
-                navigate(`/NHAI/EditUser/${user.id}`);
-                if (isDelete) {
-                  DeleteUser();
-                }
-                // }, 1000);
-              }}
-            >
-              {isDelete ? "Delete" : "Edit"}
-            </button>
+            {isDeleteUser || isEditUser ? (
+              <button
+                className="btn addUser"
+                type="button"
+                onClick={() => {
+                  setIsLoading(true);
+                  //setIsOpen(true);
+                  // toast.success("Request raised successfully!", {
+                  //   position: "top-right",
+                  //   autoClose: 3000,
+                  // });
+                  // setTimeout(() => {
+                  //   setIsLoading(false);
+                  if (isDelete) {
+                    DeleteUser();
+                  } else {
+                    navigate(`/NHAI/EditUser`, {
+                      state: { user },
+                    });
+                  }
+                  // }, 1000);
+                }}
+              >
+                {isDelete ? "Delete" : "Edit"}
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

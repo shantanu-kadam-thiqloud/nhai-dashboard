@@ -1,3 +1,4 @@
+import sideBarDataChecker from "../Checker/sideBarData";
 export const DateFormatFunction = (inputDate) => {
   if (inputDate) {
     // Parse the input date string into a Date object
@@ -33,7 +34,13 @@ export const ConvertFormat = (inputDate) => {
 };
 
 export const getCheckValueByName = (menuData, submenuName, actionName) => {
-  for (const menu of menuData) {
+  //Side bar Data
+  var sidejsonData = sideBarDataChecker.find(
+    (item) => item.type === "menuData"
+  );
+  const sidebarMockData = sidejsonData.data;
+
+  for (const menu of sidebarMockData) {
     for (const submenu of menu.subMenu) {
       if (submenu.name === submenuName) {
         if (actionName !== undefined) {

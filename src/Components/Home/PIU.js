@@ -24,11 +24,11 @@ const PIU = () => {
   const columns = [
     {
       Header: "PIU",
-      accessor: "piu",
+      accessor: "countOfPIU",
 
       Cell: ({ row }) => (
         <a href="#" onClick={() => {}} className="text-black">
-          {row.values.piu}
+          {row.values.countOfPIU}
         </a>
       ),
     },
@@ -185,7 +185,6 @@ const PIU = () => {
 
   //---------------------------------------------------------------------------------------
   function FetchPIU() {
-    debugger;
     DashboardService.getPIU(
       {
         requestMetaData: {

@@ -23,6 +23,7 @@ const Financial = () => {
   const [disbursementsTable, setDisbursementsTable] = useState([]);
   const [summaryTable, setSummaryTable] = useState([]);
   const [apiData, setApiData] = useState([]);
+  const [year, setYear] = useState("2014");
   const navigate = useNavigate();
   useEffect(() => {
     setIsLoading(true);
@@ -190,7 +191,10 @@ const Financial = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "NHAI",
-        statusAsOn: "21-05-2020",
+        // statusAsOn: "21-05-2020",
+        year: year,
+        fromDate: ConvertFormat(fromDate),
+        toDate: ConvertFormat(toDate),
       },
       (res) => {
         if (res.status === 200) {
@@ -271,10 +275,17 @@ const Financial = () => {
     doc.text("Financial Reports", pageWidth / 2, 40, { align: "center" });
     const fontSize = 10;
     doc.setFontSize(fontSize);
-    const additionalInfo = `   From: ${currentDate}    To: ${currentDate}    Bank: Kotak`;
-    doc.text(`Finacial Year: ${currentDate} ${additionalInfo}`, 15, 50, {
-      fontSize: fontSize,
-    });
+    const additionalInfo = `   From: ${ConvertFormat(
+      currentDate
+    )}    To: ${ConvertFormat(currentDate)}    Bank: Kotak`;
+    doc.text(
+      `Finacial Year: ${ConvertFormat(currentDate)} ${additionalInfo}`,
+      15,
+      50,
+      {
+        fontSize: fontSize,
+      }
+    );
 
     // Create a table for cardData
     const tableData = [];
@@ -339,7 +350,7 @@ const Financial = () => {
       fontSize: fontSize,
     });
 
-    const fileName = `Financial_${currentDate}.pdf`;
+    const fileName = `Financial_${ConvertFormat(currentDate)}.pdf`;
     doc.save(fileName);
   };
 
@@ -351,7 +362,13 @@ const Financial = () => {
           <div className="p-1">
             <div className="float-start dashboardLabels">
               <label className="statusOn">Financial Year : </label>
-              <select id="financialYear" className="selectBoxDashbord">
+              <select
+                id="financialYear"
+                className="selectBoxDashbord"
+                onChange={(e) => {
+                  setYear(e.target.value);
+                }}
+              >
                 <option value="2014">2014</option>
                 <option value="2015">2015</option>
                 <option value="2016">2016</option>
@@ -410,13 +427,13 @@ const Financial = () => {
               >
                 PDF
               </button>
-              <button
+              {/* <button
                 className="btn addUser dashbutton Cml-5"
                 type="button"
                 // onClick={generateCSV} // Call the generateExcel function on button click
               >
                 Excel
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

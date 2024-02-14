@@ -3,14 +3,16 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { GroupService } from "../../Service/GroupService";
 import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 const AddGroup = () => {
-  const { userId } = useParams();
+  const location = useLocation();
+  const userId = location.state ? location.state.user.id : ""; //useParams();
+  const locationData = location.state ? location.state.user : {};
   const path = window.location.pathname;
   const isEdit = path.includes("EditGroup") ? true : false;
   const navigate = useNavigate();

@@ -1,7 +1,8 @@
 export const Global_var = {
+  //99
   BASEURL: "http://172.16.16.99:8091", //Amol local with VPN
-  BASEURL1: "http://172.16.16.99:8085", //Ayush
-  BASEURL2: "http://172.16.16.99:7091", //Sumit
+  BASEURL1: "http://172.16.16.201:8085", //Ayush
+  BASEURL2: "http://172.16.16.201:7091", //Sumit
   //--------Login----------------------------------------
   URL_LOGIN: "/usermanagement/login/v1",
   //--------Users----------------------------------
@@ -44,8 +45,10 @@ export const Global_var = {
   URL_CHECKER_PROFILE_APPROVAL: "/usermanagement/checker/profile/action/v1",
   //-------------------------------------------------------------------------------------------------------------
   //--------Dashboard API----------------------------------------------------------------------------------------
-  URL_BANK_AND_EVENTS: "/dashboard/events/v1",
+  URL_BANK: "/dashboard/bank/v1",
+  URL_EVENTS: "/dashboard/events/v1",
   URL_SNAPSHOT: "/dashboard/snapshort/v1",
+  URL_SNAPSHOT_STATUS: "/dashboard/snapshot-status/v1",
   URL_FINANCIAL: "/dashboard/financial/v1",
   URL_VELOCITY: "/dashboard/velocity/v1",
   URL_AGEING: "/dashboard/ageingitem/v1",
@@ -53,6 +56,9 @@ export const Global_var = {
   URL_RO: "/dashboard/regional-office/v1",
   URL_PIU: "/dashboard/piu/v1",
   URL_ACCOUNT_LEVEL: "/dashboard/acc-level/v1",
+  URL_TRANSACTION: "/dashboard/transaction/v1",
+  URL_FINANCIAL_D: "",
+  URL_ZONE: "",
   //---------Report API-------------------------------------------------------------------------------------------------
   URL_REPORT_LOGIN: "/report/userLogin/v1",
   URL_REPORT_ACTIVE_INACTIVE: "/report/userStatus/v1",
@@ -61,4 +67,10 @@ export const Global_var = {
   URL_DOWNLOAD_ACTIVE_INACTIVE: "",
   URL_DOWNLOAD_FIFO: "/report/fifoAgeing/download/v1",
   //---------Dropdown API-----------------------------------------------------------------------------------------------
+  URL_DROPDOWN_BRANCH: "/dashboard/dropdowns/branch/v1",
+  URL_DROPDOWN_LOCATION: "/dashboard/dropdowns/location/v1",
+  URL_DROPDOWN_ZONE: "/dashboard/dropdowns/zone/v1",
+  URL_DROPDOWN_RO: "/dashboard/dropdowns/ro/v1",
+  URL_DROPDOWN_PIU: "/dropdowns/piu/v1",
+  URL_DROPDOWN_PD: "/dropdowns/dropdowns/pd/v1",
 };

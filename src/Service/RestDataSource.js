@@ -1,5 +1,5 @@
 import Axios from "axios";
-
+import { toast } from "react-toastify";
 export default class RestDataSource {
   constructor(base_url, userId, errorCallback) {
     this.BASE_URL = base_url;
@@ -30,36 +30,6 @@ export default class RestDataSource {
     this.SendRequest("delete", this.BASE_URL, callback, data);
   }
 
-  // async SendRequest(method, url, callback, data) {
-  //   try {
-  //     let response = await Axios.request({
-  //       method: method,
-  //       url: url,
-  //       data: data,
-  //     });
-  //     callback(response);
-  //   } catch (err) {
-  //     if (err && err.response && err.response.data) {
-  //       if (err.response.data) {
-  //         var k = err.response.data.reasonText;
-  //       }
-
-  //       if (err.response.data.reasonCode == 400) {
-  //         var k = err.response.data.reasonText;
-  //       } else {
-  //         var k = "Error encountered, Please try again";
-  //       }
-
-  //       var errbx = document.getElementById("processing-status");
-  //       if (errbx != null) {
-  //         document.getElementById("processing-status").innerHTML =
-  //           k + ", Please try again.";
-  //       }
-  //     }
-  //     callback(err.response);
-  //   }
-  // }
-
   async SendRequest(method, url, callback, data) {
     try {
       let response = await Axios.request({
@@ -70,32 +40,41 @@ export default class RestDataSource {
 
       // Check if callback is a function before calling it
       if (typeof callback === "function") {
-        callback(response);
+        callback(response, null);
       } else {
         console.error("Callback is not a function");
       }
     } catch (err) {
       // Handle the error
+      let errorMessage;
 
       if (err && err.response && err.response.data) {
-        let k;
-
-        if (err.response.data.reasonCode == 400) {
-          k = err.response.data.reasonText;
-        } else {
-          k = "Error encountered, Please try again";
-        }
-
+        errorMessage =
+          err.response.data.reasonText || "Error encountered, Please try again";
         let errbx = document.getElementById("processing-status");
         if (errbx != null) {
-          document.getElementById("processing-status").innerHTML =
-            k + ", Please try again.";
+          errbx.innerHTML = errorMessage + ", Please try again.";
         }
+      } else if (err.message === "Network Error") {
+        errorMessage = "Network Error";
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else {
+        errorMessage = "Unknown Error";
+      }
+
+      // Check if errorCallback is a function before calling it
+      if (typeof this.handleError === "function") {
+        this.handleError(errorMessage);
+      } else {
+        console.error("ErrorCallback is not a function");
       }
 
       // Check if callback is a function before calling it
       if (typeof callback === "function") {
-        callback(err.response);
+        callback(null, errorMessage);
       } else {
         console.error("Callback is not a function");
       }

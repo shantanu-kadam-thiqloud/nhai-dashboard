@@ -1,16 +1,17 @@
 import RestDataSource from "./RestDataSource";
 import { Global_var } from "../Global/Global_Var";
 
-export const GroupService = {
-  getGroupList,
-  getGroupById,
-  addGroup,
-  updateGroup,
-  deleteGroup,
+export const DropdownService = {
+  getBranchData,
+  getLocationData,
+  getZoneData,
+  getROData,
+  getPIUData,
+  getPDData,
 };
 
-function getGroupList(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_GROUPS;
+function getBranchData(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_BRANCH;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -24,24 +25,8 @@ function getGroupList(mfaInfo, fn, fnError) {
     }
   });
 }
-
-function getGroupById(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_GROUP_BY_ID;
-
-  return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
-    if (err) {
-      // Handle error
-      if (fnError) {
-        fnError(err);
-      }
-    } else {
-      // If you had other headers to handle, you can do so here
-      fn(res);
-    }
-  });
-}
-function addGroup(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_ADD_GROUP;
+function getLocationData(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_LOCATION;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -55,8 +40,8 @@ function addGroup(mfaInfo, fn, fnError) {
     }
   });
 }
-function updateGroup(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_UPDATE_GROUP;
+function getZoneData(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_ZONE;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -70,9 +55,38 @@ function updateGroup(mfaInfo, fn, fnError) {
     }
   });
 }
+function getROData(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_RO;
 
-function deleteGroup(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_DELETE_GROUP;
+  return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
+    if (err) {
+      // Handle error
+      if (fnError) {
+        fnError(err);
+      }
+    } else {
+      // If you had other headers to handle, you can do so here
+      fn(res);
+    }
+  });
+}
+function getPIUData(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_PIU;
+
+  return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
+    if (err) {
+      // Handle error
+      if (fnError) {
+        fnError(err);
+      }
+    } else {
+      // If you had other headers to handle, you can do so here
+      fn(res);
+    }
+  });
+}
+function getPDData(mfaInfo, fn, fnError) {
+  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_PD;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

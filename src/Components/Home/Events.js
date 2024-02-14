@@ -4,22 +4,27 @@ import "../../Assets/Css/Dashboard.css";
 import axios from "axios";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuid } from "uuid";
+import Hyperlink from "./Hyperlink";
 
 const Events = () => {
-  const [dynamicDate, setDate] = useState(new Date());
-  const currentDate = new Date().toISOString().split("T")[0];
+  const [isOpen, setIsOpen] = useState(false);
+  const [rowdata, setRData] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [eventTable, setEventTable] = useState([]);
   // const [dbdata, setDbdata] = useState([]);
-  // const [eventTable, setEventTable] = useState([]);
 
-  // useEffect(() => {
-  //   // Initialize the data to "Core" when the component mounts
-  //   fetchCoreData('crore');
-  // }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    FetchEvents();
+    // Initialize the data to "Core" when the component mounts
+    // fetchCoreData('crore');
+  }, []);
 
   // const fetchCoreData = (type) => {
   //   const apiUrl = 'http://localhost:3007/api/secure/reginolOffice';
@@ -62,181 +67,189 @@ const Events = () => {
 
   // }, [dbdata]);
   const columns = [
-    { field: "id", headerName: "Sr no", width: 50 },
+    {
+      field: "id",
+      header: "Sr no",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+    },
     {
       field: "accountName",
-      headerName: "Account Name",
-      width: 150,
-      editable: false,
-      type: "string",
+      header: "Account Name",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      body: "HyperLinkTemplate",
     },
     {
       field: "accountNumber",
-      headerName: "Account Number",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "Account Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      body: "HyperLinkTemplate",
     },
     {
       field: "transactionDate",
-      headerName: "Transaction Date",
-      width: 120,
-      editable: false,
-      type: "string",
+      header: "Transaction Date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "transactionDetails",
-      headerName: "Transaction Details",
-      width: 160,
-      editable: false,
-      type: "string",
+      header: "Transaction Details",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "chequeRefNumber",
-      headerName: "Cheque Reference Number",
-      width: 150,
-      editable: false,
-      type: "string",
+      header: "Cheque Reference Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "valueDate",
-      headerName: "Value Date",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Value Date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "amountDebit",
-      headerName: "Amount Debit",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "Amount Debit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "amountCredit",
-      headerName: "Amount Credit",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "Amount Credit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "transactionType",
-      headerName: "Transaction Type",
-      width: 120,
-      editable: false,
-      type: "string",
+      header: "Transaction Type",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "reportingDate",
-      headerName: "Reporting Date",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Reporting Date",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "CRN",
-      headerName: "CRN",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "CRN",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "instructionNumber",
-      headerName: "Instruction Number",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Instruction Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "CCY",
-      headerName: "CCY",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "CCY",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "UTRSerialNumber",
-      headerName: "UTR Serial Number",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "UTR Serial Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryName",
-      headerName: "Beneficiary Name",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Beneficiary Name",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryAccountNumber",
-      headerName: "Beneficiary Account Number",
-      width: 100,
-      editable: false,
-      type: "number",
+      header: "Beneficiary Account Number",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryBank",
-      headerName: "Beneficiary Bank",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Beneficiary Bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryBranch",
-      headerName: "Beneficiary Branch",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Beneficiary Branch",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryCity",
-      headerName: "Beneficiary City",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Beneficiary City",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryIFSCCode",
-      headerName: "Beneficiary IFSC Code",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Beneficiary IFSC Code",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "beneficiaryAccountType",
-      headerName: "Beneficiary Account Type",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Beneficiary Account Type",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "dataAsOn",
-      headerName: "Data As On",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Data As On",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "bank",
-      headerName: "Bank",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "transactionFor",
-      headerName: "Transaction For",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "Transaction For",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
     {
       field: "FMSUniqueId",
-      headerName: "FMS Unique ID",
-      width: 100,
-      editable: false,
-      type: "string",
+      header: "FMS Unique ID",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
     },
   ];
   const eventTableData = [
@@ -301,11 +314,17 @@ const Events = () => {
 
   //---------------------------------------------------------------------------------------
   function FetchEvents() {
-    DashboardService.getBankAndEvents(
-      {},
+    DashboardService.getEvents(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+      },
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data);
+          setEventTable(res.data.events);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -343,14 +362,14 @@ const Events = () => {
       </div>
       <hr />
       <div className="row">
-        <div className="p-2">
+        <div className="p-2 mt-2 tableDiv">
           {/* <DataTable
             columns={columns}
             data={reginoalTable}
             customClass="ROTable"
             showSearchBar={false}
           />{" "} */}
-          <Box sx={{ height: 400, width: "100%" }}>
+          {/* <Box sx={{ height: 400, width: "100%" }}>
             <DataGrid
               rows={eventTableData}
               columns={columns}
@@ -374,8 +393,16 @@ const Events = () => {
                 },
               }}
             />
-          </Box>
+          </Box> */}
+          <GenericDataTable data={eventTableData} columns={columns} />
         </div>
+        <Hyperlink
+          isOpen={isOpen}
+          setModal={setIsOpen}
+          row={rowdata}
+          // accNum={accNo}
+          //piu={propPIU}
+        />
       </div>
     </div>
   );

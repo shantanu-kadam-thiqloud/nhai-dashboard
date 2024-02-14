@@ -4,26 +4,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams } from "react-router-dom";
 import TablesDataChecker from "../Checker/fieldData";
-import sideBarDataChecker from "../Checker/sideBarData";
 import { UserService } from "../../Service/UserService";
 import Spinner from "../HtmlComponents/Spinner";
 import { v4 as uuid } from "uuid";
 import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 const UserList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [is, setIs] = useState(false);
   const [userList, setUserList] = useState([]);
+
   //User Data
   var jsonData = TablesDataChecker.find((item) => item.type === "User_list");
   const data = jsonData.data;
-  //Side bar Data
-  var sidejsonData = sideBarDataChecker.find(
-    (item) => item.type === "menuData"
-  );
-  const sidebarMockData = sidejsonData.data;
 
-  const isAddUser = getCheckValueByName(sidebarMockData, "User", "Add");
+  const isAddUser = getCheckValueByName("", "User", "Add");
   // (sidebarMockData || []).find((x) => {
   //   if (x.menuName === "Admin") {
   //     return (x.subMenu || []).find((s) => {
@@ -43,27 +39,66 @@ const UserList = () => {
     setIs(isAddUser);
   }, []);
 
+  // const columns = [
+  //   {
+  //     Header: <div className="float-center">User Full Name</div>,
+  //     accessor: "fullName",
+  //   },
+  //   { Header: <div className="float-center">User ID</div>, accessor: "userId" },
+  //   {
+  //     Header: <div className="float-center">User Type</div>,
+  //     accessor: "userType",
+  //   },
+  //   { Header: <div className="float-center">Role</div>, accessor: "userRole" },
+  //   {
+  //     Header: "Is Active",
+  //     accessor: "isActive",
+  //   },
+  //   {
+  //     Header: "Action",
+  //     accessor: "id",
+  //     Cell: ({ row }) => {
+  //       return row.values.id;
+  //     },
+  //   },
+  // ];
+
   const columns = [
     {
-      Header: <div className="float-center">User Full Name</div>,
-      accessor: "fullName",
-    },
-    { Header: <div className="float-center">User ID</div>, accessor: "userId" },
-    {
-      Header: <div className="float-center">User Type</div>,
-      accessor: "userType",
-    },
-    { Header: <div className="float-center">Role</div>, accessor: "userRole" },
-    {
-      Header: "Is Active",
-      accessor: "isActive",
+      field: "id",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "ID",
     },
     {
-      Header: "Action",
-      accessor: "id",
-      Cell: ({ row }) => {
-        return row.values.id;
-      },
+      field: "fullName",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Name",
+    },
+    {
+      field: "userRole",
+      ortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Role",
+    },
+    {
+      field: "isActive",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Is Active",
+      className: "text-center p-0",
+      body: "switchTemplate",
+    },
+    {
+      field: "",
+      header: "Action",
+      className: "text-center",
+      body: "buttonsTemplate",
     },
   ];
 
@@ -136,12 +171,19 @@ const UserList = () => {
             </div>
           </div>
           <div className="row">
-            <div className="p-2">
+            <div className="p-2 tableDiv">
               {/* <div className="col-md-11 mx-auto flex"> */}
-              <DataTable
+              {/* <DataTable
                 columns={columns}
-                data={userList} //{data}
+                data={data} //{userList}
                 // customClass="ULTable"
+                detailpage="UserDetails"
+                editpage="EditUser"
+                deletepage="DeleteUser"
+              /> */}
+              <GenericDataTable
+                data={userList} //{data} //
+                columns={columns}
                 detailpage="UserDetails"
                 editpage="EditUser"
                 deletepage="DeleteUser"

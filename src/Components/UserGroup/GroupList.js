@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { GroupService } from "../../Service/GroupService";
 import Spinner from "../HtmlComponents/Spinner";
 import { v4 as uuid } from "uuid";
+import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
+import sideBarDataChecker from "../Checker/sideBarData";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 const GroupList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -38,30 +41,83 @@ const GroupList = () => {
       isActive: false,
     },
   ];
-
   const columns = [
-    { Header: "Group Name", accessor: "groupName" },
-    { Header: "Group Description", accessor: "groupDescription" },
     {
-      Header: "Is Active",
-      accessor: "isActive",
-      Cell: ({ value }) => (
-        <input
-          className="form-check-input"
-          type="checkbox"
-          id="flexSwitchCheckChecked"
-          checked={value}
-        />
-      ),
+      field: "id",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showGridlines: true,
+      showFilterMenu: false,
+      header: "ID",
     },
     {
-      Header: "Action",
-      accessor: "id",
-      Cell: ({ row }) => {
-        return row.values.id;
-      },
+      field: "groupName",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showFilterMenu: false,
+      header: "Group Name",
+    },
+    {
+      field: "groupDescription",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showFilterMenu: false,
+      header: "Group Description",
+    },
+    {
+      field: "isActive",
+      sortable: true,
+      filter: true,
+      filterPlaceholder: "Search",
+      showFilterMenu: false,
+      header: "Is Active",
+      className: "text-center p-0",
+      body: "switchTemplate",
+    },
+    {
+      field: "",
+      header: "Action",
+      body: "buttonsTemplate",
+      className: "text-center",
     },
   ];
+  // const columns = [
+  //   { Header: "Group Name", accessor: "groupName" },
+  //   { Header: "Group Description", accessor: "groupDescription" },
+  //   {
+  //     Header: "Is Active",
+  //     accessor: "isActive",
+  //     Cell: ({ value }) => (
+  //       <input
+  //         className="form-check-input"
+  //         type="checkbox"
+  //         id="flexSwitchCheckChecked"
+  //         checked={value}
+  //       />
+  //     ),
+  //   },
+  //   {
+  //     Header: "Action",
+  //     accessor: "id",
+  //     Cell: ({ row }) => {
+  //       return row.values.id;
+  //     },
+  //   },
+  // ];
+
+  //Side bar Data
+  var sidejsonData = sideBarDataChecker.find(
+    (item) => item.type === "menuData"
+  );
+  const sidebarMockData = sidejsonData.data;
+  const isAddGroup = getCheckValueByName(
+    sidebarMockData,
+    "User Profile",
+    "Add"
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -116,27 +172,38 @@ const GroupList = () => {
             <div className="col-md-12">
               <h2 className="mb-3 mt-3 pageTitle">Group Listing</h2>
               <div className="addUserBtnDiv  mt-3">
-                <button
-                  className="btn addUser"
-                  type="button"
-                  onClick={() => {
-                    // setIsOpen(true);
-                    navigate("/NHAI/AddGroup");
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPlusCircle} className="plusIcon" />
-                  Add New Group
-                </button>
+                {isAddGroup ? (
+                  <button
+                    className="btn addUser"
+                    type="button"
+                    onClick={() => {
+                      // setIsOpen(true);
+                      navigate("/NHAI/AddGroup");
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPlusCircle} className="plusIcon" />
+                    Add New Group
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>
           <div className="row">
-            <div className="p-2">
+            <div className="p-2 tableDiv">
               {/* col-md-11 mx-auto flex */}
-              <DataTable
+              {/* <DataTable
                 columns={columns}
                 data={groupList || data} //{groupList} //{data}
                 //  customClass="ULTable"
+                detailpage="GroupDetails"
+                editpage="EditGroup"
+                deletepage="DeleteGroup"
+              /> */}
+              <GenericDataTable
+                data={groupList} //{data}
+                columns={columns}
                 detailpage="GroupDetails"
                 editpage="EditGroup"
                 deletepage="DeleteGroup"

@@ -5,8 +5,11 @@ import {
   faCircleChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
+import { ProfileService } from "../../Service/ProfileService";
+import { v4 as uuid } from "uuid";
 
 const TabsComponent = (props) => {
+  const [homeTabs, setHomeTabs] = useState([]);
   const data = [
     {
       id: 1,
@@ -30,8 +33,11 @@ const TabsComponent = (props) => {
     },
   ];
 
-  const tabsData = data[0].subMenu;
+  React.useEffect(() => {
+    // fetchProfileById();
+  }, []);
 
+  const tabsData = data[0].subMenu; //homeTabs;
   const [activeTab, setActiveTab] = useState(tabsData[0]);
   const tabsRef = useRef(null);
 
@@ -57,6 +63,36 @@ const TabsComponent = (props) => {
   useEffect(() => {
     setActiveTab(props.active);
   }, [props.active]);
+
+  //-----------Get Profile----------------------------------------------
+  function fetchProfileById() {
+    var profile = {};
+    //  var profileId = parseInt(userId, 10);
+    ProfileService.getProfileById(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        id: "", //profileId, //47,
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status == 200) {
+          profile = res.data;
+          console.log("Profile ->", profile.mapping[0].subMenu);
+          setHomeTabs(profile.mappinng[0].subMenu);
+        } else if (res.status == 404) {
+          console.log("404");
+        } else if (res.status == 500) {
+          console.log("500");
+        }
+        //   return data;
+      }
+    );
+    console.log("profile->", profile);
+    return profile;
+  }
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
@@ -10,7 +10,9 @@ import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 const AddUser = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { userId } = useParams();
+  const location = useLocation();
+  const userId = location.state ? location.state.user.id : ""; //useParams();
+  const locationData = location.state ? location.state.user : {};
   // const users = [
   //   {
   //     id: 1,
@@ -110,6 +112,11 @@ const AddUser = () => {
   };
   //----------------------Add User---------------------------------------------
   function AddUser(values) {
+    const roleName = (profileList || []).find((x) => {
+      if (x.id == values.role) {
+        return x.profileName;
+      }
+    });
     UserService.addUser(
       {
         requestMetaData: {
@@ -122,7 +129,7 @@ const AddUser = () => {
         userType: "", //"Admin",
         employeeNumber: values.employeeNumber, //"12345",
         domainName: "", //"example.com",
-        userRole: role, //"Administrator",
+        userRole: roleName.profileName, //role, //"Administrator",
         gender: "", //"Male",
         email: values.email, //"shantanu@example.com",
         mobileNumber: values.mobile, //"123-456-7890",
@@ -174,7 +181,7 @@ const AddUser = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userId: userId,
+        userId: String(userId),
         userName: "nhai",
       },
       (res) => {
@@ -212,6 +219,11 @@ const AddUser = () => {
   }
   //----------------------Edit User--------------------------------------------
   function EditUser(values) {
+    const roleName = (profileList || []).find((x) => {
+      if (x.id == values.role) {
+        return x.profileName;
+      }
+    });
     UserService.updateUser(
       {
         requestMetaData: {
@@ -224,7 +236,7 @@ const AddUser = () => {
         userType: "", //"Admin",
         employeeNumber: values.employeeNumber, //"12345",
         domainName: "", //"example.com",
-        userRole: role, //"Administrator",
+        userRole: roleName.profileName, //"Administrator",
         gender: "", //"Male",
         email: values.email, //"shantanu@example.com",
         mobileNumber: values.mobile, //"123-456-7890",
@@ -478,7 +490,7 @@ const AddUser = () => {
                                 Select role
                               </option>
                               {(profileList || []).map((x) => {
-                                setRole(x.profileName);
+                                // setRole(x.profileName);
                                 return (
                                   <option value={x.id}>{x.profileName}</option>
                                 );

@@ -29,95 +29,105 @@ const Ageing = () => {
     {
       Header: <div className=" fw-bold">Total</div>,
       id: "total",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a
-              href="#"
-              onClick={() => {
-                console.log("click618");
-              }}
-              className="text-black"
-            >
-              {row.total}
-            </a>
-          );
-        } else {
-          return Decimal ? row.decimal.total : row.crore.total;
-        }
-      },
+      accessor: Decimal ? `decimal.total` : `crore.total`,
+      // (row) => {
+      //   if (row.parameter === "No of Subsidiary Accounts") {
+
+      //     return (
+      //       <a
+      //         href="#"
+      //         onClick={() => {
+      //           console.log("click618");
+      //         }}
+      //         className="text-black"
+      //       >
+      //         {row.total}
+      //       </a>
+      //     );
+      //   } else {
+      //     return Decimal ? row.decimal.total : row.crore.total;
+      //   }
+      // },
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
       Header: <div className=" fw-bold">0-30 Days</div>,
       id: "belowThirtyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.belowThirtyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.belowThirtyDays
-            : row.crore.belowThirtyDays;
-        }
-      },
+      accessor: Decimal ? `decimal.belowThirtyDays` : `crore.belowThirtyDays`,
+      //(row) => {
+      //   if (row.parameter === "No of Subsidiary Accounts") {
+      //     return (
+      //       <a href="#" onClick={() => {}} className="text-black">
+      //         {row.belowThirtyDays}
+      //       </a>
+      //     );
+      //   } else {
+      //     return Decimal
+      //       ? row.decimal.belowThirtyDays
+      //       : row.crore.belowThirtyDays;
+      //   }
+      // },
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
       Header: <div className=" fw-bold">31-90 Days</div>,
       id: "belowNintyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.belowNintyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.belowNintyDays
-            : row.crore.belowNintyDays;
-        }
-      },
+      accessor: Decimal ? `decimal.belowNintyDays` : `crore.belowNintyDays`,
+      //  (row) => {
+      //   if (row.parameter === "No of Subsidiary Accounts") {
+      //     return (
+      //       <a href="#" onClick={() => {}} className="text-black">
+      //         {row.belowNintyDays}
+      //       </a>
+      //     );
+      //   } else {
+      //     return Decimal
+      //       ? row.decimal.belowNintyDays
+      //       : row.crore.belowNintyDays;
+      //   }
+      // },
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
       Header: <div className=" fw-bold">91-180 Days</div>,
       id: "belowOneEightyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.belowOneEightyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.belowOneEightyDays
-            : row.crore.belowOneEightyDays;
-        }
-      },
+      accessor: Decimal
+        ? `decimal.belowOneEightyDays`
+        : `crore.belowOneEightyDays`,
+      //  (row) => {
+      //   if (row.parameter === "No of Subsidiary Accounts") {
+      //     return (
+      //       <a href="#" onClick={() => {}} className="text-black">
+      //         {row.belowOneEightyDays}
+      //       </a>
+      //     );
+      //   } else {
+      //     return Decimal
+      //       ? row.decimal.belowOneEightyDays
+      //       : row.crore.belowOneEightyDays;
+      //   }
+      // },
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     {
       Header: <div className=" fw-bold">{title}</div>,
       id: "aboveOneEightyDays",
-      accessor: (row) => {
-        if (row.parameter === "No. of Subsidiary Accounts") {
-          return (
-            <a href="#" onClick={() => {}} className="text-black">
-              {row.aboveOneEightyDays}
-            </a>
-          );
-        } else {
-          return Decimal
-            ? row.decimal.aboveOneEightyDays
-            : row.crore.aboveOneEightyDays;
-        }
-      },
+      accessor: Decimal
+        ? `decimal.aboveOneEightyDays`
+        : `crore.aboveOneEightyDays`,
+      //  (row) => {
+      //   if (row.parameter === "No of Subsidiary Accounts") {
+      //     return (
+      //       <a href="#" onClick={() => {}} className="text-black">
+      //         {row.aboveOneEightyDays}
+      //       </a>
+      //     );
+      //   } else {
+      //     return Decimal
+      //       ? row.decimal.aboveOneEightyDays
+      //       : row.crore.aboveOneEightyDays;
+      //   }
+      // },
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
     // {
@@ -304,14 +314,16 @@ const Ageing = () => {
 
   function per(total, value) {
     if (total && value) {
-      total = parseFloat(total.replace(/,/g, ""));
-      value = parseFloat(value.replace(/,/g, ""));
+      var totalN = 0;
+      var valueN = 0;
+      totalN = parseFloat(total.replace(/,/g, ""));
+      valueN = parseFloat(value.replace(/,/g, ""));
       var per = 0;
-      per = (value / total) * 100;
+
+      per = (valueN / totalN) * 100;
       console.log("Ans->", per);
       return per;
     } else {
-      return 0;
     }
   }
   const utilizationPercentage =
@@ -371,6 +383,7 @@ const Ageing = () => {
       color: "#984EA3",
     },
   ];
+  console.log("AccountchartData", AccountchartData);
   const AllocatedPercentage =
     mockRes == "" ? "" : mockRes.ageingItem[1].decimal;
   const AllocatedchartData = [

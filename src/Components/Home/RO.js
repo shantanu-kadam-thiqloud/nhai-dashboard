@@ -16,9 +16,9 @@ const RO = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const [dbdata, setDbdata] = useState([]);
+  const [zoneD, setZoneD] = useState("All");
   const [reginoalTable, setReginoalTable] = useState([]);
-  const [corDecimalType, setcoreDecimalType] = useState("");
+  const [Decimal, setDecimal] = useState(true);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,63 +29,63 @@ const RO = () => {
     // fetchCoreData("crore");
   }, []);
 
-  const fetchCoreData = (type) => {
-    const apiUrl = "http://localhost:3007/api/secure/reginolOffice";
-    const uuid = localStorage.getItem("UUID");
-    const headers = {
-      XUuid: uuid,
-    };
+  // const fetchCoreData = (type) => {
+  //   const apiUrl = "http://localhost:3007/api/secure/reginolOffice";
+  //   const uuid = localStorage.getItem("UUID");
+  //   const headers = {
+  //     XUuid: uuid,
+  //   };
 
-    // Make the Axios GET request with the headers
-    axios
-      .get(apiUrl, { headers })
-      .then((response) => {
-        setDbdata(response.data.data.regionWiseData);
-        if (type === "crore") {
-          setcoreDecimalType("crore");
-        } else {
-          setcoreDecimalType("decimal");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+  //   // Make the Axios GET request with the headers
+  //   axios
+  //     .get(apiUrl, { headers })
+  //     .then((response) => {
+  //       //   setDbdata(response.data.data.regionWiseData);
+  //       if (type ) {
+  //         setDecimal("crore");
+  //       } else {
+  //         setDecimal("decimal");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
-  useEffect(() => {
-    if (dbdata && Object.keys(dbdata).length > 0) {
-      // const reginoalTable = Object.entries(dbdata).map(([key, value]) => ({
-      //   parameters: key,
-      //   total: value,
-      //   kotak: value
-      // }));
-      const reginaolData = dbdata.map((item, index) => ({
-        id: index + 1,
-        office: item.regionalOffice,
-        zone: item.zone,
-        piu: item.countOfPIU,
-        subsidiaryAccounts: item.countOfSubsidiaryAccounts,
-        sanctionLimit:
-          corDecimalType === "crore"
-            ? item.crore.sanctionLimit
-            : item.decimal.sanctionLimit,
-        utilizedLimit:
-          corDecimalType === "crore"
-            ? item.crore.utilizedLimit
-            : item.decimal.utilizedLimit,
-        unutilizedLimit:
-          corDecimalType === "crore"
-            ? item.crore.unUtilizedLimit
-            : item.decimal.unUtilizedLimit,
-        percentage:
-          corDecimalType === "crore"
-            ? item.crore.utilizedPercent
-            : item.decimal.utilizedPercent,
-      }));
-      setReginoalTable(reginaolData);
-      console.log("reginoalTable", reginaolData);
-    }
-  }, [dbdata]);
+  // useEffect(() => {
+  //   if (dbdata && Object.keys(dbdata).length > 0) {
+  //     // const reginoalTable = Object.entries(dbdata).map(([key, value]) => ({
+  //     //   parameters: key,
+  //     //   total: value,
+  //     //   kotak: value
+  //     // }));
+  //     const reginaolData = dbdata.map((item, index) => ({
+  //       id: index + 1,
+  //       office: item.regionalOffice,
+  //       zone: item.zone,
+  //       piu: item.countOfPIU,
+  //       subsidiaryAccounts: item.countOfSubsidiaryAccounts,
+  //       sanctionLimit:
+  //         Decimal
+  //           ? item.crore.sanctionLimit
+  //           : item.decimal.sanctionLimit,
+  //       utilizedLimit:
+  //         Decimal
+  //           ? item.crore.utilizedLimit
+  //           : item.decimal.utilizedLimit,
+  //       unutilizedLimit:
+  //         Decimal
+  //           ? item.crore.unutilizedLimit
+  //           : item.decimal.unutilizedLimit,
+  //       percentage:
+  //         Decimal
+  //           ? item.crore.utilizationPercentage
+  //           : item.decimal.utilizationPercentage,
+  //     }));
+  //     setReginoalTable(reginaolData);
+  //     console.log("reginoalTable", reginaolData);
+  //   }
+  // }, [dbdata]);
 
   // const columns = [
   //   { field: "id", headerName: "Sr no", width: 90 },
@@ -149,7 +149,7 @@ const RO = () => {
 
   const columns = [
     {
-      accessor: "office",
+      accessor: "regionalOffice",
       Header: "Regional Office",
     },
     {
@@ -157,28 +157,30 @@ const RO = () => {
       Header: "Zone",
     },
     {
-      accessor: "piu",
+      accessor: "countOfPIU",
       Header: "No. of PIU",
     },
     {
-      accessor: "subsidiaryAccounts",
+      accessor: "countOfSubsidiaryAccounts",
       Header: "No. of Subsidiary Accounts",
     },
     // Extra accessors
     {
-      accessor: "sanctionLimit",
+      accessor: !Decimal ? "crore.sanctionLimit" : "decimal.sanctionLimit",
       Header: "Sanction Limit",
     },
     {
-      accessor: "utilizedLimit",
+      accessor: !Decimal ? "crore.utilizedLimit" : "decimal.utilizedLimit",
       Header: "Utilized Limit",
     },
     {
-      accessor: "unutilizedLimit", // accessor for "Un-Utilized Limit"
+      accessor: !Decimal ? "crore.unutilizedLimit" : "decimal.unutilizedLimit", // accessor for "Un-Utilized Limit"
       Header: "Un-Utilized Limit",
     },
     {
-      accessor: "percentage", // accessor for "Utilized Percentage"
+      accessor: !Decimal
+        ? "crore.utilizationPercentage"
+        : "decimal.utilizationPercentage", // accessor for "Utilized Percentage"
       Header: "Utilized Percentage",
     },
   ];
@@ -190,12 +192,14 @@ const RO = () => {
           correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "NHAI",
-        statusAsOn: "21-05-2020", //ConvertFormat(asOnDate),
-        ro: "All",
+        statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
+        zone: zoneD, //"All",
       },
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data);
+          var d = res.data.regionWiseData;
+          //   setRows(d);
+          setReginoalTable(d);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -233,7 +237,13 @@ const RO = () => {
                 }}
               />{" "}
               <label className="statusOn">Zone : </label>{" "}
-              <select name="zone" className="inputDate">
+              <select
+                name="zone"
+                className="inputDate"
+                onChange={(e) => {
+                  setZoneD(e.target.value);
+                }}
+              >
                 <option value="All">All</option>
                 <option value="East">East</option>
                 <option value="West">West</option>
@@ -249,14 +259,14 @@ const RO = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => fetchCoreData("crore")}
+                onClick={() => setDecimal(false)}
               >
                 Crore
               </button>{" "}
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => fetchCoreData("decimal")}
+                onClick={() => setDecimal(true)}
               >
                 Decimal
               </button>{" "}

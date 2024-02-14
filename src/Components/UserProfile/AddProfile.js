@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import DataTable from "../HtmlComponents/DataTable";
 import Spinner from "../HtmlComponents/Spinner";
 import {
@@ -26,7 +26,9 @@ const AddProfile = () => {
   const [profile, setProfile] = useState({});
   const [groupList, setGroupList] = useState([]);
   const [isActive, setIsActive] = useState(false);
-  const { userId } = useParams();
+  const location = useLocation();
+  const userId = location.state ? location.state.user.id : ""; //useParams();
+  const locationData = location.state ? location.state.user : {};
   // const profiles = [
   //   {
   //     id: 1,
@@ -528,7 +530,6 @@ const AddProfile = () => {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
         } else if (res.status == 500) {
-          prompt("500 Internal Server Error...!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }

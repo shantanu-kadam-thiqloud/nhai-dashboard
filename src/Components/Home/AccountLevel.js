@@ -9,6 +9,7 @@ import {
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";
+import GenericDataTable from "../HtmlComponents/GenericDataTable";
 
 const AccountLevel = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -17,126 +18,286 @@ const AccountLevel = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
 
-  const [bankD, setBank] = useState("");
+  const [bankD, setBank] = useState("All");
   const [roD, setRo] = useState("");
   const [zoneD, setZone] = useState("");
   const [Decimal, setDecimal] = useState(true);
+  const [propAccNo, setPropAccNo] = useState("");
+  const [propPIU, setPropPIU] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const columns = [
     {
-      Header: "Bank",
-      accessor: "bank",
+      field: "bank",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Bank",
+      width: 150,
+      editable: false,
+      type: "string",
     },
     {
-      Header: "PIU",
-      accessor: "piu",
-
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black"
-        >
-          {row.values.piu}
-        </a>
-      ),
+      field: "piu", //"PIU"
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PIU",
+      width: 150,
+      editable: false,
+      type: "string",
+      body: "HyperLinkTemplate",
     },
     {
-      Header: "Regional Office",
-      accessor: "regionalOffice",
+      field: "regionalOffice",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Regional Office",
+      width: 150,
+      editable: false,
+      type: "string",
     },
     {
-      Header: "Zone",
-      accessor: "zone",
+      field: "zone",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Zone",
+      width: 150,
+      editable: false,
+      type: "string",
     },
     {
-      Header: "Account Number",
-      accessor: "accNum",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black float-end"
-        >
-          {row.values.accNum}
-        </a>
-      ),
+      field: "accNum", //"accountNumber"
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Number",
+      width: 150,
+      editable: false,
+      type: "string",
+      body: "HyperLinkTemplate",
+      class: "text-end",
     },
     {
-      Header: "Project Name",
-      accessor: "projectName",
-      Cell: ({ row }) => (
-        <a
-          href="#"
-          onClick={() => {
-            setRData(row.values);
-            setIsOpen(true);
-          }}
-          className="text-black"
-        >
-          {row.values.projectName}
-        </a>
-      ),
+      field: "projectName",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Project Name",
+      width: 150,
+      editable: false,
+      type: "string",
+      body: "HyperLinkTemplate",
     },
     {
-      Header: "Account Open Date",
-      accessor: "accountOpeningData",
+      field: "accountOpeningData",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Account Opening Date",
+      width: 150,
+      editable: false,
+      type: "date",
     },
     {
-      Header: "Limit Sanction Date",
-      accessor: "limitSancationDate",
+      field: "limitSancationDate",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Limit Sanction Date",
+      width: 150,
+      editable: false,
+      type: "date",
     },
     {
-      Header: "Sanction Limit",
-      accessor: "crore.sanctionLimit", // Decimal ? "decimal.sanctionLimit" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "crore.sanctionLimit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Sanction Limit (Crore)",
+      width: 150,
+      editable: false,
+      type: "number",
     },
     {
-      Header: "Utilized Limit",
-      accessor: "crore.utilizedLimit", //Decimal ? "decimal.utilizedLimit" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "crore.utilizedLimit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Utilized Limit (Crore)",
+      width: 150,
+      editable: false,
+      type: "number",
     },
     {
-      Header: "Un-Utilized Limit",
-      accessor: "crore.unUtilizedLimit", // Decimal ? "decimal.unUtilizedLimit" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "crore.unUtilizedLimit",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Unutilized Limit (Crore)",
+      width: 150,
+      editable: false,
+      type: "number",
     },
     {
-      Header: "Utilization %",
-      accessor: "crore.utilizedPercent", // Decimal ? "decimal.utilizedPercent" :
-      Cell: ({ value }) => <div className="float-end">{value}</div>,
+      field: "crore.utilizedPercent",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Utilized Percentage",
+      width: 150,
+      editable: false,
+      type: "string",
     },
     {
-      Header: "Active/Inactive",
-      accessor: "status",
-      Cell: ({ value }) => (
-        <div className="mx-auto">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value=""
-            id="flexCheckIndeterminate"
-            checked={value}
-          />
-        </div>
-      ),
+      field: "status",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Status",
+      width: 150,
+      editable: false,
+      type: "boolean",
     },
     {
-      Header: "Project Director(PD) Name",
-      accessor: "directorName",
+      field: "directorName",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "Director Name",
+      width: 150,
+      editable: false,
+      type: "string",
     },
     {
-      Header: "PMIS Code",
-      accessor: "pmisCode",
+      field: "pmisCode",
+      sortable: true,
+      filter: true,
+      showFilterMenu: false,
+      header: "PMIS Code",
+      width: 150,
+      editable: false,
+      type: "string",
     },
   ];
+  // const columns = [
+  //   {
+  //     Header: "Bank",
+  //     accessor: "bank",
+  //   },
+  //   {
+  //     Header: "PIU",
+  //     accessor: "piu",
+
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         onClick={() => {
+  //           setRData(row.values);
+  //           setIsOpen(true);
+  //           setPropPIU(row.values.PIU);
+  //         }}
+  //         className="text-black"
+  //       >
+  //         {row.values.piu}
+  //       </a>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Regional Office",
+  //     accessor: "regionalOffice",
+  //   },
+  //   {
+  //     Header: "Zone",
+  //     accessor: "zone",
+  //   },
+  //   {
+  //     Header: "Account Number",
+  //     accessor: "accNum",
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         onClick={() => {
+  //           setRData(row.values);
+  //           setIsOpen(true);
+  //           setPropAccNo(row.values.accNum);
+  //         }}
+  //         className="text-black float-end"
+  //       >
+  //         {row.values.accNum}
+  //       </a>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Project Name",
+  //     accessor: "projectName",
+  //     Cell: ({ row }) => (
+  //       <a
+  //         href="#"
+  //         onClick={() => {
+  //           setRData(row.values);
+  //           setIsOpen(true);
+  //         }}
+  //         className="text-black"
+  //       >
+  //         {row.values.projectName}
+  //       </a>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Account Open Date",
+  //     accessor: "accountOpeningData",
+  //   },
+  //   {
+  //     Header: "Limit Sanction Date",
+  //     accessor: "limitSancationDate",
+  //   },
+  //   {
+  //     Header: "Sanction Limit",
+  //     accessor: "crore.sanctionLimit", // Decimal ? "decimal.sanctionLimit" :
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Utilized Limit",
+  //     accessor: "crore.utilizedLimit", //Decimal ? "decimal.utilizedLimit" :
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Un-Utilized Limit",
+  //     accessor: "crore.unUtilizedLimit", // Decimal ? "decimal.unUtilizedLimit" :
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Utilization %",
+  //     accessor: "crore.utilizedPercent", // Decimal ? "decimal.utilizedPercent" :
+  //     Cell: ({ value }) => <div className="float-end">{value}</div>,
+  //   },
+  //   {
+  //     Header: "Active/Inactive",
+  //     accessor: "status",
+  //     Cell: ({ value }) => (
+  //       <div className="mx-auto">
+  //         <input
+  //           class="form-check-input"
+  //           type="checkbox"
+  //           value=""
+  //           id="flexCheckIndeterminate"
+  //           checked={value}
+  //         />
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     Header: "Project Director(PD) Name",
+  //     accessor: "directorName",
+  //   },
+  //   {
+  //     Header: "PMIS Code",
+  //     accessor: "pmisCode",
+  //   },
+  // ];
   const data = [
     {
       id: 1,
@@ -196,7 +357,9 @@ const AccountLevel = () => {
   ];
 
   useEffect(() => {
-    console.log("reqBody-->", reqBody);
+    setIsLoading(true);
+    FetchAccountLevel();
+    //  console.log("reqBody-->", reqBody);
   }, [asOnDate]);
 
   //Mock----------------------------------------------------------------------
@@ -265,7 +428,7 @@ const AccountLevel = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data);
+          // setRows(res.data.regionWiseData);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -316,16 +479,23 @@ const AccountLevel = () => {
       </div>
       <hr />
       <div className="row">
-        <div className="p-2">
-          <DataTable
+        <div className="p-2 tableDiv">
+          {/* <DataTable
             columns={columns}
-            data={rows} //{data}
+            data={rows} //{data} //
             customClass="AccLevelable"
             showSearchBar={false}
-          />{" "}
+          />{" "} */}
+          <GenericDataTable data={rows} columns={columns} />
         </div>
       </div>
-      <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
+      <Hyperlink
+        isOpen={isOpen}
+        setModal={setIsOpen}
+        row={rowdata}
+        accNum={propAccNo}
+        piu={propPIU}
+      />
     </div>
   );
 };

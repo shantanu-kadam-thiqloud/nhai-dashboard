@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import AddGroup from "./AddGroup";
 import { GroupService } from "../../Service/GroupService";
-import { ConvertFormat } from "../HtmlComponents/CommonFunction";
+import {
+  ConvertFormat,
+  getCheckValueByName,
+} from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 function GroupDetails() {
-  const { userId } = useParams();
+  const location = useLocation();
+  const userId = location.state ? location.state.user.id : ""; //useParams();
+  const locationData = location.state ? location.state.user : {};
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +57,8 @@ function GroupDetails() {
     fetchGroupById();
   }, []);
 
+  const isEditGroup = getCheckValueByName("", "User Group", "Update");
+  const isDeleteGroup = getCheckValueByName("", "User Group", "Delete");
   //const group = groups.find((g) => g.id.toString() === userId);
   const path = window.location.pathname;
   const isDelete = path.includes("DeleteGroup") ? true : false;
@@ -81,7 +88,6 @@ function GroupDetails() {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
         } else if (res.status == 500) {
-          prompt("500 Internal Server Error...!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -212,21 +218,26 @@ function GroupDetails() {
             >
               Back to List
             </button>
-            <button
-              className="btn addUser"
-              type="button"
-              onClick={() => {
-                //setIsOpen(true);
-                navigate(
-                  `/NHAI/${isDelete ? "DeleteGroup" : "EditGroup"}/${group.id}`
-                );
-                if (isDelete) {
-                  DeleteGroupById();
-                }
-              }}
-            >
-              {isDelete ? "Delete" : "Edit"}
-            </button>
+            {isDeleteGroup || isEditGroup ? (
+              <button
+                className="btn addUser"
+                type="button"
+                onClick={() => {
+                  //setIsOpen(true);
+                  //var user = group;
+                  navigate(`/NHAI/EditGroup`, {
+                    state: { user: group },
+                  });
+                  if (isDelete) {
+                    DeleteGroupById();
+                  }
+                }}
+              >
+                {isDelete ? "Delete" : "Edit"}
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

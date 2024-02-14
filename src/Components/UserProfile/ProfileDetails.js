@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
-import { ConvertFormat } from "../HtmlComponents/CommonFunction";
+import {
+  ConvertFormat,
+  getCheckValueByName,
+} from "../HtmlComponents/CommonFunction";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
-function UserDetails() {
-  const { userId } = useParams();
+import Spinner from "../HtmlComponents/Spinner";
+function ProfileDetails() {
+  const location = useLocation();
+  const userId = location.state ? location.state.user.id : ""; //useParams();
+  const locationData = location.state ? location.state.user : {};
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -216,6 +222,9 @@ function UserDetails() {
     fetchProfileById();
   }, []);
 
+  const isEditProfile = getCheckValueByName("", "User Profile", "Update");
+  const isDeleteProfile = getCheckValueByName("", "User Profile", "Delete");
+
   const path = window.location.pathname;
   const isDelete = path.includes("DeleteProfile") ? true : false;
   if (!profile) {
@@ -246,11 +255,14 @@ function UserDetails() {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
         } else if (res.status == 500) {
-          prompt("500 Internal Server Error...!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
         //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
       }
     );
     console.log("profile->", profile);
@@ -313,6 +325,7 @@ function UserDetails() {
   }
   return (
     <div className="container UDContainer">
+      <Spinner isLoading={isLoading} />
       <div className="ULContainer">
         <div className="row">
           <div className="col-md-12">
@@ -469,20 +482,26 @@ function UserDetails() {
             >
               Back to List
             </button>
-            <button
-              className="btn addUser"
-              type="button"
-              onClick={() => {
-                //setIsOpen(true);
-                navigate(`/NHAI/EditProfile/${userId}`);
-                if (isDelete) {
-                  setIsLoading(true);
-                  deleteProfile();
-                }
-              }}
-            >
-              {isDelete ? "Delete" : "Edit"}
-            </button>
+            {isEditProfile || isDeleteProfile ? (
+              <button
+                className="btn addUser"
+                type="button"
+                onClick={() => {
+                  //setIsOpen(true);
+                  var user = locationData;
+
+                  navigate(`/NHAI/EditProfile`, { state: { user: user } });
+                  if (isDelete) {
+                    setIsLoading(true);
+                    deleteProfile();
+                  }
+                }}
+              >
+                {isDelete ? "Delete" : "Edit"}
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
@@ -490,4 +509,4 @@ function UserDetails() {
   );
 }
 
-export default UserDetails;
+export default ProfileDetails;
