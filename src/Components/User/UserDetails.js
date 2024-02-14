@@ -95,7 +95,7 @@ function UserDetails() {
       },
       (res) => {
         if (res.status == 200) {
-          user = res.data.responseObject;
+          user = res.data.data.responseObject;
           // console.log("UserList->", UserList);
           setUser(user);
           setIsLoading(false);
@@ -142,7 +142,7 @@ function UserDetails() {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,

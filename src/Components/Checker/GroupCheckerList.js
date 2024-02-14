@@ -182,7 +182,7 @@ const GroupCheckerList = () => {
       },
       (res) => {
         if (res.status === 200) {
-          var reqList = res.data.requests;
+          var reqList = res.data.data.requests;
           setGroupRequests(reqList);
           const addList = (reqList || []).filter((x) => {
             if (x.requestType === "Add") return x;

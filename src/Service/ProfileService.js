@@ -10,7 +10,7 @@ export const ProfileService = {
 };
 
 function getProfileList(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_PROFILES;
+  var url = Global_var.AUTH_BASE + Global_var.URL_GET_PROFILES;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -26,7 +26,7 @@ function getProfileList(mfaInfo, fn, fnError) {
 }
 
 function getProfileById(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_PROFILE_BY_ID;
+  var url = Global_var.AUTH_BASE + Global_var.URL_GET_PROFILE_BY_ID;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -41,7 +41,7 @@ function getProfileById(mfaInfo, fn, fnError) {
   });
 }
 function addProfile(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_ADD_PROFILE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_ADD_PROFILE;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -56,7 +56,7 @@ function addProfile(mfaInfo, fn, fnError) {
   });
 }
 function updateProfile(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_UPDATE_PROFILE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_UPDATE_PROFILE;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -72,7 +72,7 @@ function updateProfile(mfaInfo, fn, fnError) {
 }
 
 function deleteProfile(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_DELETE_PROFILE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DELETE_PROFILE;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

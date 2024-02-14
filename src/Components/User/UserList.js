@@ -119,7 +119,7 @@ const UserList = () => {
       },
       (res) => {
         if (res.status === 200) {
-          UserList = res.data.users;
+          UserList = res.data.data.users;
           setUserList(UserList);
           setIsLoading(false);
         } else if (res.status == 404) {

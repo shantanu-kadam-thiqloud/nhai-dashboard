@@ -19,7 +19,7 @@ export const DashboardService = {
 };
 
 function getSnapshot(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_SNAPSHOT;
+  var url = Global_var.AUTH_BASE + Global_var.URL_SNAPSHOT;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -34,7 +34,7 @@ function getSnapshot(mfaInfo, fn, fnError) {
   });
 }
 function getSnapshotStatus(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_SNAPSHOT_STATUS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_SNAPSHOT_STATUS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -64,7 +64,7 @@ function getBank(mfaInfo, fn, fnError) {
   });
 }
 function getEvents(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_EVENTS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_EVENTS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -79,7 +79,7 @@ function getEvents(mfaInfo, fn, fnError) {
   });
 }
 function getVelocity(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_VELOCITY;
+  var url = Global_var.AUTH_BASE + Global_var.URL_VELOCITY;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -94,7 +94,7 @@ function getVelocity(mfaInfo, fn, fnError) {
   });
 }
 function getAgeing(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_AGEING;
+  var url = Global_var.AUTH_BASE + Global_var.URL_AGEING;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error
@@ -108,7 +108,7 @@ function getAgeing(mfaInfo, fn, fnError) {
   });
 }
 function getLimitledger(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_LIMITLEDGER;
+  var url = Global_var.AUTH_BASE + Global_var.URL_LIMITLEDGER;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -138,7 +138,7 @@ function getRO(mfaInfo, fn, fnError) {
   });
 }
 function getPIU(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_PIU;
+  var url = Global_var.AUTH_BASE + Global_var.URL_PIU;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -153,7 +153,7 @@ function getPIU(mfaInfo, fn, fnError) {
   });
 }
 function getAccountLevel(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_ACCOUNT_LEVEL;
+  var url = Global_var.AUTH_BASE + Global_var.URL_ACCOUNT_LEVEL;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error
@@ -167,7 +167,7 @@ function getAccountLevel(mfaInfo, fn, fnError) {
   });
 }
 function getFinancial(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_FINANCIAL;
+  var url = Global_var.AUTH_BASE + Global_var.URL_FINANCIAL;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error
@@ -181,7 +181,7 @@ function getFinancial(mfaInfo, fn, fnError) {
   });
 }
 function getFinancialD(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_FINANCIAL_D;
+  var url = Global_var.AUTH_BASE + Global_var.URL_FINANCIAL_D;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error
@@ -195,7 +195,7 @@ function getFinancialD(mfaInfo, fn, fnError) {
   });
 }
 function getTransaction(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_TRANSACTION;
+  var url = Global_var.AUTH_BASE + Global_var.URL_TRANSACTION;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error
@@ -209,7 +209,7 @@ function getTransaction(mfaInfo, fn, fnError) {
   });
 }
 function getZone(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_ZONE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_ZONE;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error

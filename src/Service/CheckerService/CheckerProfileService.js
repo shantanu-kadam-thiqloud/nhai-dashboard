@@ -9,7 +9,7 @@ export const CheckerProfileService = {
 };
 
 function getProfileRequests(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_CHECKER_PROFILE_REQUESTS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_CHECKER_PROFILE_REQUESTS;
 
   return new RestDataSource(url, fn).Update(mfaInfo, (res, err) => {
     if (err) {
@@ -25,7 +25,7 @@ function getProfileRequests(mfaInfo, fn, fnError) {
 }
 function getProfileAddDeleteDetails(mfaInfo, fn, fnError) {
   var url =
-    Global_var.BASEURL + Global_var.URL_CHECKER_PROFILE_ADD_DELETE_DETAILS;
+    Global_var.AUTH_BASE + Global_var.URL_CHECKER_PROFILE_ADD_DELETE_DETAILS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -40,7 +40,8 @@ function getProfileAddDeleteDetails(mfaInfo, fn, fnError) {
   });
 }
 function getProfileUpdateDetails(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_CHECKER_PROFILE_UPDATE_DETAILS;
+  var url =
+    Global_var.AUTH_BASE + Global_var.URL_CHECKER_PROFILE_UPDATE_DETAILS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -55,7 +56,7 @@ function getProfileUpdateDetails(mfaInfo, fn, fnError) {
   });
 }
 function checkerProfileApproval(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_CHECKER_PROFILE_APPROVAL;
+  var url = Global_var.AUTH_BASE + Global_var.URL_CHECKER_PROFILE_APPROVAL;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

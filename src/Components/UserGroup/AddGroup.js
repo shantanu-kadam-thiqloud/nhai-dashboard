@@ -109,7 +109,7 @@ const AddGroup = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,
@@ -153,7 +153,7 @@ const AddGroup = () => {
       (res) => {
         //meta data issue
         if (res.status == 200) {
-          group = res.data;
+          group = res.data.data;
           setGroupName(group.groupName);
           setGroupDescription(group.groupDescription);
           setIsActive(group.isActive);
@@ -203,7 +203,7 @@ const AddGroup = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             position: "top-right",
             autoClose: 3000,
           });

@@ -280,7 +280,7 @@ const Velocity = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          setRows(res.data.velocities);
+          setRows(res.data.data.velocities);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);

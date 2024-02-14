@@ -10,7 +10,7 @@ export const GroupService = {
 };
 
 function getGroupList(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_GROUPS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_GET_GROUPS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -26,7 +26,7 @@ function getGroupList(mfaInfo, fn, fnError) {
 }
 
 function getGroupById(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_GROUP_BY_ID;
+  var url = Global_var.AUTH_BASE + Global_var.URL_GET_GROUP_BY_ID;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -41,7 +41,7 @@ function getGroupById(mfaInfo, fn, fnError) {
   });
 }
 function addGroup(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_ADD_GROUP;
+  var url = Global_var.AUTH_BASE + Global_var.URL_ADD_GROUP;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -56,7 +56,7 @@ function addGroup(mfaInfo, fn, fnError) {
   });
 }
 function updateGroup(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_UPDATE_GROUP;
+  var url = Global_var.AUTH_BASE + Global_var.URL_UPDATE_GROUP;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -72,7 +72,7 @@ function updateGroup(mfaInfo, fn, fnError) {
 }
 
 function deleteGroup(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_DELETE_GROUP;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DELETE_GROUP;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

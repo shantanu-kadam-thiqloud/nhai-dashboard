@@ -198,8 +198,8 @@ const Financial = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setApiData(res.data);
-          setDbdata(res.data);
+          setApiData(res.data.data);
+          setDbdata(res.data.data);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);

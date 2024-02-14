@@ -248,7 +248,7 @@ function ProfileDetails() {
         if (res.status == 200) {
           profile = res.data;
           // console.log("UserList->", UserList);
-          setMapping(res.data.mapping);
+          setMapping(res.data.data.mapping);
           setProfile(profile);
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -294,7 +294,7 @@ function ProfileDetails() {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,

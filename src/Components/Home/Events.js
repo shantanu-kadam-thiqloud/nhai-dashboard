@@ -324,7 +324,7 @@ const Events = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setEventTable(res.data.events);
+          setEventTable(res.data.data.events);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);

@@ -137,7 +137,7 @@ const GroupList = () => {
       },
       (res) => {
         if (res.status === 200) {
-          GroupList = res.data.groups;
+          GroupList = res.data.data.groups;
           // console.log("UserList->", UserList);
           setGroupList(GroupList);
           setIsLoading(false);

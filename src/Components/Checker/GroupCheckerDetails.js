@@ -133,8 +133,8 @@ const GroupCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setReq(res.data);
-          setGroup(res.data.responseData);
+          setReq(res.data.data);
+          setGroup(res.data.data.responseData);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -164,9 +164,9 @@ const GroupCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setReq(res.data);
-          setCurrentValue(res.data.requestData.existingValue);
-          setOldValue(res.data.requestData.oldVlaue);
+          setReq(res.data.data);
+          setCurrentValue(res.data.data.requestData.existingValue);
+          setOldValue(res.data.data.requestData.oldVlaue);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -205,7 +205,7 @@ const GroupCheckerDetails = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,

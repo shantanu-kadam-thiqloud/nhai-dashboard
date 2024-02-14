@@ -24,14 +24,16 @@ export const post = async (url: string, data: any, customHeaders: any) => {
 };
 
 // Middleware function to make a PUT request
-export const put = async (req: Request, res: Response, next: NextFunction) => {
-  const { endpoint, data } = req.body;
+export const put = async (url: string, data: any, customHeaders: any) => {// async (req: Request, res: Response, next: NextFunction) => {
+  //const { endpoint, data } = req.body;
 
   try {
-    const response = await axios.put(endpoint, data);
-    res.json(response.data);
+    const response = await axios.put(url, data, customHeaders);//(endpoint, data);
+    //res.json(response.data);
+    return response.data;
   } catch (error) {
-    next(error);
+    //next(error);
+    throw (error);
   }
 };
 

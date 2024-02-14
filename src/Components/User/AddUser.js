@@ -143,7 +143,7 @@ const AddUser = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,
@@ -186,7 +186,7 @@ const AddUser = () => {
       },
       (res) => {
         if (res.status == 200) {
-          user = res.data.responseObject;
+          user = res.data.data.responseObject;
           // console.log("UserList->", UserList);
           setUser(user);
 
@@ -250,7 +250,7 @@ const AddUser = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,
@@ -292,7 +292,7 @@ const AddUser = () => {
       },
       (res) => {
         if (res.status == 200) {
-          ProfileList = res.data.profiles;
+          ProfileList = res.data.data.profiles;
           // console.log("UserList->", UserList);
           setProfileList(ProfileList);
           setIsLoading(false);

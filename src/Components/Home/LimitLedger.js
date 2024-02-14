@@ -342,7 +342,8 @@ const LimitLedger = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          //  setRows(res.data.limitLedgerDetails);
+          //  setRows(res.data.data.limitLedgerDetails);
+          console.log("->", res.data.data.limitLedgerDetails);
           setRows(mockRes.limitLedgerDetails);
           setIsLoading(false);
         } else if (res.status == 404) {

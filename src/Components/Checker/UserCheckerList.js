@@ -101,7 +101,7 @@ const UserCheckerList = () => {
       },
       (res) => {
         if (res.status === 200) {
-          reqList = res.data.requests;
+          reqList = res.data.data.requests;
           setUserRequests(reqList);
           const addList = (reqList || []).filter((x) => {
             if (x.requestType === "Add") return x;

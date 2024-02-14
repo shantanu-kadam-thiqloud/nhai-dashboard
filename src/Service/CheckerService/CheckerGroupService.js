@@ -9,7 +9,7 @@ export const CheckerGroupService = {
 };
 
 function getGroupRequests(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_CHECKER_GROUP_REQUESTS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_CHECKER_GROUP_REQUESTS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -26,7 +26,7 @@ function getGroupRequests(mfaInfo, fn, fnError) {
 
 function getGroupAddDeleteDetails(mfaInfo, fn, fnError) {
   var url =
-    Global_var.BASEURL + Global_var.URL_CHECKER_GROUP_ADD_DELETE_DETAILS;
+    Global_var.AUTH_BASE + Global_var.URL_CHECKER_GROUP_ADD_DELETE_DETAILS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -41,7 +41,7 @@ function getGroupAddDeleteDetails(mfaInfo, fn, fnError) {
   });
 }
 function getGroupUpdateDetails(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_CHECKER_GROUP_UPDATE_DETAILS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_CHECKER_GROUP_UPDATE_DETAILS;
 
   return new RestDataSource(url, fn).Update(mfaInfo, (res, err) => {
     if (err) {
@@ -57,7 +57,7 @@ function getGroupUpdateDetails(mfaInfo, fn, fnError) {
 }
 
 function checkerGroupApproval(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_CHECKER_GROUP_APPROVAL;
+  var url = Global_var.AUTH_BASE + Global_var.URL_CHECKER_GROUP_APPROVAL;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

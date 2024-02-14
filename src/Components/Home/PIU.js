@@ -199,7 +199,7 @@ const PIU = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setRows(res.data.regionWiseData);
+          setRows(res.data.data.regionWiseData);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);

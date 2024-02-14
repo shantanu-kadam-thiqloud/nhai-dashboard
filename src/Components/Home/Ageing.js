@@ -294,8 +294,8 @@ const Ageing = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          setMockRes(res.data);
-          setRows(res.data.ageingItem);
+          setMockRes(res.data.data);
+          setRows(res.data.data.ageingItem);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);

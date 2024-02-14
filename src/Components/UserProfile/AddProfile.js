@@ -426,7 +426,7 @@ const AddProfile = () => {
       },
       (res) => {
         if (res.status === 200) {
-          GroupList = res.data.groups;
+          GroupList = res.data.data.groups;
           // console.log("UserList->", UserList);
           setGroupList(GroupList);
           setIsLoading(false);
@@ -471,7 +471,7 @@ const AddProfile = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,
@@ -515,8 +515,8 @@ const AddProfile = () => {
       },
       (res) => {
         if (res.status == 200) {
-          profile = res.data;
-          setMenuData(res.data.mapping);
+          profile = res.data.data;
+          setMenuData(res.data.data.mapping);
           setProfile(profile);
           //-------------------------------------
           setProfileName(profile.profileName);
@@ -563,7 +563,7 @@ const AddProfile = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             position: "top-right",
             autoClose: 3000,
           });

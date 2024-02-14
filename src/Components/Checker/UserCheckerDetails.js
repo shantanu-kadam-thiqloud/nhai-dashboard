@@ -219,7 +219,7 @@ const UserCheckerDetails = () => {
       },
       (res) => {
         if (res.status == 200) {
-          const user = res.data.responseObject;
+          const user = res.data.data.responseObject;
           // console.log("UserList->", UserList);
           setUser(user);
           setIsLoading(false);
@@ -250,10 +250,10 @@ const UserCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setReq(res.data);
-          setUser(res.data.requestData);
+          setReq(res.data.data);
+          setUser(res.data.data.requestData);
           if (path.includes("userDeleteRequestDetails")) {
-            fetchUserById(res.data.requestData.id);
+            fetchUserById(res.data.data.requestData.id);
           }
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -284,9 +284,9 @@ const UserCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setReq(res.data);
-          setCurrentValue(res.data.existingValue);
-          setOldValue(res.data.oldValue);
+          setReq(res.data.data);
+          setCurrentValue(res.data.data.existingValue);
+          setOldValue(res.data.data.oldValue);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -326,7 +326,7 @@ const UserCheckerDetails = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,

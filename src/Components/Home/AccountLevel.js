@@ -428,6 +428,7 @@ const AccountLevel = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
+          console.log("->", res.data.data.regionWiseData);
           // setRows(res.data.regionWiseData);
           setIsLoading(false);
         } else if (res.status == 404) {

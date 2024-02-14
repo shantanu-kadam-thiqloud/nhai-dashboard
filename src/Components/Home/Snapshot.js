@@ -307,7 +307,7 @@ const Snapshot = () => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          setSnapData(res.data);
+          setSnapData(res.data.data);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);

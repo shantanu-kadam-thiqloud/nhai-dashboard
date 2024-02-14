@@ -137,7 +137,7 @@ const UserList = () => {
       },
       (res) => {
         if (res.status == 200) {
-          ProfileList = res.data.profiles;
+          ProfileList = res.data.data.profiles;
           // console.log("UserList->", UserList);
           setProfileList(ProfileList);
           setIsLoading(false);
@@ -148,6 +148,10 @@ const UserList = () => {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
+      },
+      (error) => {
+        console.error("error->", error);
+        setIsLoading(false);
       }
     );
     return ProfileList;

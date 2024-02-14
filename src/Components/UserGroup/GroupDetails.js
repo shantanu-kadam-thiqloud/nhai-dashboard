@@ -81,7 +81,7 @@ function GroupDetails() {
       (res) => {
         //meta data issue
         if (res.status == 200) {
-          group = res.data;
+          group = res.data.data;
           setGroup(group);
           setIsLoading(false);
         } else if (res.status == 404) {
@@ -120,7 +120,7 @@ function GroupDetails() {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,

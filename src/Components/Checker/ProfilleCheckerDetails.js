@@ -324,9 +324,9 @@ const ProfilleCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setReq(res.data);
-          setMapping(res.data.mapping);
-          setProfile(res.data.requestData);
+          setReq(res.data.data);
+          setMapping(res.data.data.mapping);
+          setProfile(res.data.data.requestData);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -357,8 +357,8 @@ const ProfilleCheckerDetails = () => {
       (res) => {
         if (res.status === 200) {
           setReq(res.data);
-          setCurrentValue(res.data.requestData.existingValue);
-          setOldValue(res.data.requestData.oldValue);
+          setCurrentValue(res.data.data.requestData.existingValue);
+          setOldValue(res.data.data.requestData.oldValue);
           setIsLoading(false);
         } else if (res.status == 404) {
           setIsLoading(false);
@@ -397,7 +397,7 @@ const ProfilleCheckerDetails = () => {
       },
       (res) => {
         if (res.status == 200) {
-          toast.success(res.data.responseMetaData.message, {
+          toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,

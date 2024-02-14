@@ -10,7 +10,7 @@ export const UserService = {
 };
 
 function getUserList(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_USERS;
+  var url = Global_var.AUTH_BASE + Global_var.URL_GET_USERS;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -26,7 +26,7 @@ function getUserList(mfaInfo, fn, fnError) {
 }
 
 function getUserById(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_GET_USER_BY_ID;
+  var url = Global_var.AUTH_BASE + Global_var.URL_GET_USER_BY_ID;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -42,7 +42,7 @@ function getUserById(mfaInfo, fn, fnError) {
 }
 
 function addUser(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_ADD_USER;
+  var url = Global_var.AUTH_BASE + Global_var.URL_ADD_USER;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -58,7 +58,7 @@ function addUser(mfaInfo, fn, fnError) {
 }
 
 function updateUser(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_UPDATE_USER;
+  var url = Global_var.AUTH_BASE + Global_var.URL_UPDATE_USER;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -74,7 +74,7 @@ function updateUser(mfaInfo, fn, fnError) {
 }
 
 function deleteUser(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL + Global_var.URL_DELETE_USER;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DELETE_USER;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
