@@ -13,6 +13,8 @@ import ProfileController from "../controllers/Api/Secure/Profile";
 import UserCheckerController from "../controllers/Api/Secure/UserChecker";
 import GroupCheckerController from "../controllers/Api/Secure/GroupChecker";
 import ProfileCheckerController from "../controllers/Api/Secure/ProfileChecker";
+import ReportController from "../controllers/Api/Secure/Report";
+import DropdownController from "../controllers/Api/Secure/Dropdown";
 
 const router = Router();
 
@@ -72,17 +74,30 @@ router.post("/secure/groupAddDeleteDetails", GroupCheckerController.groupAddDele
 router.put("/secure/groupUpdateDetails", GroupCheckerController.groupUpdateDetails);
 router.post("/secure/groupApproval", GroupCheckerController.groupApproval);
 
-router.put("/secure/profiles", ProfileController.profiles);
+router.post("/secure/profiles", ProfileController.profiles);
 router.post("/secure/getProfile", ProfileController.getProfile);
 router.post("/secure/addProfile", ProfileController.addProfile);
 router.post("/secure/updateProfile", ProfileController.updateProfile);
 router.post("/secure/deleteProfile", ProfileController.deleteProfile);
 
-router.post("/secure/profileRequests", ProfileCheckerController.profileRequests);
+router.put("/secure/profileRequests", ProfileCheckerController.profileRequests);
 router.post("/secure/profileAddDeleteDetails", ProfileCheckerController.profileAddDeleteDetails);
 router.post("/secure/profileUpdateDetails", ProfileCheckerController.profileUpdateDetails);
 router.post("/secure/profileApproval", ProfileCheckerController.profileApproval);
 
+router.post("/secure/userLoginReport", ReportController.userLoginReport);
+router.post("/secure/userStatusReport", ReportController.userStatusReport);
+router.post("/secure/fifoAgeingReport", ReportController.fifoAgeingReport);
+router.post("/secure/userLoginReportDownload", ReportController.userLoginReportDownload);
+router.post("/secure/userStatusReportDownload", ReportController.userStatusReportDownload);
+router.post("/secure/fifoAgeingReportDownload", ReportController.fifoAgeingReportDownload);
+
+router.post("/secure/branchDD", DropdownController.branchDD);
+router.post("/secure/locationDD", DropdownController.locationDD);
+router.post("/secure/pdDD", DropdownController.pdDD);
+router.post("/secure/zoneDD", DropdownController.zoneDD);
+router.post("/secure/roDD", DropdownController.roDD);
+router.post("/secure/piuDD", DropdownController.piuDD);
 
 // // Handle GET requests to /api route
 // router.get("/api", RegisterController.visit);

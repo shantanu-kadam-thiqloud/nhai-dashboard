@@ -6,6 +6,9 @@ import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
   ConvertFormat,
+  useRoDataList,
+  usePIUDataList,
+  useZoneDataList,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
@@ -29,6 +32,12 @@ const LimitLedger = () => {
   const [accNo, setAccNo] = useState("");
   const [propPIU, setPropPIU] = useState("");
   const [typeTransaction, setTypeTransaction] = useState(0);
+  //---------------------------------------------------------------------------------------
+  const zoneList = useZoneDataList(piuD);
+  //-----------------------------------------------------------------------------------------
+  const roList = useRoDataList(piuD, zoneD);
+  // ---------------------------------------------------------------------------------------
+  const piuList = usePIUDataList("", roD);
   const columns = [
     {
       field: "bank",
@@ -346,10 +355,10 @@ const LimitLedger = () => {
           console.log("->", res.data.data.limitLedgerDetails);
           setRows(mockRes.limitLedgerDetails);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -425,10 +434,9 @@ const LimitLedger = () => {
               }}
             >
               <option value="All">All</option>
-              <option value="East">East</option>
-              <option value="West">West</option>
-              <option value="North">North</option>
-              <option value="South">South</option>
+              {(zoneList || []).map((x) => {
+                return <option value={x.zoneName}>{x.zoneName}</option>;
+              })}
             </select>
             {"  "}
           </div>
@@ -444,9 +452,9 @@ const LimitLedger = () => {
               }}
             >
               <option value="All">All</option>
-              <option value="Bhubaneswar">Bhubaneswar</option>
-              <option value=""></option>
-              <option value=""></option>
+              {(roList || []).map((x) => {
+                return <option value={x.roName}>{x.roName}</option>;
+              })}
             </select>
             {"  "}
           </div>
@@ -462,7 +470,9 @@ const LimitLedger = () => {
               }}
             >
               <option value="All">All</option>
-              <option value=""></option>
+              {(piuList || []).map((x) => {
+                return <option value={x.piuId}>{x.piuName}</option>;
+              })}
             </select>
             {"  "}
           </div>
@@ -497,7 +507,7 @@ const LimitLedger = () => {
                 setTypeTransaction(e.target.value);
               }}
             >
-              <option value="All">All</option>
+              <option value="">All</option>
               <option value="All Except OD/SD">All Except OD/SD</option>
               <option value="OD/SD">OD/SD</option>
             </select>

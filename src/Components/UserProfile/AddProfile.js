@@ -430,10 +430,10 @@ const AddProfile = () => {
           // console.log("UserList->", UserList);
           setGroupList(GroupList);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           prompt("500 Internal Server Error..!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");
@@ -449,6 +449,11 @@ const AddProfile = () => {
   }
   //-----------Add Profile----------------------------------------------
   function addProfile(values) {
+    var group = (groupList || []).find((x) => {
+      if (values.group == x.id) {
+        return x.groupName;
+      }
+    });
     ProfileService.addProfile(
       {
         requestMetaData: {
@@ -461,7 +466,7 @@ const AddProfile = () => {
         profileDescription: values.profileDescription,
         //group: values.group,
         groupId: Number(values.group),
-        groupName: values.groupName,
+        groupName: group.groupName,
         isActive: false,
         createdDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
         createdBy: "Admin",
@@ -470,7 +475,7 @@ const AddProfile = () => {
         mapping: menuData || [],
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -478,14 +483,14 @@ const AddProfile = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/Profiles");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -514,7 +519,7 @@ const AddProfile = () => {
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           profile = res.data.data;
           setMenuData(res.data.data.mapping);
           setProfile(profile);
@@ -526,10 +531,10 @@ const AddProfile = () => {
           setGroupName(profile.groupName);
           //-----------------------------------
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -541,6 +546,11 @@ const AddProfile = () => {
   }
   //------------Edit Profile--------------------------------------------
   function editProfile(values) {
+    var group = (groupList || []).find((x) => {
+      if (values.group == x.id) {
+        return x.groupName;
+      }
+    });
     ProfileService.updateProfile(
       {
         requestMetaData: {
@@ -553,7 +563,7 @@ const AddProfile = () => {
         profileDescription: values.profileDescription,
         //  group: values.group,
         groupId: Number(values.group),
-        groupName: values.groupName,
+        groupName: group.groupName,
         isActive: Boolean(values.isActive),
         updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
         updatedBy: "Admin",
@@ -562,21 +572,21 @@ const AddProfile = () => {
         mapping: menuData || [],
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Profiles");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -692,7 +702,6 @@ const AddProfile = () => {
                             >
                               <option value="">Select Group</option>
                               {(groupList || []).map((x) => {
-                                setGroupName(x.groupName);
                                 return (
                                   <option value={x.id}>{x.groupName}</option>
                                 );

@@ -5,6 +5,8 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
+  useZoneDataList,
+  useRoDataList,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +23,11 @@ const PIU = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [rows, setRows] = useState([]);
+  //---------------------------------------------------------------------------------------
+  const zoneList = useZoneDataList("");
+  //-----------------------------------------------------------------------------------------
+  const roList = useRoDataList("", zoneD);
+
   const columns = [
     {
       Header: "PIU",
@@ -201,10 +208,10 @@ const PIU = () => {
         if (res.status === 200) {
           setRows(res.data.data.regionWiseData);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -245,10 +252,9 @@ const PIU = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value="East">East</option>
-                <option value="West">West</option>
-                <option value="North">North</option>
-                <option value="South">South</option>
+                {(zoneList || []).map((x) => {
+                  return <option value={x.zoneName}>{x.zoneName}</option>;
+                })}
               </select>
               {"  "}
               <label className="statusOn">RO : </label>{" "}
@@ -260,9 +266,9 @@ const PIU = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value="Bhubaneswar">Bhubaneswar</option>
-                <option value=""></option>
-                <option value=""></option>
+                {(roList || []).map((x) => {
+                  return <option value={x.roName}>{x.roName}</option>;
+                })}
               </select>
               {"  "}
             </div>

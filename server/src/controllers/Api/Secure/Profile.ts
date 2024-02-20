@@ -1,5 +1,5 @@
 import Locals from '../../../providers/Locals';
-import { fetchData } from './Common'
+import { fetchData, fetchPutData } from './Common'
 
 const BASE_URL_A = Locals.config().amBaseUrl;
 class Profile {

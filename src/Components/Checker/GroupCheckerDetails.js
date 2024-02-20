@@ -136,10 +136,10 @@ const GroupCheckerDetails = () => {
           setReq(res.data.data);
           setGroup(res.data.data.responseData);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -168,10 +168,10 @@ const GroupCheckerDetails = () => {
           setCurrentValue(res.data.data.requestData.existingValue);
           setOldValue(res.data.data.requestData.oldVlaue);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -204,7 +204,7 @@ const GroupCheckerDetails = () => {
         //   : group.userId,
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -212,14 +212,14 @@ const GroupCheckerDetails = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/groupRequests");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -262,13 +262,21 @@ const GroupCheckerDetails = () => {
               <strong>Request Date:</strong>
             </div>
             <div className="col-md-6 UDCoulmns">
-              {DateFormatFunction(req.requestRaisedTime)}
+              {DateFormatFunction(
+                path.includes("groupUpdateRequestDetails")
+                  ? req.requestRaisedTime
+                  : group.requestRaisedTime
+              )}
             </div>
 
             <div className="col-md-6 UDCoulmns">
               <strong>Raised by:</strong>
             </div>
-            <div className="col-md-6 UDCoulmns">{req.requestRaisedBy}</div>
+            <div className="col-md-6 UDCoulmns">
+              {path.includes("groupUpdateRequestDetails")
+                ? req.requestRaisedBy
+                : group.requestRaisedBy}
+            </div>
           </div>
         </div>
         {/* -----------User Details--------------------- */}

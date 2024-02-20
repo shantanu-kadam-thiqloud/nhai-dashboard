@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { ReportService } from "../../Service/ReportService";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +17,8 @@ const UserActiveInactiveReport = () => {
   );
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState("All");
+  const [status, setStatus] = useState("ALL");
+  const [rows, setRows] = useState([]); //data
   const navigate = useNavigate();
   // const columns = [
   //   {
@@ -133,48 +135,47 @@ const UserActiveInactiveReport = () => {
       header: "Logged in Date & Time",
     },
   ];
-  const data = [
-    {
-      id: 1,
-      userId: "NHAI",
-      userType: "NHAI",
-      bankId: "",
-      pdid: "",
-      roid: "",
-      domainUserName: "NHAI",
-      fullName: "NHAI User",
-      status: "Active",
-      role: "AdminRole",
-      loggedTime: "27-10-2023 \n 09:53:30",
-    },
-    {
-      id: 2,
-      userId: "NHAI",
-      userType: "NHAI",
-      bankId: "",
-      pdid: "",
-      roid: "",
-      domainUserName: "NHAI",
-      fullName: "NHAI User",
-      status: "Inactive",
-      role: "AdminRole",
-      loggedTime: "27-10-2023 \n 09:53:30",
-    },
-    {
-      id: 3,
-      userId: "NHAI",
-      userType: "NHAI",
-      bankId: "",
-      pdid: "",
-      roid: "",
-      domainUserName: "NHAI",
-      fullName: "NHAI User",
-      status: "Active",
-      role: "AdminRole",
-      loggedTime: "27-10-2023 \n 09:53:30",
-    },
-  ];
-  const [rows, setRows] = useState(data);
+  // const data = [
+  //   {
+  //     id: 1,
+  //     userId: "NHAI",
+  //     userType: "NHAI",
+  //     bankId: "",
+  //     pdid: "",
+  //     roid: "",
+  //     domainUserName: "NHAI",
+  //     fullName: "NHAI User",
+  //     status: "Active",
+  //     role: "AdminRole",
+  //     loggedTime: "27-10-2023 \n 09:53:30",
+  //   },
+  //   {
+  //     id: 2,
+  //     userId: "NHAI",
+  //     userType: "NHAI",
+  //     bankId: "",
+  //     pdid: "",
+  //     roid: "",
+  //     domainUserName: "NHAI",
+  //     fullName: "NHAI User",
+  //     status: "Inactive",
+  //     role: "AdminRole",
+  //     loggedTime: "27-10-2023 \n 09:53:30",
+  //   },
+  //   {
+  //     id: 3,
+  //     userId: "NHAI",
+  //     userType: "NHAI",
+  //     bankId: "",
+  //     pdid: "",
+  //     roid: "",
+  //     domainUserName: "NHAI",
+  //     fullName: "NHAI User",
+  //     status: "Active",
+  //     role: "AdminRole",
+  //     loggedTime: "27-10-2023 \n 09:53:30",
+  //   },
+  // ];
 
   useEffect(() => {
     setIsLoading(true);
@@ -195,15 +196,15 @@ const UserActiveInactiveReport = () => {
         status: status, //"Inactive",
       },
       (res) => {
-        if (res.status == 200) {
-          var da = res.data.responseObjectList;
+        if (res.status === 200) {
+          var da = res.data.data.responseObjectList;
           setRows(da);
           console.log("->", da);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -224,16 +225,20 @@ const UserActiveInactiveReport = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "nhai",
+        fromDate: "01-01-2017", //ConvertFormat(fromDate), //
+        toDate: "31-12-2023", //ConvertFormat(toDate), //
+        status: status, //"Inactive",
       },
       (res) => {
-        if (res.status == 200) {
-          var d = res.data;
+        if (res.status === 200) {
+          var d = res.data.data;
           console.log("->", d);
           setIsLoading(false);
-        } else if (res.status == 404) {
+          DownloadByteArray("User_Status_Report", d);
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -299,6 +304,7 @@ const UserActiveInactiveReport = () => {
                   className="btn addUser dashbutton  ms-5"
                   type="button"
                   onClick={() => {
+                    setIsLoading(true);
                     DownloadUserStatusReport();
                   }}
                 >

@@ -141,10 +141,10 @@ const GroupList = () => {
           // console.log("UserList->", UserList);
           setGroupList(GroupList);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           prompt("500 Internal Server Error..!");
           setIsLoading(false);
           navigate("/NHAI/Error/500");

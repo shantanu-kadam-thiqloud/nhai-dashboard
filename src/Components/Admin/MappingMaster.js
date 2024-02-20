@@ -4,12 +4,43 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
+import { useEffect } from "react";
+import Spinner from "../HtmlComponents/Spinner";
+import { v4 as uuid } from "uuid";
+import { DropdownService } from "../../Service/DropdownService";
+import {
+  usePIUDataList,
+  useZoneDataList,
+  useRoDataList,
+} from "../HtmlComponents/CommonFunction";
+
 const MappingMaster = () => {
   const navigate = useNavigate();
+  // ----------for Add new--------------------------------------
   const [isLocation, setLocation] = useState(false);
   const [isPIU, setPIU] = useState(false);
   const [isPD, setPD] = useState(false);
   const [isZone, setZone] = useState(false);
+  //-----------DD List-----------------------------------------
+  const [locationList, setLocationList] = useState([]);
+  const [branchList, setBranchList] = useState([]);
+  const [PDList, setPDList] = useState([]);
+  //-----------Selected value-------------------------------------
+  const [location, setlocation] = useState("");
+  const [branch, setbranch] = useState("");
+  const [pd, setpd] = useState("");
+  // ------------------------------------------
+  const [piu, setpiu] = useState("");
+  const [zone, setzone] = useState("");
+  const [ro, setro] = useState("");
+  //---------------------------------------------------------------------------------------
+  const zoneList = useZoneDataList(piu);
+  //-----------------------------------------------------------------------------------------
+  const roList = useRoDataList(piu, zone);
+  // ---------------------------------------------------------------------------------------
+  const piuList = usePIUDataList(location, ro);
+
+  const [isLoading, setIsLoading] = useState(false);
   const validationSchema = Yup.object({
     userName: Yup.string().required("User Name is required"),
     location: Yup.string().required("Location is required"),
@@ -26,8 +57,127 @@ const MappingMaster = () => {
     role: Yup.string("Role is invalid"),
     mobile: Yup.string("Mobile Number is invalid"),
   });
+
+  useEffect(() => {
+    //setIsLoading(true);
+    FetchBranchDD();
+    FetchLocationDD(branch);
+    FetchPD_DD(piu);
+  }, [branch]);
+
+  // ------------Branch DD-----------------------------------------------------------------
+  function FetchBranchDD() {
+    DropdownService.getBranchData(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data.branches;
+          setBranchList(data);
+          console.log("->", data);
+          setIsLoading(false);
+          //   {
+          //     "branchId": 3,
+          //     "branchName": "Indusind"
+          // },
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  // ------------Location DD---------------------------------------------------------------
+  function FetchLocationDD(branchId) {
+    DropdownService.getLocationData(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+        branchId: branchId, //"586", // null
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data.locations;
+          console.log("->", data);
+          setLocationList(data);
+          setIsLoading(false);
+          //   {
+          //     "locationId": 354,
+          //     "locationName": "Sohna"
+          // }
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  // ------------PD DD---------------------------------------------------------------------
+  function FetchPD_DD(piuId) {
+    DropdownService.getPDData(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "nhai",
+        piuId: piuId, //"210",
+      },
+      (res) => {
+        //   {
+        //     "pdId": 187,
+        //     "pdName": "Col Sh",
+        //     "pdEmail": "hajipur@nhai",
+        //     "pdMobileNo": "7"
+        // },
+        if (res.status === 200) {
+          var data = res.data.data.pds;
+          console.log("->", data);
+          setPDList(data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+
   return (
     <div className="wrapper">
+      <Spinner isLoading={isLoading} />
       <div className="container">
         <div className="ULContainer">
           <div className="row">
@@ -38,8 +188,16 @@ const MappingMaster = () => {
           <div className="row">
             <div className="col-md-11 mx-auto flex">
               <Formik
-                initialValues={{}}
+                initialValues={{
+                  branch: branch,
+                  location: location,
+                  zone: zone,
+                  piu: piu,
+                  ro: ro,
+                  pd: pd,
+                }}
                 validationSchema={validationSchema}
+                enableReinitialize
                 onSubmit={(values) => {
                   // Handle form submission here
                   console.log(values);
@@ -61,7 +219,13 @@ const MappingMaster = () => {
                           >
                             {" "}
                             <option value="">--Select Branch--</option>
-                            <option value=""></option>
+                            {(branchList || []).map((x) => {
+                              return (
+                                <option value={x.branchId}>
+                                  {x.branchName}
+                                </option>
+                              );
+                            })}
                           </Field>
                           <ErrorMessage
                             name="branch"
@@ -84,7 +248,13 @@ const MappingMaster = () => {
                                   name="location"
                                 >
                                   <option value="">--Select Location--</option>
-                                  <option value=""></option>
+                                  {(locationList || []).map((x) => {
+                                    return (
+                                      <option value={x.locationId}>
+                                        {x.locationName}
+                                      </option>
+                                    );
+                                  })}
                                 </Field>
                               ) : (
                                 <Field
@@ -137,7 +307,14 @@ const MappingMaster = () => {
                                   name="piu"
                                 >
                                   <option value="">--Select PIU--</option>
-                                  <option value=""></option>
+                                  <option value="">All</option>
+                                  {(piuList || []).map((x) => {
+                                    return (
+                                      <option value={x.piuId}>
+                                        {x.piuName}
+                                      </option>
+                                    );
+                                  })}
                                 </Field>
                               )}
                               <ErrorMessage
@@ -169,8 +346,12 @@ const MappingMaster = () => {
                             name="gender"
                           >
                             <option value="">--Select RO--</option>
-                            <option value=""></option>
-                            <option value=""></option>
+                            <option value="">All</option>
+                            {(roList || []).map((x) => {
+                              return (
+                                <option value={x.roName}>{x.roName}</option>
+                              );
+                            })}
                           </Field>
                           <ErrorMessage
                             name="gender"
@@ -199,7 +380,14 @@ const MappingMaster = () => {
                                   name="zone"
                                 >
                                   <option value="">--Select Zone--</option>
-                                  <option value=""></option>
+                                  <option value="">All</option>
+                                  {(zoneList || []).map((x) => {
+                                    return (
+                                      <option value={x.zoneName}>
+                                        {x.zoneName}
+                                      </option>
+                                    );
+                                  })}
                                 </Field>
                               )}
                               <ErrorMessage
@@ -244,7 +432,11 @@ const MappingMaster = () => {
                                   name="pd"
                                 >
                                   <option value="">--Select PD--</option>
-                                  <option value=""></option>
+                                  {(PDList || []).map((x) => {
+                                    return (
+                                      <option value={x.pdId}>{x.pdName}</option>
+                                    );
+                                  })}
                                 </Field>
                               )}
                               <ErrorMessage

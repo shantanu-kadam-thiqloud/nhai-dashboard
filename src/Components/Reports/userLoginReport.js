@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { ReportService } from "../../Service/ReportService";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ const UserLoginReport = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [userID, setUserID] = useState("");
   const [userType, setUserType] = useState("ALL");
+  const [rows, setRows] = useState([]);
   const navigate = useNavigate();
   // const columns = [
   //   {
@@ -147,56 +149,55 @@ const UserLoginReport = () => {
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      userId: "NHAI",
-      userType: "NHAI",
-      bankId: "",
-      pdid: "",
-      roid: "",
-      domainUserName: "NHAI",
-      fullName: "NHAI User",
-      isActive: "Yes",
-      role: "AdminRole",
-      loggedTime: "27-10-2023 \n 09:53:30",
-      ipAddress: "10.53.80.21",
-    },
-    {
-      id: 2,
-      userId: "NHAI",
-      userType: "NHAI",
-      bankId: "",
-      pdid: "",
-      roid: "",
-      domainUserName: "NHAI",
-      fullName: "NHAI User",
-      isActive: "No",
-      role: "AdminRole",
-      loggedTime: "27-10-2023 \n 09:53:30",
-      ipAddress: "10.53.80.21",
-    },
-    {
-      id: 3,
-      userId: "NHAI",
-      userType: "NHAI",
-      bankId: "",
-      pdid: "",
-      roid: "",
-      domainUserName: "NHAI",
-      fullName: "NHAI User",
-      isActive: "Yes",
-      role: "AdminRole",
-      loggedTime: "27-10-2023 \n 09:53:30",
-      ipAddress: "10.53.80.21",
-    },
-  ];
+  // const data = [
+  //   {
+  //     id: 1,
+  //     userId: "NHAI",
+  //     userType: "NHAI",
+  //     bankId: "",
+  //     pdid: "",
+  //     roid: "",
+  //     domainUserName: "NHAI",
+  //     fullName: "NHAI User",
+  //     isActive: "Yes",
+  //     role: "AdminRole",
+  //     loggedTime: "27-10-2023 \n 09:53:30",
+  //     ipAddress: "10.53.80.21",
+  //   },
+  //   {
+  //     id: 2,
+  //     userId: "NHAI",
+  //     userType: "NHAI",
+  //     bankId: "",
+  //     pdid: "",
+  //     roid: "",
+  //     domainUserName: "NHAI",
+  //     fullName: "NHAI User",
+  //     isActive: "No",
+  //     role: "AdminRole",
+  //     loggedTime: "27-10-2023 \n 09:53:30",
+  //     ipAddress: "10.53.80.21",
+  //   },
+  //   {
+  //     id: 3,
+  //     userId: "NHAI",
+  //     userType: "NHAI",
+  //     bankId: "",
+  //     pdid: "",
+  //     roid: "",
+  //     domainUserName: "NHAI",
+  //     fullName: "NHAI User",
+  //     isActive: "Yes",
+  //     role: "AdminRole",
+  //     loggedTime: "27-10-2023 \n 09:53:30",
+  //     ipAddress: "10.53.80.21",
+  //   },
+  // ];
 
-  const [rows, setRows] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     FetchUserLoginReport();
-  }, []);
+  }, [toDate, userID, userType]);
   //-------------Fetch Report--------------------------------------------------
   function FetchUserLoginReport() {
     ReportService.getUserLoginReport(
@@ -206,21 +207,21 @@ const UserLoginReport = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "nhai",
-        fromDate: ConvertFormat(fromDate), //"01-01-2017",
-        toDate: ConvertFormat(toDate), //"31-12-2023",
+        fromDate: "01-01-2017", //ConvertFormat(fromDate), //
+        toDate: "31-12-2023", //ConvertFormat(toDate), //
         userType: userType, //"ALL",
         userId: userID, //"",
       },
       (res) => {
-        if (res.status == 200) {
-          var da = res.data.responseObjectList;
+        if (res.status === 200) {
+          var da = res.data.data.responseObjectList;
           setRows(da);
           console.log("->", da);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -241,16 +242,21 @@ const UserLoginReport = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "nhai",
+        fromDate: "01-01-2017", //ConvertFormat(fromDate), //
+        toDate: "31-12-2023", //ConvertFormat(toDate), //
+        userType: userType, //"ALL",
+        userId: userID, //"",
       },
       (res) => {
-        if (res.status == 200) {
-          var d = res.data;
+        if (res.status === 200) {
+          var d = res.data.data;
           console.log("->", d);
+          DownloadByteArray("User_Login_Report", d);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -298,7 +304,7 @@ const UserLoginReport = () => {
                     console.log("->", ConvertFormat(e.target.value));
                   }}
                 />{" "}
-                <label className="statusOn  ms-5">User Type :</label>{" "}
+                {/* <label className="statusOn  ms-5">User Type :</label>{" "}
                 <select
                   name="userType"
                   className="inputDate"
@@ -306,12 +312,12 @@ const UserLoginReport = () => {
                     setUserType(e.target.value);
                   }}
                 >
-                  <option value="ALL">ALL</option>
+                  <option value="">All</option>
                   <option value="Bank">Bank</option>
                   <option value="NHAI">NHAI</option>
                   <option value="PD">PD</option>
                   <option value="RO">RO</option>
-                </select>
+                </select> */}
                 {"  "}
                 <label className="statusOn  ms-5">User Id : </label>
                 {"  "}
@@ -330,6 +336,7 @@ const UserLoginReport = () => {
                   className="btn addUser dashbutton  ms-5"
                   type="button"
                   onClick={() => {
+                    setIsLoading(true);
                     DownloadUserLoginReport();
                   }}
                 >

@@ -136,15 +136,15 @@ const UserList = () => {
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           ProfileList = res.data.data.profiles;
           // console.log("UserList->", UserList);
           setProfileList(ProfileList);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }

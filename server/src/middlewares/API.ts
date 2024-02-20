@@ -23,17 +23,25 @@ export const post = async (url: string, data: any, customHeaders: any) => {
   }
 };
 
+export const downloadPost = async (url: string, data: any) => {
+  const headers = { 'Content-Type': 'blob' };
+  try {
+    const response = await axios.post(url, data);//, { headers: headers }responseType: 'arraybuffer',
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Middleware function to make a PUT request
-export const put = async (url: string, data: any, customHeaders: any) => {// async (req: Request, res: Response, next: NextFunction) => {
+export const put = async (url: string, data: any, customHeaders: any) => {
   //const { endpoint, data } = req.body;
 
   try {
-    const response = await axios.put(url, data, customHeaders);//(endpoint, data);
-    //res.json(response.data);
-    return response.data;
+    const response = await axios.put(url, data);
+    return response.data; // Sending the response back to the client
   } catch (error) {
-    //next(error);
-    throw (error);
+    throw (error); // Passing the error to the error handling middleware
   }
 };
 

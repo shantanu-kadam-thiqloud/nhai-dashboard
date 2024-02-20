@@ -7,8 +7,10 @@ import {
 import { useEffect } from "react";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
+import { useLocation } from "react-router";
 
 const TabsComponent = (props) => {
+  const location = useLocation();
   const [homeTabs, setHomeTabs] = useState([]);
   const data = [
     {
@@ -36,11 +38,11 @@ const TabsComponent = (props) => {
   React.useEffect(() => {
     // fetchProfileById();
   }, []);
-
+  const userData = location.state ? location.state.userData : ""; //useParams();
   const tabsData = data[0].subMenu; //homeTabs;
   const [activeTab, setActiveTab] = useState(tabsData[0]);
   const tabsRef = useRef(null);
-
+  console.log(userData, " - from tabs");
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     props.ActiveTab(tab.name);
@@ -74,17 +76,17 @@ const TabsComponent = (props) => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        id: "", //profileId, //47,
+        id: userData.profileId, //"", //profileId, //47,
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
-          profile = res.data;
+        if (res.status === 200) {
+          profile = res.data.data;
           console.log("Profile ->", profile.mapping[0].subMenu);
           setHomeTabs(profile.mappinng[0].subMenu);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           console.log("404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           console.log("500");
         }
         //   return data;

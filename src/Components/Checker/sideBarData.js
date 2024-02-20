@@ -122,6 +122,7 @@ const sideData = [
             id: 1,
             name: "User",
             url: "/NHAI/Users",
+            oldCheck: false,
             check: true,
             action: [
               { id: 3, actionName: "Add", oldCheck: false, check: true },
@@ -135,6 +136,7 @@ const sideData = [
             name: "User Profile",
             url: "/NHAI/Profiles",
             check: true,
+            oldCheck: false,
             action: [
               { id: 3, actionName: "Add", oldCheck: false, check: true },
               { id: 4, actionName: "View", oldCheck: false, check: true },
@@ -146,6 +148,7 @@ const sideData = [
             id: 3,
             name: "User Group",
             url: "/NHAI/Groups",
+            oldCheck: false,
             check: true,
             action: [
               { id: 3, actionName: "Add", oldCheck: false, check: true },

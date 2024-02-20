@@ -11,7 +11,7 @@ export const ReportService = {
 };
 
 function getFIFOReport(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL2 + Global_var.URL_REPORT_FIFO;
+  var url = Global_var.AUTH_BASE + Global_var.URL_REPORT_FIFO;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -26,7 +26,7 @@ function getFIFOReport(mfaInfo, fn, fnError) {
   });
 }
 function getUserLoginReport(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL2 + Global_var.URL_REPORT_LOGIN;
+  var url = Global_var.AUTH_BASE + Global_var.URL_REPORT_LOGIN;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -42,7 +42,7 @@ function getUserLoginReport(mfaInfo, fn, fnError) {
 }
 
 function getUserStatusReport(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL2 + Global_var.URL_REPORT_ACTIVE_INACTIVE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_REPORT_ACTIVE_INACTIVE;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error
@@ -57,7 +57,7 @@ function getUserStatusReport(mfaInfo, fn, fnError) {
 }
 
 function downloadFIFOReport(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL2 + Global_var.URL_DOWNLOAD_FIFO;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DOWNLOAD_FIFO;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -73,7 +73,7 @@ function downloadFIFOReport(mfaInfo, fn, fnError) {
 }
 
 function downloadUserLoginReport(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL2 + Global_var.URL_DOWNLOAD_LOGIN;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DOWNLOAD_LOGIN;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -89,7 +89,7 @@ function downloadUserLoginReport(mfaInfo, fn, fnError) {
 }
 
 function downloadUserStatusReport(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL2 + Global_var.URL_DOWNLOAD_ACTIVE_INACTIVE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DOWNLOAD_ACTIVE_INACTIVE;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
       // Handle error

@@ -7,6 +7,9 @@ import {
   DateFormatFunction,
   ConvertFormat,
 } from "../HtmlComponents/CommonFunction";
+import { DashboardService } from "../../Service/DashboardService";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const FinanacialD = () => {
   const [fromDate, setFromDate] = useState(
@@ -17,6 +20,9 @@ const FinanacialD = () => {
   const [Decimal, setDecimal] = useState(true);
   const [bankD, setBank] = useState("");
   const [yearD, setYear] = useState("");
+
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -41,6 +47,11 @@ const FinanacialD = () => {
     )}_to_${ConvertFormat(toDate)}.pdf`;
     doc.save(fileName);
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    FetchFinancial_D();
+  }, [yearD, toDate]);
 
   // Function to generate and download the Excel file
   // const generateCSV = () => {
@@ -258,6 +269,29 @@ const FinanacialD = () => {
     fromDate: fromDate, //"01-04-2017",
     toData: toDate, //"01-09-2023",
   };
+
+  function FetchFinancial_D() {
+    DashboardService.getFinancialD(
+      reqBody,
+      (res) => {
+        if (res.status === 200) {
+          console.log(res.data.data);
+          // setRows(res.data.data.zones);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
 
   return (
     <div>

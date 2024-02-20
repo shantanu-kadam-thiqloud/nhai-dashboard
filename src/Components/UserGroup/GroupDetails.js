@@ -80,14 +80,14 @@ function GroupDetails() {
       },
       (res) => {
         //meta data issue
-        if (res.status == 200) {
-          group = res.data.data;
+        if (res.status === 200) {
+          group = res.data.data.responseObject;
           setGroup(group);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -119,7 +119,7 @@ function GroupDetails() {
         createdBy: group.createdBy,
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -127,14 +127,14 @@ function GroupDetails() {
           });
           setIsLoading(false);
           navigate("/NHAI/Groups");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,

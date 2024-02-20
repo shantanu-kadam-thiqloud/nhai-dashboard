@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import loginImage from "../../Assets/images/login.png";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import forge from "node-forge";
 import Spinner from "../HtmlComponents/Spinner";
@@ -23,7 +23,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState("");
-
+  const location = useLocation();
   React.useEffect(() => {
     async function fetchPublicKey() {
       try {
@@ -49,7 +49,7 @@ const Login = () => {
       },
       (res) => {
         debugger;
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success("Login successful!", {
             //"Request raised successful!", {
             position: "top-right",
@@ -66,15 +66,15 @@ const Login = () => {
           //   userData.profileId
           // );
           setIsLoading(false);
-          navigate("/NHAI/Dashboard");
-        } else if (res.status == 404) {
+          navigate("/NHAI/Dashboard", { state: { userData: userData } });
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,

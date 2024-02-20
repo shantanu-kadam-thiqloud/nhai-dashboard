@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import {
   DateFormatFunction,
   ConvertFormat,
+  useZoneDataList,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
@@ -21,6 +22,8 @@ const RO = () => {
   const [Decimal, setDecimal] = useState(true);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  //---------------------------------------------------------------------------------------
+  const zoneList = useZoneDataList("");
 
   useEffect(() => {
     setIsLoading(true);
@@ -201,10 +204,10 @@ const RO = () => {
           //   setRows(d);
           setReginoalTable(d);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -245,13 +248,9 @@ const RO = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value="East">East</option>
-                <option value="West">West</option>
-                <option value="North">North</option>
-                <option value="South">South</option>
-                <option value="MoRTH">MoRTH</option>
-                <option value="North East">North East</option>
-                <option value="Unmapped">Unmapped</option>
+                {(zoneList || []).map((x) => {
+                  return <option value={x.zoneName}>{x.zoneName}</option>;
+                })}
               </select>
               {"  "}
             </div>

@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { ReportService } from "../../Service/ReportService";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +17,7 @@ const FifoAgeingReport = () => {
   );
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [rows, setRows] = useState([]); //data
   const columns = [
     {
       field: "piu",
@@ -110,57 +111,56 @@ const FifoAgeingReport = () => {
       header: "Ageing",
     },
   ];
-  const data = [
-    {
-      id: 0,
-      piu: "Agra",
-      ro: "Lucknow(U.P West)",
-      accNum: "2312026853",
-      accName: "CALA ADM ETAWAH AND PD NHAI AGRA",
-      value: "1105812151.00",
-      requestDate: "7/4/2017",
-      sanctionLimit: "5948106913.00",
-      utilizedlimit: "4756267359.00",
-      unUtilizedLimit: "1191839554.00",
-      fifoAmount: "0.00",
-      currentDate: "5/21/2020",
-      days: "",
-      ageing: "",
-    },
-    {
-      id: 1,
-      piu: "Agra",
-      ro: "Lucknow(U.P West)",
-      accNum: "2312026853",
-      accName: "CALA ADM ETAWAH AND PD NHAI AGRA",
-      value: "1105812151.00",
-      requestDate: "7/4/2017",
-      sanctionLimit: "5948106913.00",
-      utilizedlimit: "4756267359.00",
-      unUtilizedLimit: "1191839554.00",
-      fifoAmount: "0.00",
-      currentDate: "5/21/2020",
-      days: "",
-      ageing: "",
-    },
-    {
-      id: 2,
-      piu: "Agra",
-      ro: "Lucknow(U.P West)",
-      accNum: "2312026853",
-      accName: "CALA ADM ETAWAH AND PD NHAI AGRA",
-      value: "1105812151.00",
-      requestDate: "7/4/2017",
-      sanctionLimit: "5948106913.00",
-      utilizedlimit: "4756267359.00",
-      unUtilizedLimit: "1191839554.00",
-      fifoAmount: "0.00",
-      currentDate: "5/21/2020",
-      days: "",
-      ageing: "",
-    },
-  ];
-  const [rows, setRows] = useState(data);
+  // const data = [
+  //   {
+  //     id: 0,
+  //     piu: "Agra",
+  //     ro: "Lucknow(U.P West)",
+  //     accNum: "2312026853",
+  //     accName: "CALA ADM ETAWAH AND PD NHAI AGRA",
+  //     value: "1105812151.00",
+  //     requestDate: "7/4/2017",
+  //     sanctionLimit: "5948106913.00",
+  //     utilizedlimit: "4756267359.00",
+  //     unUtilizedLimit: "1191839554.00",
+  //     fifoAmount: "0.00",
+  //     currentDate: "5/21/2020",
+  //     days: "",
+  //     ageing: "",
+  //   },
+  //   {
+  //     id: 1,
+  //     piu: "Agra",
+  //     ro: "Lucknow(U.P West)",
+  //     accNum: "2312026853",
+  //     accName: "CALA ADM ETAWAH AND PD NHAI AGRA",
+  //     value: "1105812151.00",
+  //     requestDate: "7/4/2017",
+  //     sanctionLimit: "5948106913.00",
+  //     utilizedlimit: "4756267359.00",
+  //     unUtilizedLimit: "1191839554.00",
+  //     fifoAmount: "0.00",
+  //     currentDate: "5/21/2020",
+  //     days: "",
+  //     ageing: "",
+  //   },
+  //   {
+  //     id: 2,
+  //     piu: "Agra",
+  //     ro: "Lucknow(U.P West)",
+  //     accNum: "2312026853",
+  //     accName: "CALA ADM ETAWAH AND PD NHAI AGRA",
+  //     value: "1105812151.00",
+  //     requestDate: "7/4/2017",
+  //     sanctionLimit: "5948106913.00",
+  //     utilizedlimit: "4756267359.00",
+  //     unUtilizedLimit: "1191839554.00",
+  //     fifoAmount: "0.00",
+  //     currentDate: "5/21/2020",
+  //     days: "",
+  //     ageing: "",
+  //   },
+  // ];
 
   useEffect(() => {
     setIsLoading(true);
@@ -169,24 +169,25 @@ const FifoAgeingReport = () => {
 
   //-------------Fetch Report--------------------------------------------------
   function FetchFIFOReport() {
-    ReportService.downloadFIFOReport(
+    ReportService.getFIFOReport(
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "nhai",
+        asOnDate: "31-12-2023", //ConvertFormat(asOnDate);
       },
       (res) => {
-        if (res.status == 200) {
-          data = res.data.responseObjectList;
+        if (res.status === 200) {
+          var data = res.data.data.responseObjectList;
           console.log("->", data);
           setRows(data);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -207,16 +208,18 @@ const FifoAgeingReport = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "nhai",
+        asOnDate: "31-12-2017", //ConvertFormat(asOnDate);
       },
       (res) => {
-        if (res.status == 200) {
-          data = res.data;
+        if (res.status === 200) {
+          var data = res.data.data;
           console.log("->", data);
+          DownloadByteArray("FIFO_Ageing_Report", data);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -257,6 +260,7 @@ const FifoAgeingReport = () => {
                   className="btn addUser dashbutton  ms-5"
                   type="button"
                   onClick={() => {
+                    setIsLoading(true);
                     DownloadFifoAgeingReport();
                   }}
                 >

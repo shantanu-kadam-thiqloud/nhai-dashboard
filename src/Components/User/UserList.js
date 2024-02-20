@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "../HtmlComponents/DataTable";
+//import DataTable from "../HtmlComponents/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; //, useParams
 import TablesDataChecker from "../Checker/fieldData";
 import { UserService } from "../../Service/UserService";
 import Spinner from "../HtmlComponents/Spinner";
@@ -16,10 +16,9 @@ const UserList = () => {
   const [userList, setUserList] = useState([]);
 
   //User Data
-  var jsonData = TablesDataChecker.find((item) => item.type === "User_list");
-  const data = jsonData.data;
+  // var jsonData = TablesDataChecker.find((item) => item.type === "User_list");
+  //const data = jsonData.data;
 
-  const isAddUser = getCheckValueByName("", "User", "Add");
   // (sidebarMockData || []).find((x) => {
   //   if (x.menuName === "Admin") {
   //     return (x.subMenu || []).find((s) => {
@@ -36,6 +35,7 @@ const UserList = () => {
   // }) !== undefined;
 
   useEffect(() => {
+    const isAddUser = getCheckValueByName("", "User", "Add");
     setIs(isAddUser);
   }, []);
 
@@ -122,10 +122,10 @@ const UserList = () => {
           UserList = res.data.data.users;
           setUserList(UserList);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -140,7 +140,7 @@ const UserList = () => {
     return UserList;
   }
 
-  function handleAction(id) {}
+  //function handleAction(id) {}
 
   const HandleAddUser = () => {
     navigate("/NHAI/AddUser");

@@ -7,10 +7,15 @@ import BarChart from "../Charts/BarChart";
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
+import {
+  usePIUDataList,
+  useRoDataList,
+  useZoneDataList,
+} from "../HtmlComponents/CommonFunction";
 
 const Ageing = () => {
   const [Decimal, setDecimal] = useState(true);
-  const [bankD, setBank] = useState("");
+  const [bankD, setBank] = useState("All");
   const [roD, setRo] = useState("All");
   const [zoneD, setZone] = useState("All");
   const [piuD, setPiu] = useState("All");
@@ -19,6 +24,13 @@ const Ageing = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mockRes, setMockRes] = useState("");
   const [rows, setRows] = useState([]); //mockRes.zones//data
+  //---------------------------------------------------------------------------------------
+  const zoneList = useZoneDataList(piuD);
+  //-----------------------------------------------------------------------------------------
+  const roList = useRoDataList(piuD, zoneD);
+  // ---------------------------------------------------------------------------------------
+  const piuList = usePIUDataList("", roD);
+
   const columns = [
     {
       Header: "Parameters",
@@ -297,10 +309,10 @@ const Ageing = () => {
           setMockRes(res.data.data);
           setRows(res.data.data.ageingItem);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -326,6 +338,7 @@ const Ageing = () => {
     } else {
     }
   }
+
   const utilizationPercentage =
     mockRes == "" ? "" : mockRes.ageingItem[4].decimal;
   const BarchartData = [
@@ -441,13 +454,9 @@ const Ageing = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value="East">East</option>
-                <option value="West">West</option>
-                <option value="North">North</option>
-                <option value="South">South</option>
-                <option value="MoRTH">MoRTH</option>
-                <option value="North East">North East</option>
-                <option value="Unmapped">Unmapped</option>
+                {(zoneList || []).map((x) => {
+                  return <option value={x.zoneName}>{x.zoneName}</option>;
+                })}
               </select>
               {"  "}
               <label className="statusOn">RO : </label>{" "}
@@ -459,9 +468,9 @@ const Ageing = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
+                {(roList || []).map((x) => {
+                  return <option value={x.roName}>{x.roName}</option>;
+                })}
               </select>
               {"  "}
               <label className="statusOn">PIU : </label>{" "}
@@ -473,9 +482,9 @@ const Ageing = () => {
                 }}
               >
                 <option value="All">All</option>
-                <option value=""></option>
-                <option value=""></option>
-                <option value=""></option>
+                {(piuList || []).map((x) => {
+                  return <option value={x.piuId}>{x.piuName}</option>;
+                })}
               </select>
               {"  "}
             </div>

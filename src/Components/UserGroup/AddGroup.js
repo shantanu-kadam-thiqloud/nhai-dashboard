@@ -108,7 +108,7 @@ const AddGroup = () => {
         createdBy: "Admin",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -116,14 +116,14 @@ const AddGroup = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/Groups");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -152,20 +152,20 @@ const AddGroup = () => {
       },
       (res) => {
         //meta data issue
-        if (res.status == 200) {
-          group = res.data.data;
+        if (res.status === 200) {
+          group = res.data.data.responseObject;
           setGroupName(group.groupName);
           setGroupDescription(group.groupDescription);
           setIsActive(group.isActive);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -202,21 +202,21 @@ const AddGroup = () => {
         status: "Initiated",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Groups");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed. Please try again.", {
             position: "top-right",
             autoClose: 3000,

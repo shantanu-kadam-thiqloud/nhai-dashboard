@@ -5,6 +5,9 @@ import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
   ConvertFormat,
+  useRoDataList,
+  usePIUDataList,
+  useZoneDataList,
 } from "../HtmlComponents/CommonFunction";
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
@@ -30,6 +33,13 @@ const Velocity = () => {
   const [propAccNo, setPropAccNo] = useState("");
   const [propPIU, setPropPIU] = useState("");
   const [rows, setRows] = useState([]);
+
+  //---------------------------------------------------------------------------------------
+  const zoneList = useZoneDataList(piuD);
+  //-----------------------------------------------------------------------------------------
+  const roList = useRoDataList(piuD, zoneD);
+  // ---------------------------------------------------------------------------------------
+  const piuList = usePIUDataList("", roD);
   const columns = [
     {
       field: "bank",
@@ -282,10 +292,10 @@ const Velocity = () => {
         if (res.status === 200) {
           setRows(res.data.data.velocities);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -362,10 +372,9 @@ const Velocity = () => {
               }}
             >
               <option value="All">All</option>
-              <option value="East">East</option>
-              <option value="West">West</option>
-              <option value="North">North</option>
-              <option value="South">South</option>
+              {(zoneList || []).map((x) => {
+                return <option value={x.zoneName}>{x.zoneName}</option>;
+              })}
             </select>
             {"  "}
           </div>
@@ -381,9 +390,9 @@ const Velocity = () => {
               }}
             >
               <option value="All">All</option>
-              <option value="Bhubaneswar">Bhubaneswar</option>
-              <option value=""></option>
-              <option value=""></option>
+              {(roList || []).map((x) => {
+                return <option value={x.roName}>{x.roName}</option>;
+              })}
             </select>
             {"  "}
           </div>
@@ -399,7 +408,9 @@ const Velocity = () => {
               }}
             >
               <option value="All">All</option>
-              <option value=""></option>
+              {(piuList || []).map((x) => {
+                return <option value={x.piuId}>{x.piuName}</option>;
+              })}
             </select>
             {"  "}
           </div>

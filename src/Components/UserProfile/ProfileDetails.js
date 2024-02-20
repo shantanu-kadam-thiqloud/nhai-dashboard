@@ -245,16 +245,16 @@ function ProfileDetails() {
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
-          profile = res.data;
+        if (res.status === 200) {
+          profile = res.data.data;
           // console.log("UserList->", UserList);
           setMapping(res.data.data.mapping);
           setProfile(profile);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -288,12 +288,12 @@ function ProfileDetails() {
         groupId: Number(profile.groupId),
         groupName: profile.groupName,
         isActive: profile.isActive,
-        createdDate: profile.createdDate,
+        createdDate: ConvertFormat(profile.createdDate),
         createdBy: profile.createdBy,
         mapping: profile.mapping || [],
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -301,14 +301,14 @@ function ProfileDetails() {
           });
           setIsLoading(false);
           navigate("/NHAI/Profiles");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,

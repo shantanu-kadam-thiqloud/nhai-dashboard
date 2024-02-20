@@ -328,10 +328,10 @@ const ProfilleCheckerDetails = () => {
           setMapping(res.data.data.mapping);
           setProfile(res.data.data.requestData);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -356,14 +356,15 @@ const ProfilleCheckerDetails = () => {
       },
       (res) => {
         if (res.status === 200) {
-          setReq(res.data);
+          setReq(res.data.data);
           setCurrentValue(res.data.data.requestData.existingValue);
           setOldValue(res.data.data.requestData.oldValue);
+          setMapping(res.data.data.requestData.mapping);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -396,7 +397,7 @@ const ProfilleCheckerDetails = () => {
         //   : group.userId,
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -404,14 +405,14 @@ const ProfilleCheckerDetails = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/ProfileRequests");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -552,8 +553,8 @@ const ProfilleCheckerDetails = () => {
               <div className="col-md-4 UDCoulmns">
                 <strong>Group:</strong>
               </div>
-              <div className="col-md-4 UDCoulmns">{currentValue.group}</div>
-              <div className="col-md-4 UDCoulmns">{oldValue.group}</div>
+              <div className="col-md-4 UDCoulmns">{currentValue.groupName}</div>
+              <div className="col-md-4 UDCoulmns">{oldValue.groupName}</div>
               {/* <div className="col-md-4 UDCoulmns">
                 <strong>Active:</strong>
               </div>

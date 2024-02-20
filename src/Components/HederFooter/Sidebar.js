@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../../Assets/Css/Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,6 +14,7 @@ import sideBarDataChecker from "../Checker/sideBarData";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 const Sidebar = () => {
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState("Home"); // Initialize with the default active item
   const [isToggleA, setToggleA] = useState(false);
   const [isToggleP, setToggleP] = useState(false);
@@ -33,6 +34,7 @@ const Sidebar = () => {
   const handleSetActiveItem = (itemName) => {
     setActiveItem(itemName);
   };
+  const userData = location.state ? location.state.userData : ""; //useParams();
   var jsonData = sideBarDataChecker.find((item) => item.type === "menuData");
   const data = jsonData.data;
 
@@ -44,7 +46,7 @@ const Sidebar = () => {
     });
     setToggleStates(initialState);
   };
-
+  console.log(userData, " - from sidebar");
   // Call the initialization function when the component mounts
   React.useEffect(() => {
     // fetchProfileById();
@@ -68,19 +70,19 @@ const Sidebar = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        id: "", //profileId, //47,
+        id: userData.profileId, //profileId, //47,
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
-          profile = res.data;
+        if (res.status === 200) {
+          profile = res.data.data;
           console.log("Profile ->", profile);
-          setMappingData(res.data.mapping);
+          setMappingData(res.data.data.mapping);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }

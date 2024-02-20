@@ -11,7 +11,7 @@ export const DropdownService = {
 };
 
 function getBranchData(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_BRANCH;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DROPDOWN_BRANCH;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -26,7 +26,7 @@ function getBranchData(mfaInfo, fn, fnError) {
   });
 }
 function getLocationData(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_LOCATION;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DROPDOWN_LOCATION;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -41,7 +41,7 @@ function getLocationData(mfaInfo, fn, fnError) {
   });
 }
 function getZoneData(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_ZONE;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DROPDOWN_ZONE;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -56,7 +56,7 @@ function getZoneData(mfaInfo, fn, fnError) {
   });
 }
 function getROData(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_RO;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DROPDOWN_RO;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -71,7 +71,7 @@ function getROData(mfaInfo, fn, fnError) {
   });
 }
 function getPIUData(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_PIU;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DROPDOWN_PIU;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {
@@ -86,7 +86,7 @@ function getPIUData(mfaInfo, fn, fnError) {
   });
 }
 function getPDData(mfaInfo, fn, fnError) {
-  var url = Global_var.BASEURL1 + Global_var.URL_DROPDOWN_PD;
+  var url = Global_var.AUTH_BASE + Global_var.URL_DROPDOWN_PD;
 
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

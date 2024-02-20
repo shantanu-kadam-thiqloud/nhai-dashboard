@@ -91,6 +91,11 @@ const AddUser = () => {
     userId: Yup.string("User ID is invalid"),
     role: Yup.string("Role is invalid"),
     mobile: Yup.string("Mobile Number is invalid"),
+    // .test(
+    //   "len",
+    //   "Must be exactly 10 digit",
+    //   (val) => val.length === 10
+    // ),
   });
 
   useEffect(() => {
@@ -142,7 +147,7 @@ const AddUser = () => {
         profileId: Number(values.role),
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -150,14 +155,14 @@ const AddUser = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/Users");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -185,7 +190,7 @@ const AddUser = () => {
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           user = res.data.data.responseObject;
           // console.log("UserList->", UserList);
           setUser(user);
@@ -200,10 +205,10 @@ const AddUser = () => {
           setProfileId(user.profileId);
 
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -249,7 +254,7 @@ const AddUser = () => {
         profileId: Number(values.role),
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -257,14 +262,14 @@ const AddUser = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/Users");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -291,15 +296,15 @@ const AddUser = () => {
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           ProfileList = res.data.data.profiles;
           // console.log("UserList->", UserList);
           setProfileList(ProfileList);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }

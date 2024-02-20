@@ -218,15 +218,15 @@ const UserCheckerDetails = () => {
         userName: "nhai",
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           const user = res.data.data.responseObject;
           // console.log("UserList->", UserList);
           setUser(user);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -252,14 +252,14 @@ const UserCheckerDetails = () => {
         if (res.status === 200) {
           setReq(res.data.data);
           setUser(res.data.data.requestData);
-          if (path.includes("userDeleteRequestDetails")) {
-            fetchUserById(res.data.data.requestData.id);
-          }
+          // if (path.includes("userDeleteRequestDetails")) {
+          //   fetchUserById(res.data.data.requestData.id);
+          // }
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -288,10 +288,10 @@ const UserCheckerDetails = () => {
           setCurrentValue(res.data.data.existingValue);
           setOldValue(res.data.data.oldValue);
           setIsLoading(false);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
@@ -325,7 +325,7 @@ const UserCheckerDetails = () => {
           : user.userId,
       },
       (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           toast.success(res.data.data.responseMetaData.message, {
             //"Request raised successful!", {
             position: "top-right",
@@ -333,14 +333,14 @@ const UserCheckerDetails = () => {
           });
           setIsLoading(false);
           navigate("/NHAI/UserRequests");
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
             autoClose: 3000,
           });
           setIsLoading(false);
           navigate("/NHAI/Error/404");
-        } else if (res.status == 500) {
+        } else if (res.status === 500) {
           toast.error("Request failed 500. Please try again.", {
             position: "top-right",
             autoClose: 3000,
@@ -380,7 +380,11 @@ const UserCheckerDetails = () => {
             <div className="col-md-6 UDCoulmns">
               <strong>Raised by:</strong>
             </div>
-            <div className="col-md-6 UDCoulmns">{req.requestRaisedBy}</div>
+            <div className="col-md-6 UDCoulmns">
+              {path.includes("userUpdateRequestDetails")
+                ? req.requestRaisedBy
+                : user.requestRaisedBy}
+            </div>
           </div>
           {/* -------------------------------------------------------- */}
           <div className="col-md-5">
@@ -392,7 +396,11 @@ const UserCheckerDetails = () => {
               <strong>Request Date:</strong>
             </div>
             <div className="col-md-6 UDCoulmns">
-              {DateFormatFunction(req.requestRaisedTime)}
+              {DateFormatFunction(
+                path.includes("userUpdateRequestDetails")
+                  ? req.requestRaisedTime
+                  : user.requestRaisedTime
+              )}
             </div>
             <div className="col-md-6 UDCoulmns">
               <strong>Request Type:</strong>
@@ -513,6 +521,12 @@ const UserCheckerDetails = () => {
               </div>
               <div className="col-md-4 UDCoulmns">{currentValue.userRole}</div>
               <div className="col-md-4 UDCoulmns">{oldValue.userRole}</div>
+
+              <div className="col-md-4 UDCoulmns">
+                <strong>IsActive:</strong>
+              </div>
+              <div className="col-md-4 UDCoulmns">{currentValue.isActive}</div>
+              <div className="col-md-4 UDCoulmns">{oldValue.isActive}</div>
             </div>
           </div>
         )}
