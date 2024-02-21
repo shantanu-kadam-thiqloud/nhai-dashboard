@@ -144,6 +144,10 @@ export async function downloadData(API_baseUrl: string, req: any, res: any, next
                 const responseData = await api.downloadPost(API_baseUrl, req.body);
                 console.log(`Response from ${API_baseUrl} api ->`, responseData);
 
+                res.set({
+                    'Content-Type': "text/plain",
+
+                });
                 // if (responseData.status === 404) {
                 //     return res.status(404).json({ error: '404 Bad request' });
                 // }
@@ -151,7 +155,7 @@ export async function downloadData(API_baseUrl: string, req: any, res: any, next
                 //     return res.status(500).json({ error: '500 Bad request' });
                 // }
 
-                res.json({
+                res.send({
                     data: responseData,
                 });
             } catch (error) {

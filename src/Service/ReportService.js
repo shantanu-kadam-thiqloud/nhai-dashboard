@@ -89,6 +89,7 @@ function downloadUserLoginReport(mfaInfo, fn, fnError) {
 }
 
 function downloadUserStatusReport(mfaInfo, fn, fnError) {
+  //var url = "http://172.16.16.201:7091/report/download/userStatus/v1";
   var url = Global_var.AUTH_BASE + Global_var.URL_DOWNLOAD_ACTIVE_INACTIVE;
   return new RestDataSource(url, fn).Store(mfaInfo, (res, err) => {
     if (err) {

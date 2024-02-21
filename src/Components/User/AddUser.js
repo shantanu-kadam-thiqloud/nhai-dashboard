@@ -77,6 +77,9 @@ const AddUser = () => {
   const isEdit = path.includes("EditUser") ? true : false;
   const [profileList, setProfileList] = useState([]);
   const navigate = useNavigate();
+  const phoneRegExp = /^\d{10}$/;
+  // /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
   const validationSchema = Yup.object({
     userName: Yup.string().required("User Name is required"),
     // userType: Yup.string().required("User Type is required"),
@@ -90,18 +93,17 @@ const AddUser = () => {
     // workPhone: Yup.string("Work Phone is invalid"),
     userId: Yup.string("User ID is invalid"),
     role: Yup.string("Role is invalid"),
-    mobile: Yup.string("Mobile Number is invalid"),
-    // .test(
-    //   "len",
-    //   "Must be exactly 10 digit",
-    //   (val) => val.length === 10
-    // ),
+    mobile: Yup.string("Mobile Number is invalid").matches(
+      phoneRegExp,
+      "Mobile number is not valid"
+    ),
   });
 
   useEffect(() => {
     if (isEdit) {
       setIsLoading(true);
       fetchUserById();
+      fetchProfileList();
     }
     fetchProfileList();
   }, [isEdit]);
@@ -201,7 +203,12 @@ const AddUser = () => {
           setIsActive(user.isActive);
           setMobile(user.mobileNumber);
           setUserid(user.userId);
-          setRole(user.userRole);
+          const roleId = (profileList || []).find((x) => {
+            if (x.profileName === user.userRole) {
+              return x.id;
+            }
+          });
+          setRole(user.profileId);
           setProfileId(user.profileId);
 
           setIsLoading(false);
