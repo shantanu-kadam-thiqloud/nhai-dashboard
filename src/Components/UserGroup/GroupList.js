@@ -207,6 +207,7 @@ const GroupList = () => {
                 detailpage="GroupDetails"
                 editpage="EditGroup"
                 deletepage="DeleteGroup"
+                enablePagination={true}
               />
             </div>
           </div>

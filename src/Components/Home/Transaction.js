@@ -700,7 +700,11 @@ const Transaction = () => {
               }}
             />
           </Box> */}
-          <GenericDataTable data={transactionTableData} columns={columns} />
+          <GenericDataTable
+            data={transactionTableData}
+            columns={columns}
+            enablePagination={false}
+          />
         </div>
         <Hyperlink
           isOpen={isOpen}

@@ -274,6 +274,7 @@ const ProfileCheckerList = () => {
                 // detailpage="UserDetails"
                 // editpage="EditUser"
                 //deletepage="DeleteUser"
+                enablePagination={false}
               />
             </div>{" "}
           </div>

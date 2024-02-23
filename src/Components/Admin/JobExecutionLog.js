@@ -85,6 +85,114 @@ const JobExecutionLog = () => {
       jobTime: "06:09:38",
       duration: "0:9:8",
     },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
+    {
+      id: 2,
+      srno: 3,
+      uploadId: 3,
+      uploadName: "Transaction_DATA",
+      uploadStatus: "Succeeded",
+      message:
+        "commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. \n It is also used to temporarily replace text in a process called greeking, ",
+      jobDate: "7/4/2017",
+      jobTime: "06:09:38",
+      duration: "0:9:8",
+    },
   ];
   const [rows, setRows] = useState(data);
   return (
@@ -135,7 +243,12 @@ const JobExecutionLog = () => {
         </div>
         <div className="row">
           <div className="mt-2"></div>
-          <DataTable columns={columns} data={rows} showSearchBar={false} />{" "}
+          <DataTable
+            columns={columns}
+            data={rows}
+            showSearchBar={false}
+            enablePagination={true}
+          />{" "}
           <div className="mt-2"></div>
         </div>
       </div>

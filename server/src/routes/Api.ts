@@ -15,6 +15,7 @@ import GroupCheckerController from "../controllers/Api/Secure/GroupChecker";
 import ProfileCheckerController from "../controllers/Api/Secure/ProfileChecker";
 import ReportController from "../controllers/Api/Secure/Report";
 import DropdownController from "../controllers/Api/Secure/Dropdown";
+import DashboardDownloadController from "../controllers/Api/Secure/DashboardDownload";
 
 const router = Router();
 
@@ -50,6 +51,15 @@ router.post("/secure/zone", DashboardController.zone);
 router.post("/secure/velocity", DashboardController.velocity);
 router.post("/secure/limitLedger", DashboardController.limitLedger);
 router.post("/secure/accountLevel", DashboardController.accountLevel);
+
+router.post("/secure/subsaideryAccountDownload", DashboardDownloadController.subsaideryAccountDownload);
+router.post("/secure/roDownload", DashboardDownloadController.roDownload);
+router.post("/secure/accountLevelDownload", DashboardDownloadController.accountLevelDownload);
+router.post("/secure/velocityDownload", DashboardDownloadController.velocityDownload);
+router.post("/secure/limitLedgerDownload", DashboardDownloadController.limitLedgerDownload);
+router.post("/secure/eventsDownload", DashboardDownloadController.eventsDownload);
+router.post("/secure/transactionDownload", DashboardDownloadController.transactionDownload);
+router.post("/secure/piuDownload", DashboardDownloadController.piuDownload);
 
 
 router.post("/secure/users", UserController.users);

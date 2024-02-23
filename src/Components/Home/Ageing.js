@@ -519,6 +519,7 @@ const Ageing = () => {
             data={rows} //{data}
             customClass="AgeingTable"
             showSearchBar={false}
+            enablePagination={false}
           />{" "}
         </div>
         {/* -------------------------------------------------------------------------- */}

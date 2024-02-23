@@ -33,6 +33,7 @@ import MappingMasterCheckerList from "./Components/Checker/MappingMasterCheckerL
 import MappingMasterCheckerDetails from "./Components/Checker/MappingMasterCheckerDetails";
 import Error404 from "./Components/HtmlComponents/Error404";
 import Error500 from "./Components/HtmlComponents/Error500";
+import OTP from "./Components/Login/OTP";
 
 const Routers = () => {
   return (
@@ -40,6 +41,7 @@ const Routers = () => {
       <Route path="/NHAI" element={<Login />}></Route>
       <Route path="/NHAI/login" element={<Login />}></Route>
       <Route path="/NHAI/Dashboard" element={<Dashboard />}></Route>
+      <Route path="/NHAI/TwofactorAuthentication" element={<OTP />}></Route>
       {/* ------------USER------------------------------------------------------------- */}
       <Route path="/NHAI/Users" element={<UserList />}></Route>
       <Route path="/NHAI/AddUser" element={<AddUser />}></Route>

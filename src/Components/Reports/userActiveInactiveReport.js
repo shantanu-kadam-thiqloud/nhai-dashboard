@@ -323,7 +323,11 @@ const UserActiveInactiveReport = () => {
             customClass="LoginReportTable"
             showSearchBar={false}
           />{" "} */}
-            <GenericDataTable data={rows} columns={columns} />
+            <GenericDataTable
+              data={rows}
+              columns={columns}
+              enablePagination={true}
+            />
           </div>
         </div>
       </div>

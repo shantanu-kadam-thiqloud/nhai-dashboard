@@ -527,6 +527,7 @@ const LimitLedger = () => {
             <GenericDataTable
               data={mockRes.limitLedgerDetails} //rows}
               columns={columns}
+              enablePagination={false}
             />
           </div>
         </div>

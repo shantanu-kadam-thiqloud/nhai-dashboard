@@ -506,6 +506,7 @@ const Snapshot = () => {
               data={rows} //{data}
               customClass="snapTable"
               showSearchBar={false}
+              enablePagination={false}
             />{" "}
           </div>
         </div>

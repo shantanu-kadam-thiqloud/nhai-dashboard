@@ -394,7 +394,11 @@ const Events = () => {
               }}
             />
           </Box> */}
-          <GenericDataTable data={eventTableData} columns={columns} />
+          <GenericDataTable
+            data={eventTableData}
+            columns={columns}
+            enablePagination={false}
+          />
         </div>
         <Hyperlink
           isOpen={isOpen}

@@ -799,6 +799,7 @@ const MenuManagement = () => {
               name: name,
               url: url,
             }}
+            enableReinitialize
             validationSchema={validationSchema}
             onSubmit={(values) => {
               // Handle form submission here
@@ -828,10 +829,10 @@ const MenuManagement = () => {
                     className="form-control"
                     id="name"
                     name="name"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
+                    //value={name}
+                    // onChange={(e) => {
+                    //   setName(e.target.value);
+                    // }}
                   ></Field>
                   <ErrorMessage name="name" component="div" className="error" />
                   <label htmlFor="name" className="form-label">
@@ -844,10 +845,10 @@ const MenuManagement = () => {
                         className="form-control"
                         id="url"
                         name="url"
-                        value={url}
-                        onChange={(e) => {
-                          setUrl(e.target.value);
-                        }}
+                        // value={url}
+                        // onChange={(e) => {
+                        //   setUrl(e.target.value);
+                        // }}
                       ></Field>
                       <ErrorMessage
                         name="url"

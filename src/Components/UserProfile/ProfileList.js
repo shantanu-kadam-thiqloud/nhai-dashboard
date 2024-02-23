@@ -205,6 +205,7 @@ const UserList = () => {
                 detailpage="ProfileDetails"
                 editpage="EditProfile"
                 deletepage="DeleteProfile"
+                enablePagination={true}
               />
             </div>
           </div>

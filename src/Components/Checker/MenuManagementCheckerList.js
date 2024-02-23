@@ -300,6 +300,7 @@ const MenuManagementCheckerList = () => {
                       // detailpage="UserDetails"
                       // editpage="EditUser"
                       //deletepage="DeleteUser"
+                      enablePagination={false}
                     />
                   </Accordion.Body>
                 </Accordion.Item>
@@ -372,6 +373,7 @@ const MenuManagementCheckerList = () => {
                       // detailpage="UserDetails"
                       // editpage="EditUser"
                       //deletepage="DeleteUser"
+                      enablePagination={false}
                     />
                   </Accordion.Body>
                 </Accordion.Item>
@@ -444,6 +446,7 @@ const MenuManagementCheckerList = () => {
                       // detailpage="UserDetails"
                       // editpage="EditUser"
                       //deletepage="DeleteUser"
+                      enablePagination={false}
                     />
                   </Accordion.Body>
                 </Accordion.Item>

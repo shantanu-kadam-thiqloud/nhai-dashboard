@@ -299,6 +299,7 @@ const Bank = () => {
               data={rows} //{bankTable.bankItem}
               customClass="BankTable"
               showSearchBar={false}
+              enablePagination={false}
             />{" "}
           </div>
         </div>

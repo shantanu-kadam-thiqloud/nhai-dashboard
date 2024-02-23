@@ -288,6 +288,7 @@ const RO = () => {
             data={reginoalTable}
             customClass="ROTable"
             showSearchBar={false}
+            enablePagination={false}
           />{" "}
           {/* <Box sx={{ height: 400, width: "100%" }}>
             <DataGrid

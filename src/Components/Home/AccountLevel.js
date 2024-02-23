@@ -487,7 +487,11 @@ const AccountLevel = () => {
             customClass="AccLevelable"
             showSearchBar={false}
           />{" "} */}
-          <GenericDataTable data={rows} columns={columns} />
+          <GenericDataTable
+            data={rows}
+            columns={columns}
+            enablePagination={false}
+          />
         </div>
       </div>
       <Hyperlink

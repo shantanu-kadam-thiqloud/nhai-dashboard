@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Hyperlink from "../Home/Hyperlink";
+import "./GenricPagination.css";
 
 const GenericDataTable = ({
   data,
@@ -13,6 +14,7 @@ const GenericDataTable = ({
   detailpage,
   editpage,
   deletepage,
+  enablePagination,
 }) => {
   const [switchStates, setSwitchStates] = useState({});
   const navigate = useNavigate();
@@ -102,12 +104,20 @@ const GenericDataTable = ({
 
   return (
     <>
+      {/* <div className="ui-datatable"> */}
       <DataTable
         value={data}
         removableSort
         filterDisplay="row"
         showGridlines
         tableStyle={{ minWidth: "50rem" }}
+        paginator={enablePagination}
+        rows={5}
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        // className="ui-datatable"
+        paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+        currentPageReportTemplate=" Page {currentPage} of  {totalRecords} " //"{first} to {last} of {totalRecords}"
+        // "FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
       >
         {columns.map((column) => (
           <Column
@@ -124,6 +134,7 @@ const GenericDataTable = ({
           ></Column>
         ))}
       </DataTable>
+      {/* </div> */}
       <Hyperlink isOpen={isOpen} setModal={setIsOpen} row={rowdata} />
     </>
   );

@@ -310,6 +310,7 @@ const PIU = () => {
             data={rows} //{data}
             customClass="PIUTable"
             showSearchBar={false}
+            enablePagination={false}
           />{" "}
         </div>
       </div>

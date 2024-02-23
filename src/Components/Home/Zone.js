@@ -991,6 +991,7 @@ const Zone = ({ setTab }) => {
             data={rows} //{data} //
             customClass="ZoneTable"
             showSearchBar={false}
+            enablePagination={false}
           />{" "}
         </div>
         {/* -------------------------------------------------------------------------- */}

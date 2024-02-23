@@ -87,6 +87,7 @@ class Dashboard {
   public static async accountLevel(req: any, res: any, next: any): Promise<any> {
     fetchData(BASE_URL_A + '/dashboard/acc-level/v1', req, res, next);
   }
+
 }
 
 export default Dashboard;

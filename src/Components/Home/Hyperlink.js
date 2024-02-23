@@ -328,7 +328,11 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
                     customClass="LimitTable"
                     showSearchBar={false}
                   />{" "} */}
-                  <GenericDataTable data={rows} columns={columns} />
+                  <GenericDataTable
+                    data={rows}
+                    columns={columns}
+                    enablePagination={true}
+                  />
                 </div>
               </div>
               {/*------------------------------------------------------------------------*/}

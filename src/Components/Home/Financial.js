@@ -448,6 +448,7 @@ const Financial = () => {
                 data={depositsTable}
                 customClass="BankTable"
                 showSearchBar={false}
+                enablePagination={false}
               />{" "}
             </div>
           )}
@@ -458,6 +459,7 @@ const Financial = () => {
                 data={disbursementsTable}
                 customClass="BankTable"
                 showSearchBar={false}
+                enablePagination={false}
               />{" "}
             </div>
           )}
@@ -468,6 +470,7 @@ const Financial = () => {
                 data={summaryTable}
                 customClass="BankTable"
                 showSearchBar={false}
+                enablePagination={false}
               />{" "}
             </div>
           )}
