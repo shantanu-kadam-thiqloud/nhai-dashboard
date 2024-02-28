@@ -5,11 +5,13 @@ import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
   ConvertFormat,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 
 const AccountLevel = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -445,6 +447,31 @@ const AccountLevel = () => {
       }
     );
   }
+  //----------------------------------------------------------------------------------
+  function DownloadAccountLevel() {
+    DashboardDownloadService.downloadAccountLevel(
+      reqBody,
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Account_Level", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
   return (
     <div>
       <div className="row">
@@ -470,7 +497,10 @@ const AccountLevel = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {}}
+                onClick={() => {
+                  setIsLoading(true);
+                  DownloadAccountLevel();
+                }}
               >
                 Download
               </button>{" "}

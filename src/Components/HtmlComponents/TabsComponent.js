@@ -11,6 +11,7 @@ import { useLocation } from "react-router";
 
 const TabsComponent = (props) => {
   const location = useLocation();
+  const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
   const [homeTabs, setHomeTabs] = useState([]);
   const data = [
     {
@@ -38,11 +39,13 @@ const TabsComponent = (props) => {
   React.useEffect(() => {
     // fetchProfileById();
   }, []);
+
   const userData = location.state ? location.state.userData : ""; //useParams();
-  const tabsData = data[0].subMenu; //homeTabs;
+  // const tabsData = data[0].subMenu; //homeTabs;
+  const tabsData = (MappingData[0] || []).subMenu; //homeTabs;
   const [activeTab, setActiveTab] = useState(tabsData[0]);
   const tabsRef = useRef(null);
-  console.log(userData, " - from tabs");
+  //console.log(userData, " - from tabs");
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     props.ActiveTab(tab.name);

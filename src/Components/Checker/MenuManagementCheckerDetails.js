@@ -1,12 +1,13 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const MenuManagementCheckerDetails = () => {
-  const userId = 2; //useParams();
+  const userId = location.state ? location.state.requestId : ""; //2; //useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const customStyles = {
     content: {
       top: "50%",

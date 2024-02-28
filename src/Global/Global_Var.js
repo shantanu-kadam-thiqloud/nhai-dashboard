@@ -6,6 +6,10 @@ export const Global_var = {
   AUTH_BASE: "http://localhost:3007/api",
   //--------Login----------------------------------------
   URL_LOGIN: "http://localhost:3007/api/auth/login", //"/usermanagement/login/v1",
+  //-------------------------------------------------------------------------------
+  URL_EXTERNAL_LOGIN: "http://localhost:3007/api/auth/externalLogin",
+  URL_CHNG_PWD: "http://localhost:3007/api/auth/changePassword",
+  URL_OTP_VALIDATION: "http://localhost:3007/api/auth/otpValidation",
   //--------Users----------------------------------
   URL_GET_USERS: "/secure/users", //"/usermanagement/admin/users/v1",
   URL_GET_USER_BY_ID: "/secure/getUser", //"/usermanagement/admin/userDetails/v1",
@@ -81,4 +85,16 @@ export const Global_var = {
   URL_DOWNLOAD_LIMIT_LEDGER: "/secure/limitLedgerDownload",
   URL_DOWNLOAD_VELOCITY: "/secure/velocityDownload",
   URL_DOWNLOAD_SUB_ACCOUNTS: "/secure/subsaideryAccountDownload",
+  //-----------------------------------------------------------------------------------------
+  URL_ADD_MENU_SUBMENU_ACTION: "/secure/addMenuSubmenuAction",
+  URL_UPDATE_MENU_SUBMENU_ACTION: "/secure/updateMenuSubmenuAction",
+  URL_DELETE_MENU_SUBMENU_ACTION: "/secure/deleteMenuSubmenuAction",
+  URL_REQUESTS_MENU_SUBMENU_ACTION: "/secure/getMenuSubmenuActionRequests",
+  URL_DETAILS_AD_MENU_SUBMENU_ACTION:
+    "/secure/getMenuSubmenuActionAddDeleteDetails",
+  URL_DETAILS_U_MENU_SUBMENU_ACTION:
+    "/secure/getMenuSubmenuActionUpdateDetails",
+  URL_APPROVAL_MENU_SUBMENU_ACTION: "/secure/menuSubmenuActionApproval",
+  URL_GET_MENU_JSON: "/secure/getMenuSubmenuActionJson",
+  URL_UPDATE_MENU_JSON: "/secure/UpdateMenuSubmenuActionJson",
 };

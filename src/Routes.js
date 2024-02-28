@@ -34,12 +34,14 @@ import MappingMasterCheckerDetails from "./Components/Checker/MappingMasterCheck
 import Error404 from "./Components/HtmlComponents/Error404";
 import Error500 from "./Components/HtmlComponents/Error500";
 import OTP from "./Components/Login/OTP";
+import InternalLogin from "./Components/Login/InternalLogin";
 
 const Routers = () => {
   return (
     <Routes>
       <Route path="/NHAI" element={<Login />}></Route>
       <Route path="/NHAI/login" element={<Login />}></Route>
+      <Route path="/NHAI/internalLogin" element={<InternalLogin />}></Route>
       <Route path="/NHAI/Dashboard" element={<Dashboard />}></Route>
       <Route path="/NHAI/TwofactorAuthentication" element={<OTP />}></Route>
       {/* ------------USER------------------------------------------------------------- */}
@@ -78,22 +80,22 @@ const Routers = () => {
         element={<MappingMasterCheckerList />}
       ></Route>
       <Route
-        path="/NHAI/MappingMasterDetails/:userId"
+        path="/NHAI/MappingMasterDetails"
         element={<MappingMasterCheckerDetails />}
       ></Route>
       <Route path="/NHAI/JobExecutionLog" element={<JobExecutionLog />}></Route>
       {/* ------------Checker Screen---------------------------------------------------- */}
       <Route path="/NHAI/UserRequests" element={<UserCheckerList />}></Route>
       <Route
-        path="/NHAI/userAddRequestDetails/:userId"
+        path="/NHAI/userAddRequestDetails"
         element={<UserCheckerDetails />}
       ></Route>
       <Route
-        path="/NHAI/userUpdateRequestDetails/:userId"
+        path="/NHAI/userUpdateRequestDetails"
         element={<UserCheckerDetails />}
       ></Route>
       <Route
-        path="/NHAI/userDeleteRequestDetails/:userId"
+        path="/NHAI/userDeleteRequestDetails"
         element={<UserCheckerDetails />}
       ></Route>
       {/* ----------------Profile------------------------- */}
@@ -102,29 +104,29 @@ const Routers = () => {
         element={<ProfileCheckerList />}
       ></Route>
       <Route
-        path="/NHAI/profileAddRequestDetails/:userId"
+        path="/NHAI/profileAddRequestDetails"
         element={<ProfilleCheckerDetails />}
       ></Route>
       <Route
-        path="/NHAI/profileUpdateRequestDetails/:userId"
+        path="/NHAI/profileUpdateRequestDetails"
         element={<ProfilleCheckerDetails />}
       ></Route>
       <Route
-        path="/NHAI/profileDeleteRequestDetails/:userId"
+        path="/NHAI/profileDeleteRequestDetails"
         element={<ProfilleCheckerDetails />}
       ></Route>
       {/* ----------------Group------------------------- */}
       <Route path="/NHAI/groupRequests" element={<GroupCheckerList />}></Route>
       <Route
-        path="/NHAI/groupAddRequestDetails/:userId"
+        path="/NHAI/groupAddRequestDetails"
         element={<GroupCheckerDetails />}
       ></Route>
       <Route
-        path="/NHAI/groupUpdateRequestDetails/:userId"
+        path="/NHAI/groupUpdateRequestDetails"
         element={<GroupCheckerDetails />}
       ></Route>
       <Route
-        path="/NHAI/groupDeleteRequestDetails/:userId"
+        path="/NHAI/groupDeleteRequestDetails"
         element={<GroupCheckerDetails />}
       ></Route>
       {/* -------------------------------------------------------------------------------------- */}

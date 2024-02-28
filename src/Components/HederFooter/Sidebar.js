@@ -15,6 +15,7 @@ import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 const Sidebar = () => {
   const location = useLocation();
+  const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
   const [activeItem, setActiveItem] = useState("Home"); // Initialize with the default active item
   const [isToggleA, setToggleA] = useState(false);
   const [isToggleP, setToggleP] = useState(false);
@@ -46,7 +47,7 @@ const Sidebar = () => {
     });
     setToggleStates(initialState);
   };
-  console.log(userData, " - from sidebar");
+  //console.log(userData, " - from sidebar");
   // Call the initialization function when the component mounts
   React.useEffect(() => {
     // fetchProfileById();
@@ -100,7 +101,7 @@ const Sidebar = () => {
     >
       <div className="position-sticky" key="0">
         <div className="list-group list-group-flush" key="0">
-          {(data || data).map((x, index) => {
+          {(MappingData || []).map((x, index) => {
             return (
               <>
                 <Link

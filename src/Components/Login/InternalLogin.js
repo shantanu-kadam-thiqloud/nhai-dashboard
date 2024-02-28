@@ -9,13 +9,13 @@ import forge from "node-forge";
 import Spinner from "../HtmlComponents/Spinner";
 import { LoginService } from "../../Service/LoginService";
 import { v4 as uuid } from "uuid";
-import { ExternalUserService } from "../../Service/ExternalUserService";
+import { ProfileService } from "../../Service/ProfileService";
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
 });
 
-const Login = () => {
+const InternalLogin = () => {
   const initialValues = {
     username: "",
     password: "",
@@ -40,25 +40,24 @@ const Login = () => {
   }, []);
 
   function Login(values) {
-    ExternalUserService.externalUserLogin(
+    LoginService.userLogin(
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
         },
-        username: values.username, //"ro_telang@nhai.com",
-        password: values.password, //"2oCz5N1GPu4=",
+        email: values.username, //"ro_telang@nhai.com",
       },
       (res) => {
         debugger;
         if (res.status === 200) {
-          debugger;
           toast.success("Login successful!", {
             //"Request raised successful!", {
             position: "top-right",
             autoClose: 3000,
           });
           var userData = res.data.data.responseObject;
+          fetchProfileById(userData.profileId);
           localStorage.setItem("UUID", res.data.data.sessionId);
           //res.data.data.responseObject
           setUserDetails(userData);
@@ -173,6 +172,41 @@ const Login = () => {
     // }
   };
 
+  //-----------Get Profile----------------------------------------------
+  function fetchProfileById(profileId) {
+    var profile = {};
+    //  var profileId = parseInt(userId, 10);
+    ProfileService.getProfileById(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        id: profileId, //profileId, //47,
+        userName: "nhai",
+      },
+      (res) => {
+        if (res.status === 200) {
+          profile = res.data.data;
+          console.log("Profile ->", profile);
+          var mappingData = JSON.stringify(res.data.data.mapping);
+          setIsLoading(false);
+          sessionStorage.removeItem();
+          sessionStorage.setItem("Mapping", mappingData);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      }
+    );
+    console.log("profile->", profile);
+    return profile;
+  }
+
   return (
     <div className="container loginContainer">
       <Spinner isLoading={isLoading} />
@@ -236,14 +270,6 @@ const Login = () => {
                 <button type="submit" className="btn btn-primary loginBtn">
                   Login
                 </button>
-                <a
-                  href="#"
-                  onClick={() => {
-                    navigate("/NHAI/internalLogin");
-                  }}
-                >
-                  Internal Login
-                </a>
               </Form>
             )}
           </Formik>
@@ -253,4 +279,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default InternalLogin;

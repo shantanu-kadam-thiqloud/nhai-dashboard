@@ -14,6 +14,10 @@ const UserList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [profileList, setProfileList] = useState([]);
+  const [is, setIs] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
   const data = [
     {
@@ -41,6 +45,18 @@ const UserList = () => {
       isActive: false,
     },
   ];
+
+  useEffect(() => {
+    const isAddUser = getCheckValueByName("", "User Profile", "Add");
+    const isShowUser = getCheckValueByName("", "User Profile", "View");
+    const isUpdateUser = getCheckValueByName("", "User Profile", "Update");
+    const isDeleteUser = getCheckValueByName("", "User Profile", "Delete");
+    setIs(isAddUser);
+    setIsShow(isShowUser);
+    setIsUpdate(isUpdateUser);
+    setIsDelete(isDeleteUser);
+  }, []);
+
   // const columns = [
   //   { Header: "Profile Name", accessor: "profileName" },
   //   { Header: "Profile Description", accessor: "profileDescription" },
@@ -109,16 +125,16 @@ const UserList = () => {
     },
   ];
 
-  //Side bar Data
-  var sidejsonData = sideBarDataChecker.find(
-    (item) => item.type === "menuData"
-  );
-  const sidebarMockData = sidejsonData.data;
-  const isAddProfile = getCheckValueByName(
-    sidebarMockData,
-    "User Profile",
-    "Add"
-  );
+  // //Side bar Data
+  // var sidejsonData = sideBarDataChecker.find(
+  //   (item) => item.type === "menuData"
+  // );
+  // const sidebarMockData = sidejsonData.data;
+  // const isAddProfile = getCheckValueByName(
+  //   sidebarMockData,
+  //   "User Profile",
+  //   "Add"
+  // );
 
   useEffect(() => {
     setIsLoading(true);
@@ -170,7 +186,7 @@ const UserList = () => {
             <div className="col-md-12">
               <h2 className="mb-3 mt-3 pageTitle">Profile Listing</h2>
               <div className="addUserBtnDiv  mt-3">
-                {isAddProfile ? (
+                {is ? (
                   <button
                     className="btn addUser"
                     type="button"
@@ -202,9 +218,9 @@ const UserList = () => {
               <GenericDataTable
                 data={profileList} //{data}
                 columns={columns}
-                detailpage="ProfileDetails"
-                editpage="EditProfile"
-                deletepage="DeleteProfile"
+                detailpage={isShow ? "ProfileDetails" : ""}
+                editpage={isUpdate ? "EditProfile" : ""}
+                deletepage={isDelete ? "DeleteProfile" : ""}
                 enablePagination={true}
               />
             </div>

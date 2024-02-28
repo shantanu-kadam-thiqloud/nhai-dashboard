@@ -1,10 +1,8 @@
 import { DropdownService } from "../../Service/DropdownService";
 import { v4 as uuid } from "uuid";
 import sideBarDataChecker from "../Checker/sideBarData";
-import * as XLSX from "xlsx";
 import { useState } from "react";
 import { useEffect } from "react";
-import FileSaver from "file-saver";
 
 export const DateFormatFunction = (inputDate) => {
   if (inputDate) {
@@ -42,10 +40,11 @@ export const ConvertFormat = (inputDate) => {
 
 export const getCheckValueByName = (menuData, submenuName, actionName) => {
   //Side bar Data
-  var sidejsonData = sideBarDataChecker.find(
-    (item) => item.type === "menuData"
-  );
-  const sidebarMockData = sidejsonData.data;
+  // var sidejsonData = sideBarDataChecker.find(
+  //   (item) => item.type === "menuData"
+  // );
+  const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
+  const sidebarMockData = MappingData; //sidejsonData.data;
 
   for (const menu of sidebarMockData) {
     for (const submenu of menu.subMenu) {

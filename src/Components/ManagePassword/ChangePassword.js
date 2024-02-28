@@ -1,33 +1,39 @@
-import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
-import forge from 'node-forge';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import forge from "node-forge";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  currentPassword: Yup.string().required('Current Password is required'),
-  newPassword: Yup.string().min(6, 'Password must be at least 6 characters').required('New Password is required'),
+  currentPassword: Yup.string().required("Current Password is required"),
+  newPassword: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("New Password is required"),
   confirmNewPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
-    .required('Confirm New Password is required'),
+    .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+    .required("Confirm New Password is required"),
 });
 
 const ChangePassword = () => {
-  const [publicKey, setPublicKey] = useState('');
+  const [publicKey, setPublicKey] = useState("");
+  const navigate = useNavigate();
   const initialValues = {
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
   };
 
   React.useEffect(() => {
     async function fetchPublicKey() {
       try {
-        const response = await axios.get('http://localhost:3007/api/RSA/public-key');
+        const response = await axios.get(
+          "http://localhost:3007/api/RSA/public-key"
+        );
         setPublicKey(response.data);
       } catch (error) {
-        console.error('Error fetching public key:', error);
+        console.error("Error fetching public key:", error);
       }
     }
     fetchPublicKey();
@@ -35,29 +41,36 @@ const ChangePassword = () => {
 
   const handleSubmit = async (values) => {
     if (!publicKey) {
-      console.error('Public key not available');
+      console.error("Public key not available");
       return;
     }
 
     try {
       const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
-      const encrypted = publicKeyObject.encrypt(JSON.stringify(values), 'RSA-OAEP');
+      const encrypted = publicKeyObject.encrypt(
+        JSON.stringify(values),
+        "RSA-OAEP"
+      );
       const encryptedValues = forge.util.encode64(encrypted);
-      const response = await axios.post('http://localhost:3007/api/auth/change-password', { encrypted: encryptedValues });
+      const response = await axios.post(
+        "http://localhost:3007/api/auth/change-password",
+        { encrypted: encryptedValues }
+      );
       console.log(response.data);
       if (response.data) {
-        toast.success('Password changed successfully', {
-          position: 'top-right',
+        toast.success("Password changed successfully", {
+          position: "top-right",
           autoClose: 3000,
         });
+        navigate("/NHAI/login");
       } else {
-        toast.error('Password change failed. Please try again.', {
-          position: 'top-right',
+        toast.error("Password change failed. Please try again.", {
+          position: "top-right",
           autoClose: 5000,
         });
       }
     } catch (error) {
-      console.error('Error changing password:', error);
+      console.error("Error changing password:", error);
     }
   };
 
@@ -82,7 +95,11 @@ const ChangePassword = () => {
                   id="currentPassword"
                   name="currentPassword"
                 />
-                <ErrorMessage className="text-danger" name="currentPassword" component="div" />
+                <ErrorMessage
+                  className="text-danger"
+                  name="currentPassword"
+                  component="div"
+                />
               </div>
 
               <div className="form-group mb-3">
@@ -93,7 +110,11 @@ const ChangePassword = () => {
                   id="newPassword"
                   name="newPassword"
                 />
-                <ErrorMessage className="text-danger" name="newPassword" component="div" />
+                <ErrorMessage
+                  className="text-danger"
+                  name="newPassword"
+                  component="div"
+                />
               </div>
 
               <div className="form-group mb-3">
@@ -104,7 +125,11 @@ const ChangePassword = () => {
                   id="confirmNewPassword"
                   name="confirmNewPassword"
                 />
-                <ErrorMessage className="text-danger" name="confirmNewPassword" component="div" />
+                <ErrorMessage
+                  className="text-danger"
+                  name="confirmNewPassword"
+                  component="div"
+                />
               </div>
 
               <button type="submit" className="btn btn-primary loginBtn">

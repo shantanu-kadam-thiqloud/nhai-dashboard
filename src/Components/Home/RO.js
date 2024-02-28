@@ -8,11 +8,13 @@ import {
   DateFormatFunction,
   ConvertFormat,
   useZoneDataList,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";
-
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
+import { v4 as uuid } from "uuid";
 const RO = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -166,6 +168,18 @@ const RO = () => {
     {
       accessor: "countOfSubsidiaryAccounts",
       Header: "No. of Subsidiary Accounts",
+      Cell: ({ row }) => (
+        <a
+          href="#"
+          onClick={() => {
+            setIsLoading(true);
+            DownloadSubAccounts();
+          }}
+          className="text-black"
+        >
+          {row.values.countOfSubsidiaryAccounts}
+        </a>
+      ),
     },
     // Extra accessors
     {
@@ -192,7 +206,7 @@ const RO = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "NHAI",
         statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
@@ -211,6 +225,70 @@ const RO = () => {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //----------------------------------------------------------------------------------
+  function DownloadRO() {
+    DashboardDownloadService.downloadRO(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
+        zone: zoneD, //"All",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Regional_Office", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //----------------------------------------------------------------------------------
+  function DownloadSubAccounts() {
+    DashboardDownloadService.downloadSubsaideryAccount(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Subsidiary_Accounts", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
       },
       (error) => {
         setIsLoading(false);
@@ -272,7 +350,10 @@ const RO = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {}}
+                onClick={() => {
+                  setIsLoading(true);
+                  DownloadRO();
+                }}
               >
                 Download
               </button>{" "}

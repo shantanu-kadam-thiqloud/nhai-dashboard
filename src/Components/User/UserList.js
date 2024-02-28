@@ -13,6 +13,10 @@ const UserList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [is, setIs] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+
   const [userList, setUserList] = useState([]);
 
   //User Data
@@ -36,7 +40,13 @@ const UserList = () => {
 
   useEffect(() => {
     const isAddUser = getCheckValueByName("", "User", "Add");
+    const isShowUser = getCheckValueByName("", "User", "View");
+    const isUpdateUser = getCheckValueByName("", "User", "Update");
+    const isDeleteUser = getCheckValueByName("", "User", "Delete");
     setIs(isAddUser);
+    setIsShow(isShowUser);
+    setIsUpdate(isUpdateUser);
+    setIsDelete(isDeleteUser);
   }, []);
 
   // const columns = [
@@ -184,9 +194,9 @@ const UserList = () => {
               <GenericDataTable
                 data={userList} //{data} //
                 columns={columns}
-                detailpage="UserDetails"
-                editpage="EditUser"
-                deletepage="DeleteUser"
+                detailpage={isShow ? "UserDetails" : ""}
+                editpage={isUpdate ? "EditUser" : ""}
+                deletepage={isDelete ? "DeleteUser" : ""}
                 enablePagination={true}
               />
             </div>

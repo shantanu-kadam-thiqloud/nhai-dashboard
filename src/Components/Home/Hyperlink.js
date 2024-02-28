@@ -9,6 +9,8 @@ import Spinner from "../HtmlComponents/Spinner";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
   const customStyles = {
     content: {
@@ -250,7 +252,7 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data.limitLedgerDetails);
+          // setRows(res.data.data.limitLedgerDetails);
           setIsLoading(false);
         } else if (res.status === 404) {
           setIsLoading(false);
@@ -259,6 +261,31 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
           setIsLoading(false);
           navigate("/NHAI/Error/500");
         }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //----------------------------------------
+  function DownloadLimitLedger() {
+    DashboardDownloadService.downloadLimitledger(
+      reqBody,
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Limit_Ledger", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
       },
       (error) => {
         setIsLoading(false);
@@ -314,7 +341,10 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
                   <button
                     className="btn addUser dashbutton ms-5 float-end p-2"
                     type="button"
-                    onClick={() => {}}
+                    onClick={() => {
+                      setIsLoading(true);
+                      DownloadLimitLedger();
+                    }}
                   >
                     Download
                   </button>{" "}

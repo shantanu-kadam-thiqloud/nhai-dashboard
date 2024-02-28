@@ -7,10 +7,12 @@ import {
   ConvertFormat,
   useZoneDataList,
   useRoDataList,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 
 const PIU = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -51,7 +53,14 @@ const PIU = () => {
       Header: "No. of Subsidiary Accounts",
       accessor: "countOfSubsidiaryAccounts",
       Cell: ({ row }) => (
-        <a href="#" onClick={() => {}} className="text-black float-end">
+        <a
+          href="#"
+          onClick={() => {
+            setIsLoading(true);
+            DownloadSubAccounts();
+          }}
+          className="text-black float-end"
+        >
           {row.values.countOfSubsidiaryAccounts}
         </a>
       ),
@@ -222,6 +231,72 @@ const PIU = () => {
       }
     );
   }
+  //-----------------------------------------------------------------------------
+  function DownloadPIU() {
+    DashboardDownloadService.downloadPIU(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
+        ro: roD, //"All",
+        bank: bankD, //"All",
+        zone: zoneD, //"North",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("PIU", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+  //----------------------------------------------------------------------------------
+  function DownloadSubAccounts() {
+    DashboardDownloadService.downloadSubsaideryAccount(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Subsidiary_Accounts", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
 
   return (
     <div>
@@ -294,7 +369,10 @@ const PIU = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {}}
+                onClick={() => {
+                  setIsLoading(true);
+                  DownloadPIU();
+                }}
               >
                 Download
               </button>{" "}

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import loginImage from "../../Assets/images/login.png";
+import otpImage from "../../Assets/images/mfa2.jpg";
 import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -87,7 +87,7 @@ const OTP = () => {
 
   useEffect(() => {
     if (otp.join("") !== "" && otp.join("") !== 416578) {
-      setOtpError("Wrong OTP Please Check Again or");
+      setOtpError("Didn't receive an OTP ? ");
     } else {
       setOtpError(null);
     }
@@ -113,12 +113,30 @@ const OTP = () => {
     }
   }
 
+  const [seconds, setSeconds] = useState(30);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds === 0) {
+          clearInterval(interval);
+          // Handle timer expiry
+          return 0;
+        } else {
+          return prevSeconds - 1;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="container loginContainer">
       <Spinner isLoading={isLoading} />
       <div className="row">
-        <div className="col-md-6">
-          <img src={loginImage} alt="Login" className="img-fluid" />
+        <div className="col-md-6 mt-4">
+          <img src={otpImage} alt="mfa" className="img-fluid" />
         </div>
         <div className="col-md-6 mt-5">
           <Formik
@@ -133,9 +151,13 @@ const OTP = () => {
                 {/* Two Factor Authentication */}
                 <hr class="hr mb-3" />
 
-                <p className="text-base text-black mt-6 mb-4">
-                  Enter One Time Password (OTP)
-                </p>
+                <h5 className="text-base text-black mt-6 mb-4">
+                  Enter OTP to Verify
+                </h5>
+
+                {/* <h6 className="text-base text-black mt-6 mb-4">
+                  We've sent an OTP to +91 {}
+                </h6> */}
 
                 <div className="flex items-center justify-center gap-2 otpBox">
                   {/* otpBox */}
@@ -157,9 +179,9 @@ const OTP = () => {
                   Validate
                 </button>
 
-                <p
+                {/* <p
                   className={`text-lg text-red mt-4 ${
-                    otpError ? "error-show" : ""
+                    otpError ? "error-show" : `Wait to resend OTP ${seconds}`
                   }`}
                 >
                   {otpError && (
@@ -171,7 +193,30 @@ const OTP = () => {
                       </a>
                     </>
                   )}
-                </p>
+                </p> */}
+                <div>
+                  {seconds > 0 ? (
+                    <p className="text-lg color-red mt-4">
+                      OTP will expire in {seconds} seconds
+                    </p>
+                  ) : (
+                    <>
+                      {" "}
+                      <p className="text-lg color-red mt-4">
+                        Didn't receive an OTP ?{" "}
+                        <a
+                          href="#"
+                          className=""
+                          onClick={() => {
+                            setSeconds(30);
+                          }}
+                        >
+                          Resend OTP
+                        </a>
+                      </p>{" "}
+                    </>
+                  )}
+                </div>
               </Form>
             )}
           </Formik>

@@ -225,6 +225,7 @@ const MenuManagement = () => {
     },
   ];
   const [data, setData] = useState(menuData);
+
   //-Add function---------------------------------------------------------------------------------
   // Function to add a menu
   function addMenu(data, newMenu) {
@@ -234,8 +235,8 @@ const MenuManagement = () => {
   }
 
   // Function to add a submenu to a specific menu
-  function addSubMenu(data, menuId, newSubMenu) {
-    const menu = data.find((item) => item.id === menuId);
+  function addSubMenu(data, menuName, newSubMenu) {
+    const menu = data.find((item) => item.menuName === menuName);
     if (menu) {
       if (!menu.subMenu) {
         menu.subMenu = [];
@@ -247,10 +248,12 @@ const MenuManagement = () => {
   }
 
   // Function to add an action to a specific submenu
-  function addAction(data, menuId, subMenuId, newAction) {
-    const menu = data.find((item) => item.id === menuId);
+  function addAction(data, menuName, subMenuName, newAction) {
+    const menu = data.find((item) => item.menuName === menuName);
     if (menu) {
-      const subMenu = menu.subMenu.find((subItem) => subItem.id === subMenuId);
+      const subMenu = menu.subMenu.find(
+        (subItem) => subItem.name === subMenuName
+      );
       if (subMenu) {
         if (!subMenu.action) {
           subMenu.action = [];
@@ -263,8 +266,8 @@ const MenuManagement = () => {
   }
   //-Edit function---------------------------------------------------------------------------------
   // Function to edit a menu
-  function editMenu(data, menuId, updatedMenu) {
-    const index = data.findIndex((item) => item.id === menuId);
+  function editMenu(data, menuName, updatedMenu) {
+    const index = data.findIndex((item) => item.menuName === menuName);
     if (index !== -1) {
       data[index] = { ...data[index], ...updatedMenu };
     }
@@ -273,11 +276,11 @@ const MenuManagement = () => {
   }
 
   // Function to edit a submenu in a specific menu
-  function editSubMenu(data, menuId, subMenuId, updatedSubMenu) {
-    const menu = data.find((item) => item.id === menuId);
+  function editSubMenu(data, menuName, subMenuName, updatedSubMenu) {
+    const menu = data.find((item) => item.menuName === menuName);
     if (menu && menu.subMenu) {
       const subMenuIndex = menu.subMenu.findIndex(
-        (subItem) => subItem.id === subMenuId
+        (subItem) => subItem.name === subMenuName
       );
       if (subMenuIndex !== -1) {
         menu.subMenu[subMenuIndex] = {
@@ -291,10 +294,12 @@ const MenuManagement = () => {
   }
 
   // Function to edit an action in a specific submenu
-  function editAction(data, menuId, subMenuId, actionId, updatedAction) {
-    const menu = data.find((item) => item.id === menuId);
+  function editAction(data, menuName, subMenuName, actionId, updatedAction) {
+    const menu = data.find((item) => item.menuName === menuName);
     if (menu && menu.subMenu) {
-      const subMenu = menu.subMenu.find((subItem) => subItem.id === subMenuId);
+      const subMenu = menu.subMenu.find(
+        (subItem) => subItem.name === subMenuName
+      );
       if (subMenu && subMenu.action) {
         const actionIndex = subMenu.action.findIndex(
           (action) => action.id === actionId
@@ -311,17 +316,17 @@ const MenuManagement = () => {
     return data;
   }
   //-Delete Function----------------------------------------------------------------------------------
-  // Function to delete a menu by its ID
-  function deleteMenu(data, menuId) {
-    return data.filter((menu) => menu.id !== menuId);
+  // Function to delete a menu by its name
+  function deleteMenu(data, menuName) {
+    return data.filter((menu) => menu.menuName !== menuName);
   }
 
-  // Function to delete a submenu by its ID inside a specific menu
-  function deleteSubMenu(data, menuId, subMenuId) {
+  // Function to delete a submenu by its name inside a specific menu
+  function deleteSubMenu(data, menuName, subMenuName) {
     return data.map((menu) => {
-      if (menu.id === menuId && menu.subMenu) {
+      if (menu.menuName === menuName && menu.subMenu) {
         menu.subMenu = menu.subMenu.filter(
-          (subMenu) => subMenu.id !== subMenuId
+          (subMenu) => subMenu.name !== subMenuName
         );
       }
       return menu;
@@ -329,11 +334,11 @@ const MenuManagement = () => {
   }
 
   // Function to delete an action by its ID inside a specific submenu
-  function deleteAction(data, menuId, subMenuId, actionId) {
+  function deleteAction(data, menuName, subMenuName, actionId) {
     return data.map((menu) => {
-      if (menu.id === menuId && menu.subMenu) {
+      if (menu.menuName === menuName && menu.subMenu) {
         menu.subMenu = menu.subMenu.map((subMenu) => {
-          if (subMenu.id === subMenuId && subMenu.action) {
+          if (subMenu.name === subMenuName && subMenu.action) {
             subMenu.action = subMenu.action.filter(
               (action) => action.id !== actionId
             );
@@ -344,6 +349,7 @@ const MenuManagement = () => {
       return menu;
     });
   }
+
   return (
     <div className="wrapper">
       <div className="container">

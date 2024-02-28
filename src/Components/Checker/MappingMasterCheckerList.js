@@ -66,7 +66,9 @@ const MappingMasterCheckerList = () => {
             className="btn addUser dashbutton"
             type="button"
             onClick={() => {
-              navigate(`/NHAI/MappingMasterDetails/${row.values.id}`);
+              navigate(`/NHAI/MappingMasterDetails`, {
+                state: { requestId: row.values.id },
+              });
             }}
           >
             Details

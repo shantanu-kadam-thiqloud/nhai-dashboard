@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DataTable from "../HtmlComponents/DataTable";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
@@ -160,7 +160,9 @@ const GroupCheckerList = () => {
             className="btn addUser dashbutton"
             type="button"
             onClick={() => {
-              navigate(`/NHAI/${action}/${row.values.requestId}`);
+              navigate(`/NHAI/${action}`, {
+                state: { requestId: row.values.requestId },
+              });
             }}
           >
             Details

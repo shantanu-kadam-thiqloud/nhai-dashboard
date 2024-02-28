@@ -9,10 +9,12 @@ import {
   useRoDataList,
   usePIUDataList,
   useZoneDataList,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 
 const LimitLedger = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -369,7 +371,31 @@ const LimitLedger = () => {
       }
     );
   }
-
+  //----------------------------------------
+  function DownloadLimitLedger() {
+    DashboardDownloadService.downloadLimitledger(
+      reqBody,
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Limit_Ledger", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
   return (
     <div>
       <div className="row p-1">
@@ -415,7 +441,10 @@ const LimitLedger = () => {
             <button
               className="btn addUser dashbutton"
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                setIsLoading(true);
+                DownloadLimitLedger();
+              }}
             >
               Download
             </button>{" "}

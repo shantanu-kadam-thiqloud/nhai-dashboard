@@ -120,7 +120,7 @@ const AddUser = () => {
   //----------------------Add User---------------------------------------------
   function AddUser(values) {
     const roleName = (profileList || []).find((x) => {
-      if (x.id == values.role) {
+      if (Number(x.id) === Number(values.role)) {
         return x.profileName;
       }
     });
@@ -232,7 +232,7 @@ const AddUser = () => {
   //----------------------Edit User--------------------------------------------
   function EditUser(values) {
     const roleName = (profileList || []).find((x) => {
-      if (x.id == values.role) {
+      if (Number(x.id) === Number(values.role)) {
         return x.profileName;
       }
     });

@@ -16,7 +16,8 @@ import ProfileCheckerController from "../controllers/Api/Secure/ProfileChecker";
 import ReportController from "../controllers/Api/Secure/Report";
 import DropdownController from "../controllers/Api/Secure/Dropdown";
 import DashboardDownloadController from "../controllers/Api/Secure/DashboardDownload";
-
+import MenuSubmenuActionController from "../controllers/Api/Secure/MenuSubmenuAction";
+import ExternalUserController from "../controllers/Api/Auth/ExternalUser";
 const router = Router();
 
 router.post("/auth/login", LoginController.login);
@@ -24,6 +25,11 @@ router.post("/auth/logout", LoginController.logout);
 router.post("/auth/register", RegisterController.register);
 router.get("/RSA/public-key", CryptoController.publicKey);
 // router.post('/auth/refresh-token', expressJwt({ secret: Locals.config().appSecret }), RefreshTokenController.perform);
+
+router.post("/auth/externalLogin", ExternalUserController.externalLogin);
+router.post("/auth/changePassword", ExternalUserController.changePassword);
+router.post("/auth/otpValidation", ExternalUserController.otpValidation);
+router.post("/auth/externalLogout", ExternalUserController.logout);
 
 //Dummy API for JWT
 router.get("/auth/generate-token", RegisterController.genrateToken);
@@ -108,6 +114,20 @@ router.post("/secure/pdDD", DropdownController.pdDD);
 router.post("/secure/zoneDD", DropdownController.zoneDD);
 router.post("/secure/roDD", DropdownController.roDD);
 router.post("/secure/piuDD", DropdownController.piuDD);
+
+router.post("/secure/addMenuSubmenuAction", MenuSubmenuActionController.addMenuSubmenuAction);
+router.post("/secure/updateMenuSubmenuAction", MenuSubmenuActionController.updateMenuSubmenuAction);
+router.post("/secure/deleteMenuSubmenuAction", MenuSubmenuActionController.deleteMenuSubmenuAction);
+router.post("/secure/getMenuSubmenuActionRequests", MenuSubmenuActionController.getMenuSubmenuActionRequests);
+router.post(
+    "/secure/getMenuSubmenuActionAddDeleteDetails", MenuSubmenuActionController.getMenuSubmenuActionAddDeleteDetails);
+router.post(
+    "/secure/getMenuSubmenuActionUpdateDetails", MenuSubmenuActionController.getMenuSubmenuActionUpdateDetails);
+router.post("/secure/menuSubmenuActionApproval", MenuSubmenuActionController.menuSubmenuActionApproval);
+router.post("/secure/getMenuJson", MenuSubmenuActionController.getMenuSubmenuActionJson);
+router.post("/secure/UpdateMenuJson", MenuSubmenuActionController.UpdateMenuSubmenuActionJson);
+
+
 
 // // Handle GET requests to /api route
 // router.get("/api", RegisterController.visit);
