@@ -55,8 +55,10 @@ const Login = () => {
             position: "top-right",
             autoClose: 3000,
           });
-          var userData = res.data.data.responseObject;
-          localStorage.setItem("UUID", res.data.data.sessionId);
+          var userData = res.data.data.responseObject;          
+          const session_id = `${res.data.data.sessionId}_${userData.userId}`;
+          localStorage.setItem("UUID", session_id);
+
           //res.data.data.responseObject
           setUserDetails(userData);
           // console.log(

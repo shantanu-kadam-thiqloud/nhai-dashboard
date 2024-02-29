@@ -30,8 +30,8 @@ export default class RestDataSource {
     this.SendRequest("delete", this.BASE_URL, callback, data);
   }
 
-  async SendRequest(method, url, callback, data) {
-    const uuid = localStorage.getItem("UUID");
+  async SendRequest(method, url, callback, data) {   
+    const uuid = localStorage.getItem("UUID");   
     debugger;
     const headers = {
       XUuid: uuid,
@@ -45,7 +45,13 @@ export default class RestDataSource {
         data: data,
         headers: headers, //localstorage uuid
       });
-
+      if(response.data.message === 'session expired'){
+        toast.error("session expired", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        window.location.href = "/NHAI/login";
+      }
       // Check if callback is a function before calling it
       if (typeof callback === "function") {
         callback(response, null);
