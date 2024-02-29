@@ -76,6 +76,7 @@ const AddProfile = () => {
   });
 
   useEffect(() => {
+    handleUnCheckAll();
     fetchGroupList();
     if (isEdit) {
       setIsLoading(true);
@@ -450,7 +451,7 @@ const AddProfile = () => {
   //-----------Add Profile----------------------------------------------
   function addProfile(values) {
     var group = (groupList || []).find((x) => {
-      if (values.group == x.id) {
+      if (Number(values.group) === Number(x.id)) {
         return x.groupName;
       }
     });
@@ -547,7 +548,7 @@ const AddProfile = () => {
   //------------Edit Profile--------------------------------------------
   function editProfile(values) {
     var group = (groupList || []).find((x) => {
-      if (values.group == x.id) {
+      if (Number(values.group) === Number(x.id)) {
         return x.groupName;
       }
     });
@@ -784,7 +785,7 @@ const AddProfile = () => {
                             <div className="col-4 submenuColor"></div>
                             <div className="col-4 submenuColor ">{s.name}</div>
                             <div className="col-3 submenuColor"></div>
-                            {s.action.length == 0 ? (
+                            {s.action.length === 0 ? (
                               <div className="col-1 submenuColor" key={s.id}>
                                 {" "}
                                 <input

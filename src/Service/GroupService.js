@@ -70,7 +70,6 @@ function updateGroup(mfaInfo, fn, fnError) {
     }
   });
 }
-
 function deleteGroup(mfaInfo, fn, fnError) {
   var url = Global_var.AUTH_BASE + Global_var.URL_DELETE_GROUP;
 

@@ -32,21 +32,33 @@ const GenericDataTable = ({
 
   const buttonsTemplate = (row) => (
     <>
-      <FontAwesomeIcon
-        icon={faEye}
-        onClick={() => handleEyeAction(row)}
-        style={{ cursor: "pointer", marginRight: "8px" }}
-      />
-      <FontAwesomeIcon
-        icon={faEdit}
-        style={{ cursor: "pointer", marginRight: "8px" }}
-        onClick={() => handleEditAction(row)}
-      />
-      <FontAwesomeIcon
-        icon={faTrash}
-        style={{ cursor: "pointer" }}
-        onClick={() => handleTrashAction(row)}
-      />
+      {detailpage === "" ? (
+        ""
+      ) : (
+        <FontAwesomeIcon
+          icon={faEye}
+          onClick={() => handleEyeAction(row)}
+          style={{ cursor: "pointer", marginRight: "8px" }}
+        />
+      )}
+      {editpage === "" ? (
+        ""
+      ) : (
+        <FontAwesomeIcon
+          icon={faEdit}
+          style={{ cursor: "pointer", marginRight: "8px" }}
+          onClick={() => handleEditAction(row)}
+        />
+      )}
+      {deletepage === "" ? (
+        ""
+      ) : (
+        <FontAwesomeIcon
+          icon={faTrash}
+          style={{ cursor: "pointer" }}
+          onClick={() => handleTrashAction(row)}
+        />
+      )}
     </>
   );
 

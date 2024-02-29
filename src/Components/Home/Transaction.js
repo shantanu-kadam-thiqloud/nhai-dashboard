@@ -7,9 +7,14 @@ import Box from "@mui/material/Box";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
-import { ConvertFormat } from "../HtmlComponents/CommonFunction";
+import {
+  ConvertFormat,
+  DownloadByteArray,
+} from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import Hyperlink from "./Hyperlink";
+import { v4 as uuid } from "uuid";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 const Transaction = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
@@ -256,7 +261,7 @@ const Transaction = () => {
       {
         requestMetaData: {
           applicationId: "nhai-dashboard",
-          correlationId: "ere353535-456fdgfdg-4564fghfh-ghjg567",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         userName: "NHAI",
         filter: filter, //"0",
@@ -284,6 +289,43 @@ const Transaction = () => {
       }
     );
   }
+  function DownloadTransaction() {
+    DashboardDownloadService.downloadTransaction(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+        filter: filter, //"0",
+        dataType: dataType, //"CALAPD",
+        fromDate: "21-01-2020",
+        toData: "21-01-2020",
+        // fromDate: ConvertFormat(fromDate), //"",
+        // toData:ConvertFormat(toDate), //"",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Transaction", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+
   const columns = [
     {
       field: "accountName",
@@ -658,7 +700,10 @@ const Transaction = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {}}
+                onClick={() => {
+                  setIsLoading(true);
+                  DownloadTransaction();
+                }}
               >
                 Download
               </button>{" "}

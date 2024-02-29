@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -14,9 +14,10 @@ import { UserService } from "../../Service/UserService";
 import { v4 as uuid } from "uuid";
 const UserCheckerDetails = () => {
   const path = window.location.pathname;
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [remark, setRemark] = useState("");
-  const { userId } = useParams();
+  const userId = location.state ? location.state.requestId : ""; //useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [currentValue, setCurrentValue] = useState({});
@@ -525,8 +526,12 @@ const UserCheckerDetails = () => {
               <div className="col-md-4 UDCoulmns">
                 <strong>IsActive:</strong>
               </div>
-              <div className="col-md-4 UDCoulmns">{currentValue.isActive}</div>
-              <div className="col-md-4 UDCoulmns">{oldValue.isActive}</div>
+              <div className="col-md-4 UDCoulmns">
+                {String(currentValue.isActive)}
+              </div>
+              <div className="col-md-4 UDCoulmns">
+                {String(oldValue.isActive)}
+              </div>
             </div>
           </div>
         )}

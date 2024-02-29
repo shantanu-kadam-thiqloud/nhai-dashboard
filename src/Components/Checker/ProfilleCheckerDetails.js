@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,8 @@ import {
 } from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 const ProfilleCheckerDetails = () => {
-  const { userId } = useParams();
+  const location = useLocation();
+  const userId = location.state ? location.state.requestId : ""; //useParams();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState({});

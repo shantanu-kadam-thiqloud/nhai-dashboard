@@ -15,6 +15,7 @@ function App() {
     location.pathname === "/NHAI/" ||
     location.pathname === "/NHAI/login" ||
     location.pathname === "/NHAI/TwofactorAuthentication" ||
+    location.pathname === "/NHAI/internalLogin" ||
     location.pathname === "/NHAI/varients"
       ? true
       : false;

@@ -78,7 +78,9 @@ const UserCheckerList = () => {
             className="btn addUser dashbutton"
             type="button"
             onClick={() => {
-              navigate(`/NHAI/${action}/${row.values.requestId}`);
+              navigate(`/NHAI/${action}`, {
+                state: { requestId: row.values.requestId },
+              });
             }}
           >
             Details

@@ -10,6 +10,8 @@ import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import Hyperlink from "./Hyperlink";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
+import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
 
 const Events = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -340,6 +342,37 @@ const Events = () => {
       }
     );
   }
+  //----------------------------------------------------------------------------------
+  function DownloadEvents() {
+    DashboardDownloadService.downloadEvents(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        userName: "NHAI",
+      },
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Events", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
 
   return (
     <div>
@@ -352,7 +385,10 @@ const Events = () => {
               <button
                 className="btn addUser dashbutton"
                 type="button"
-                onClick={() => {}}
+                onClick={() => {
+                  setIsLoading(true);
+                  DownloadEvents();
+                }}
               >
                 Download
               </button>{" "}

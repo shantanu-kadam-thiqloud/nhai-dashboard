@@ -1,7 +1,7 @@
 import RestDataSource from "./RestDataSource";
 import { Global_var } from "../Global/Global_Var";
 
-export const DashboardService = {
+export const DashboardDownloadService = {
   downloadSubsaideryAccount,
   downloadEvents,
   downloadVelocity,
@@ -69,7 +69,7 @@ function downloadLimitledger(mfaInfo, fn, fnError) {
         fnError(err);
       }
     } else {
-      // If you had other headers to handle, you can do so here
+      // If you had other heaers to handle, you can do so here
       fn(res);
     }
   });

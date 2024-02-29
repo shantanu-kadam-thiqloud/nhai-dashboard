@@ -8,11 +8,13 @@ import {
   useRoDataList,
   usePIUDataList,
   useZoneDataList,
+  DownloadByteArray,
 } from "../HtmlComponents/CommonFunction";
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 
 const Velocity = () => {
   const [asOnDate, setAsOnDate] = useState(
@@ -306,6 +308,31 @@ const Velocity = () => {
       }
     );
   }
+  //----------------------------------------------------------------------------------
+  function DownloadVelocity() {
+    DashboardDownloadService.downloadVelocity(
+      reqBody,
+      (res) => {
+        if (res.status === 200) {
+          var data = res.data.data;
+          console.log("->", data);
+          DownloadByteArray("Velocity", data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
 
   return (
     <div>
@@ -353,7 +380,10 @@ const Velocity = () => {
             <button
               className="btn addUser dashbutton"
               type="button"
-              onClick={() => {}}
+              onClick={() => {
+                setIsLoading(true);
+                DownloadVelocity();
+              }}
             >
               Download
             </button>{" "}
@@ -428,7 +458,7 @@ const Velocity = () => {
             <GenericDataTable
               data={rows}
               columns={columns}
-              enablePagination={false}
+              enablePagination={true}
             />
           </div>
         </div>
