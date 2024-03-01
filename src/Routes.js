@@ -35,6 +35,9 @@ import Error404 from "./Components/HtmlComponents/Error404";
 import Error500 from "./Components/HtmlComponents/Error500";
 import OTP from "./Components/Login/OTP";
 import InternalLogin from "./Components/Login/InternalLogin";
+// import TransactionType from "./Components/Admin/TransactionType";
+import MainTransaction from "./Components/Admin/MainTransaction";
+import CALAPDTransaction from "./Components/Admin/CALAPDTransaction";
 
 const Routers = () => {
   return (
@@ -44,6 +47,12 @@ const Routers = () => {
       <Route path="/NHAI/internalLogin" element={<InternalLogin />}></Route>
       <Route path="/NHAI/Dashboard" element={<Dashboard />}></Route>
       <Route path="/NHAI/TwofactorAuthentication" element={<OTP />}></Route>
+      {/* <Route path="/NHAI/type" element={<TransactionType />}></Route> */}
+      <Route path="/NHAI/MainTransaction" element={<MainTransaction />}></Route>
+      <Route
+        path="/NHAI/CALAPDTransaction"
+        element={<CALAPDTransaction />}
+      ></Route>
       {/* ------------USER------------------------------------------------------------- */}
       <Route path="/NHAI/Users" element={<UserList />}></Route>
       <Route path="/NHAI/AddUser" element={<AddUser />}></Route>

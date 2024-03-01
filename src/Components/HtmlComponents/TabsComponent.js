@@ -8,11 +8,13 @@ import { useEffect } from "react";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 import { useLocation } from "react-router";
+import Spinner from "./Spinner";
 
 const TabsComponent = (props) => {
   const location = useLocation();
   const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
   const [homeTabs, setHomeTabs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const data = [
     {
       id: 1,
@@ -36,16 +38,15 @@ const TabsComponent = (props) => {
     },
   ];
 
-  React.useEffect(() => {
-    // fetchProfileById();
-  }, []);
+  React.useEffect(() => {}, []);
 
   const userData = location.state ? location.state.userData : ""; //useParams();
-  // const tabsData = data[0].subMenu; //homeTabs;
-  const tabsData = (MappingData[0] || []).subMenu; //homeTabs;
+  const tabsData =
+    MappingData == null ? data[0].subMenu : MappingData[0].subMenu;
+
   const [activeTab, setActiveTab] = useState(tabsData[0]);
   const tabsRef = useRef(null);
-  //console.log(userData, " - from tabs");
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     props.ActiveTab(tab.name);
@@ -87,10 +88,13 @@ const TabsComponent = (props) => {
           profile = res.data.data;
           console.log("Profile ->", profile.mapping[0].subMenu);
           setHomeTabs(profile.mappinng[0].subMenu);
+          setIsLoading(false);
         } else if (res.status === 404) {
           console.log("404");
+          setIsLoading(false);
         } else if (res.status === 500) {
           console.log("500");
+          setIsLoading(false);
         }
         //   return data;
       }
@@ -102,6 +106,7 @@ const TabsComponent = (props) => {
   return (
     <div>
       <div className="tabs-container">
+        <Spinner isLoading={isLoading} />
         <div className="buttons">
           <button className="scrollbtn" onClick={handlePreviousClick}>
             <FontAwesomeIcon
@@ -111,7 +116,7 @@ const TabsComponent = (props) => {
           </button>
         </div>
         <div className="tabs" ref={tabsRef}>
-          {tabsData.map((tab) => {
+          {(tabsData || homeTabs).map((tab) => {
             return tab.check ? (
               <div
                 key={tab.id}

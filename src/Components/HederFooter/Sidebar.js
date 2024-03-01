@@ -9,17 +9,16 @@ import {
   faKey,
   faUser,
   faHouse,
+  faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import sideBarDataChecker from "../Checker/sideBarData";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 const Sidebar = () => {
   const location = useLocation();
+  const userData = location.state ? location.state.userData : ""; //useParams();
   const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
   const [activeItem, setActiveItem] = useState("Home"); // Initialize with the default active item
-  const [isToggleA, setToggleA] = useState(false);
-  const [isToggleP, setToggleP] = useState(false);
-  const [isToggleR, setToggleR] = useState(false);
   const [mappingData, setMappingData] = useState([]);
   // Create a state object to hold the dynamic toggle states
   const [toggleStates, setToggleStates] = useState({});
@@ -35,22 +34,27 @@ const Sidebar = () => {
   const handleSetActiveItem = (itemName) => {
     setActiveItem(itemName);
   };
-  const userData = location.state ? location.state.userData : ""; //useParams();
+
   var jsonData = sideBarDataChecker.find((item) => item.type === "menuData");
   const data = jsonData.data;
 
   // Initialize the toggle states based on JSON data
   const initializeToggleStates = () => {
     const initialState = {};
-    data.forEach((item) => {
+    (MappingData || data).forEach((item) => {
       initialState[`item_${item.id}`] = false; // Initialize as false (not toggled)
     });
     setToggleStates(initialState);
   };
-  //console.log(userData, " - from sidebar");
+
   // Call the initialization function when the component mounts
   React.useEffect(() => {
-    // fetchProfileById();
+    if (MappingData == null) {
+      fetchProfileById();
+    } else {
+      setIsLoading(false);
+    }
+
     initializeToggleStates();
   }, []);
 
@@ -101,7 +105,7 @@ const Sidebar = () => {
     >
       <div className="position-sticky" key="0">
         <div className="list-group list-group-flush" key="0">
-          {(MappingData || []).map((x, index) => {
+          {(MappingData || mappingData).map((x, index) => {
             return (
               <>
                 <Link
@@ -125,6 +129,8 @@ const Sidebar = () => {
                           ? faUser
                           : x.menuName == "Manage Password"
                           ? faKey
+                          : x.menuName == "Transaction Type"
+                          ? faPenToSquare
                           : faFile
                       }
                       className="MenuIcon"

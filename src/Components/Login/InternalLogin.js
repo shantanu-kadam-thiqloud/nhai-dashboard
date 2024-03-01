@@ -57,16 +57,8 @@ const InternalLogin = () => {
             autoClose: 3000,
           });
           var userData = res.data.data.responseObject;
-          fetchProfileById(userData.profileId);
           localStorage.setItem("UUID", res.data.data.sessionId);
-          //res.data.data.responseObject
           setUserDetails(userData);
-          // console.log(
-          //   "User Data = > ",
-          //   userData.userName,
-          //   userData.userId,
-          //   userData.profileId
-          // );
           setIsLoading(false);
           navigate("/NHAI/Dashboard", { state: { userData: userData } });
         } else if (res.status === 404) {
@@ -93,119 +85,9 @@ const InternalLogin = () => {
   }
 
   const handleSubmit = async (values) => {
+    setIsLoading(true);
     Login(values);
-    // if (!publicKey) {
-    //   console.error("Public key not available");
-    //   return;
-    // }
-    // const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
-    // console.log("object type :-", typeof publicKeyObject);
-    // const requestData = {
-    //   username: values.username,
-    //   password: values.password,
-    // };
-    // const encodedData = forge.util.encodeUtf8(values);
-    // console.log("login data", values);
-    // const encrypted = publicKeyObject.encrypt(encodedData, "RSA-OAEP");
-    // const encryptedValues = forge.util.encode64(encrypted);
-    // console.log(encryptedValues);
-    // const response = await axios.post("http://localhost:3007/api/auth/login", {
-    //   encrypted: requestData,
-    // });
-    // console.log(response.data);
-    // if (response.data) {
-    //   localStorage.setItem("UUID", response.data.session_id);
-    //   toast.success("Login successful!", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   navigate("/NHAI/Dashboard");
-    // } else {
-    //   toast.error("Login failed. Please try again.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //   });
-    // }
-    // if (values.username === "admin" && values.password === "admin123") {
-    //   toast.success("Login successful!", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   navigate("/Users");
-    // } else {
-    //   toast.error("Login failed. Please try again.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //   });
-    // }
-    //---------------------------------------------------------------------------
-    // if (values.username === "Siddhesh" && values.password === "admin@123") {
-    //   setIsLoading(true);
-
-    //   toast.success("Login successful!", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-    //     navigate("/NHAI/Dashboard");
-    //   }, 1000);
-    // } else if (
-    //   values.username === "Shantanu" &&
-    //   values.password === "admin@123"
-    // ) {
-    //   setIsLoading(true);
-
-    //   toast.success("Login successful!", {
-    //     position: "top-right",
-    //     autoClose: 3000,
-    //   });
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-    //     navigate("/NHAI/Dashboard");
-    //   }, 1000);
-    // } else {
-    //   toast.error("Login failed. Please try again.", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //   });
-    // }
   };
-
-  //-----------Get Profile----------------------------------------------
-  function fetchProfileById(profileId) {
-    var profile = {};
-    //  var profileId = parseInt(userId, 10);
-    ProfileService.getProfileById(
-      {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: uuid(),
-        },
-        id: profileId, //profileId, //47,
-        userName: "nhai",
-      },
-      (res) => {
-        if (res.status === 200) {
-          profile = res.data.data;
-          console.log("Profile ->", profile);
-          var mappingData = JSON.stringify(res.data.data.mapping);
-          setIsLoading(false);
-          sessionStorage.removeItem();
-          sessionStorage.setItem("Mapping", mappingData);
-        } else if (res.status === 404) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/404");
-        } else if (res.status === 500) {
-          setIsLoading(false);
-          navigate("/NHAI/Error/500");
-        }
-        //   return data;
-      }
-    );
-    console.log("profile->", profile);
-    return profile;
-  }
 
   return (
     <div className="container loginContainer">

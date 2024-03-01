@@ -85,7 +85,7 @@ export const Global_var = {
   URL_DOWNLOAD_LIMIT_LEDGER: "/secure/limitLedgerDownload",
   URL_DOWNLOAD_VELOCITY: "/secure/velocityDownload",
   URL_DOWNLOAD_SUB_ACCOUNTS: "/secure/subsaideryAccountDownload",
-  //-----------------------------------------------------------------------------------------
+  //------------Menu-Submenu-Action-----------------------------------------------------------------------
   URL_ADD_MENU_SUBMENU_ACTION: "/secure/addMenuSubmenuAction",
   URL_UPDATE_MENU_SUBMENU_ACTION: "/secure/updateMenuSubmenuAction",
   URL_DELETE_MENU_SUBMENU_ACTION: "/secure/deleteMenuSubmenuAction",
@@ -97,4 +97,15 @@ export const Global_var = {
   URL_APPROVAL_MENU_SUBMENU_ACTION: "/secure/menuSubmenuActionApproval",
   URL_GET_MENU_JSON: "/secure/getMenuSubmenuActionJson",
   URL_UPDATE_MENU_JSON: "/secure/UpdateMenuSubmenuActionJson",
+  //-------------File-Upload----------------------------------------------------------------------------------------
+  URL_UPLOAD_FILE: "/secure/uploadFile",
+  URL_PROCESS_SUMMARY: "/secure/processAccountSummary",
+  URL_PROCESS_SANCTION: "/secure/processSanctionLimit",
+  //-------------Transaction-Type---------------------------------------------------
+  URL_GET_MAIN_TRANSACTION: "/secure/getMainTransaction",
+  URL_GET_CALAPD_TRANSACTION: "/secure/getCALAPDTransaction",
+  URL_UPDATE_MAIN_TRANSACTION: "/secure/updateMainTransaction",
+  URL_UPDATE_CALAPD_TRANSACTION: "/secure/updateCALAPDTransaction",
+  URL_DOWNLOAD_MAIN_TRANSACTION: "/secure/downloadMainTransaction",
+  URL_DOWNLOAD_CALAPD_TRANSACTION: "/secure/downloadCALAPDTransaction",
 };

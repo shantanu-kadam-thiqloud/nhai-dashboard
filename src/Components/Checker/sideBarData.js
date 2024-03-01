@@ -177,6 +177,22 @@ const sideData = [
           },
           {
             id: 8,
+            name: "Main Transaction Type",
+            url: "/NHAI/MainTransaction",
+            check: true,
+            oldCheck: false,
+            action: [],
+          },
+          {
+            id: 9,
+            name: "CALAPD Transaction Type",
+            url: "/NHAI/CALAPDTransaction",
+            check: true,
+            oldCheck: false,
+            action: [],
+          },
+          {
+            id: 10,
             name: "Mapping Master",
             url: "/NHAI/MappingMaster",
             check: true,
@@ -184,7 +200,7 @@ const sideData = [
             action: [],
           },
           {
-            id: 9,
+            id: 11,
             name: "Job Execution Log",
             url: "/NHAI/JobExecutionLog",
             check: true,

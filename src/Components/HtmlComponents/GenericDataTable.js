@@ -15,6 +15,7 @@ const GenericDataTable = ({
   editpage,
   deletepage,
   enablePagination,
+  onFilter,
 }) => {
   const [switchStates, setSwitchStates] = useState({});
   const navigate = useNavigate();
@@ -130,6 +131,7 @@ const GenericDataTable = ({
         paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
         currentPageReportTemplate=" Page {currentPage} of  {totalRecords} " //"{first} to {last} of {totalRecords}"
         // "FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+        onFilter={onFilter}
       >
         {columns.map((column) => (
           <Column
@@ -143,6 +145,7 @@ const GenericDataTable = ({
             header={column.header}
             className={column.className}
             body={getTemplate(column.field, column.body)}
+            editor={column.editor}
           ></Column>
         ))}
       </DataTable>

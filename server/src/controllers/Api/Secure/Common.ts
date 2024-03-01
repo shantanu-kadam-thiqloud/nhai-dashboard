@@ -8,16 +8,9 @@ const BASE_URL = Locals.config().baseUrl;
 // Define the function with a dynamic base URL parameter
 export async function fetchData(API_baseUrl: string, req: any, res: any, next: any): Promise<any> {
     const uuidHeader = req.headers['xuuid'];
-    const parts = uuidHeader.split('_');
-    const userid = parts[1];
-    const original_uuid = parts[0];
     const useRedis = new Redis();
-    const redisRES = await useRedis.get(userid);
-    if(original_uuid !== redisRES.sessionId){
-        return res.json({
-            message: "session expired"
-        });
-    }
+    const redisRES = await useRedis.get(uuidHeader);
+
     if (redisRES !== null && redisRES !== "Please provide redis key") {
         console.log('jwt token get from redis:-----', redisRES.sessionToken);
         const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
@@ -56,7 +49,7 @@ export async function fetchData(API_baseUrl: string, req: any, res: any, next: a
                 res.json({ error: error.message });
             }
         }
-    } else if (redisRES === "Please provide redis key") {
+    } else if (redisRES == "Please provide redis key") {
         return res.json({
             message: "Please provide valid redis key"
         });
@@ -71,16 +64,8 @@ export async function fetchData(API_baseUrl: string, req: any, res: any, next: a
 export async function fetchPutData(API_baseUrl: string, req: any, res: any, next: any): Promise<any> {
 
     const uuidHeader = req.headers['xuuid'];
-    const parts = uuidHeader.split('-');
-    const userid = parts[1];
     const useRedis = new Redis();
-    const redisRES = await useRedis.get(userid);
-    const original_uuid = parts[0];
-    if(original_uuid !== redisRES.sessionId){
-        return res.json({
-            message: "session expired"
-        });
-    }
+    const redisRES = await useRedis.get(uuidHeader);
 
     if (redisRES !== null && redisRES !== "Please provide redis key") {
         console.log('jwt token get from redis:-----', redisRES.sessionToken);
@@ -133,16 +118,8 @@ export async function fetchPutData(API_baseUrl: string, req: any, res: any, next
 
 export async function downloadData(API_baseUrl: string, req: any, res: any, next: any): Promise<any> {
     const uuidHeader = req.headers['xuuid'];
-    const parts = uuidHeader.split('-');
-    const userid = parts[1];
     const useRedis = new Redis();
-    const redisRES = await useRedis.get(userid);
-    const original_uuid = parts[0];
-    if(original_uuid !== redisRES.sessionId){
-        return res.json({
-            message: "session expired"
-        });
-    }
+    const redisRES = await useRedis.get(uuidHeader);
 
     if (redisRES !== null && redisRES !== "Please provide redis key") {
         console.log('jwt token get from redis:-----', redisRES.sessionToken);

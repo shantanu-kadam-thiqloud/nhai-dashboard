@@ -40,7 +40,8 @@ function Header() {
                 className="MenuIcon"
                 onClick={() => {
                   navigate("/NHAI/login");
-                  sessionStorage.removeItem();
+                  sessionStorage.clear();
+                  localStorage.clear();
                 }}
               />
             </div>

@@ -52,12 +52,7 @@ class Login {
       console.log('Incoming Data-->', req.body);
       //Set to redis-----------------------------------------------------------------
       if (LoginUser) {
-        const userid = LoginUser['responseObject'].userId;
-        const redisData = await useRedis.get(userid);
-        if(redisData){
-          const redisRESDelete = await useRedis.delete(userid);
-        }
-        const session_id = uuid()
+        const session_id = uuid();
         delete LoginUser.token;
         //Internal API call for session Token(30 min) 
         const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
@@ -68,7 +63,8 @@ class Login {
         // const ttlInSeconds = null; 
         console.log("User Details ->", LoginUser);
         const jsonString = JSON.stringify(LoginUser);
-        const redisRES = await useRedis.set(userid, jsonString, ttlInSeconds);
+
+        const redisRES = await useRedis.set(session_id, jsonString, ttlInSeconds);
         //console.log(redisRES);
         // Sending the response after processing
         res.json({
