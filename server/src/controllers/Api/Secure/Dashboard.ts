@@ -24,7 +24,7 @@ class Dashboard {
     //   const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
     //   console.log('tokenVerified:---', tokenVerified.message);
     //   if (tokenVerified.message === "Invalid token") {
-    //     debugger
+    //     
     //     const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
     //     console.log('session_token', session_token.token);
     //     const headers: any = {

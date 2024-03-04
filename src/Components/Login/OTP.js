@@ -35,7 +35,6 @@ const OTP = () => {
         email: values.username, //"ro_telang@nhai.com",
       },
       (res) => {
-        debugger;
         if (res.status === 200) {
           toast.success("Login successful!", {
             //"Request raised successful!", {

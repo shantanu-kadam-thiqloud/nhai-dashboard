@@ -252,3 +252,58 @@ export const usePIUDataList = (locationId, piuStateName) => {
   return piuList;
 };
 //export const ZoneDataList = useZoneDataList("");
+
+export async function getBase64(file) {
+  if (file === null) {
+    return;
+  } else {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+    });
+  }
+}
+
+//-----------Cookie----------------------------------------------------------------
+
+// Function to set a cookie with JSON data
+export function setCookie(name, value, days) {
+  let expires = "";
+  if (days) {
+    let date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie =
+    name +
+    "=" +
+    encodeURIComponent(JSON.stringify(value)) +
+    expires +
+    "; path=/";
+}
+
+// Function to get a cookie and parse JSON data
+export function getCookie(name) {
+  let nameEQ = name + "=";
+  let cookies = document.cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    let cookie = cookies[i];
+    while (cookie.charAt(0) === " ") {
+      cookie = cookie.substring(1, cookie.length);
+    }
+    if (cookie.indexOf(nameEQ) === 0) {
+      let cookieValue = cookie.substring(nameEQ.length, cookie.length);
+      return JSON.parse(decodeURIComponent(cookieValue));
+    }
+  }
+  return null;
+}
+
+// Function to clear a cookie
+export function clearCookie(name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}

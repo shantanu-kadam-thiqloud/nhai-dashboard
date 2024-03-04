@@ -38,6 +38,7 @@ import InternalLogin from "./Components/Login/InternalLogin";
 // import TransactionType from "./Components/Admin/TransactionType";
 import MainTransaction from "./Components/Admin/MainTransaction";
 import CALAPDTransaction from "./Components/Admin/CALAPDTransaction";
+import ResetPassword from "./Components/ManagePassword/ResetPassword";
 
 const Routers = () => {
   return (
@@ -73,6 +74,7 @@ const Routers = () => {
       <Route path="/NHAI/DeleteGroup" element={<GroupDetails />}></Route>
       <Route path="/NHAI/Logout" element={<Logout />}></Route>
       <Route path="/NHAI/ChangePassword" element={<ChangePassword />}></Route>
+      <Route path="/NHAI/ResetPassword" element={<ResetPassword />}></Route>
       <Route path="/NHAI/Hyperlink" element={<Hyperlink />}></Route>
       <Route path="/NHAI/UserLoginReport" element={<UserLoginReport />}></Route>
       <Route

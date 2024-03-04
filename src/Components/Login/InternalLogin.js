@@ -10,6 +10,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import { LoginService } from "../../Service/LoginService";
 import { v4 as uuid } from "uuid";
 import { ProfileService } from "../../Service/ProfileService";
+import { setCookie } from "../HtmlComponents/CommonFunction";
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -49,7 +50,6 @@ const InternalLogin = () => {
         email: values.username, //"ro_telang@nhai.com",
       },
       (res) => {
-        debugger;
         if (res.status === 200) {
           toast.success("Login successful!", {
             //"Request raised successful!", {
@@ -58,6 +58,7 @@ const InternalLogin = () => {
           });
           var userData = res.data.data.responseObject;
           localStorage.setItem("UUID", res.data.data.sessionId);
+          setCookie("USER", userData, 1);
           setUserDetails(userData);
           setIsLoading(false);
           navigate("/NHAI/Dashboard", { state: { userData: userData } });

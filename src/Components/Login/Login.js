@@ -50,30 +50,29 @@ const Login = () => {
         password: values.password, //"2oCz5N1GPu4=",
       },
       (res) => {
-        debugger;
         if (res.status === 200) {
-          debugger;
-          toast.success("Login successful!", {
-            //"Request raised successful!", {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          // toast.success("Login successful!", {
+          //   //"Request raised successful!", {
+          //   position: "top-right",
+          //   autoClose: 3000,
+          // });
           var userData = res.data.data.responseObject;
-          // const session_id = `${res.data.data.sessionId}_${userData.userId}`;
-          // localStorage.setItem("UUID", session_id);
+          var isPwdChng =
+            res.data.data.responseObject.pwdReset == -1 ? true : false;
 
-          localStorage.setItem("UUID", res.data.data.sessionId);
-
-          //res.data.data.responseObject
+          // localStorage.setItem("UUID", res.data.data.sessionId);
           setUserDetails(userData);
-          // console.log(
-          //   "User Data = > ",
-          //   userData.userName,
-          //   userData.userId,
-          //   userData.profileId
-          // );
           setIsLoading(false);
-          navigate("/NHAI/Dashboard", { state: { userData: userData } });
+          if (isPwdChng) {
+            navigate("/NHAI/ResetPassword", { state: { userData: userData } });
+          } else {
+            navigate("/NHAI/Dashboard", {
+              state: { userData: userData },
+            });
+            // navigate("/NHAI/TwofactorAuthentication", {
+            //   state: { userData: userData },
+            // });
+          }
         } else if (res.status === 404) {
           toast.error("404 Not found !", {
             position: "top-right",
