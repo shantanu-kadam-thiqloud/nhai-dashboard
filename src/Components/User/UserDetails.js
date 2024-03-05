@@ -3,14 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom"; //, useParams
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
-import { ConvertFormat } from "../HtmlComponents/CommonFunction";
+import { ConvertFormat, getCookie } from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
 
 function UserDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
-
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const navigate = useNavigate();
   const location = useLocation();
   // const users = [
@@ -125,7 +125,7 @@ function UserDetails() {
           correlationId: uuid(),
         },
         userName: user.userId, //"nhai",
-        requsterUserId: "35611",
+        requsterUserId: USER.userId, // "35611",
         id: userId,
         userId: String(userId),
         requestType: "Delete",

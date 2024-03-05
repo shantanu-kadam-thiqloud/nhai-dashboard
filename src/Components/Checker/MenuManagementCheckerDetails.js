@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const MenuManagementCheckerDetails = () => {
+  const location = useLocation();
   const userId = location.state ? location.state.requestId : ""; //2; //useParams();
   const navigate = useNavigate();
-  const location = useLocation();
+
   const customStyles = {
     content: {
       top: "50%",

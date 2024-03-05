@@ -4,6 +4,11 @@ import { Column } from "primereact/column";
 import Spinner from "../HtmlComponents/Spinner";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
+import { FileService } from "../../Service/FileService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
+import { v4 as uuid } from "uuid";
 var id = [];
 const transactionTableData = [
   {
@@ -183,6 +188,8 @@ const transactionTableData = [
 
 const CALAPDTransaction = () => {
   const [rows, setRows] = useState([]); //initial row
+  const navigate = useNavigate();
+  const [isProcess, setIsProcees] = useState(false);
   const [updatedRows, setUpdatedRows] = useState([]); //use updation
   const [editedRows, setEditedRows] = useState([]); //only edited row
   const [isLoading, setIsLoading] = useState(false);
@@ -446,6 +453,7 @@ const CALAPDTransaction = () => {
       editedProducts
     );
     setEditedRows(editedProducts);
+    UpdateCALATransaction();
     id = [];
     return editedProducts;
   }
@@ -480,6 +488,141 @@ const CALAPDTransaction = () => {
   const onSave = () => {
     getEditedRows(updatedRows, id);
   };
+
+  function processCalapdTransaction() {
+    FileService.processCalapd(
+      {},
+      (res) => {
+        if (res.status === 200) {
+          toast.success(res.data.data.responseMetaData.message, {
+            //"Request raised successful!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          FetchCALATransaction();
+          setIsLoading(false);
+          setIsProcees(true);
+        } else if (res.status === 404) {
+          toast.error("404 Not found !", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          toast.error("Request failed 500. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (err) => {
+        setIsLoading(false);
+        console.error("Exception - >", err);
+        navigate("/NHAI/Error/500");
+      }
+    );
+  }
+
+  function FetchCALATransaction() {
+    var List = [];
+    FileService.getCALAPDTransaction(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        userName: "",
+      },
+      (res) => {
+        if (res.status === 200) {
+          List = res.data.data;
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (err) => {
+        setIsLoading(false);
+        console.error("Exception - >", err);
+        navigate("/NHAI/Error/500");
+      }
+    );
+  }
+  function UpdateCALATransaction() {
+    FileService.updateCALAPDTransaction(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        transactionUpdates: editedRows || [],
+      },
+      (res) => {
+        if (res.status === 200) {
+          toast.success(res.data.data.responseMetaData.message, {
+            //"Request raised successful!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          toast.error("404 Not found !", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          toast.error("Request failed 500. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (err) => {
+        setIsLoading(false);
+        console.error("Exception - >", err);
+        navigate("/NHAI/Error/500");
+      }
+    );
+  }
+  function DownloadCALATransaction() {
+    FileService.downloadCALAPDTransaction(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        userName: "",
+      },
+      (res) => {
+        if (res.status === 200) {
+          setIsLoading(false);
+          DownloadByteArray(res.data.data);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (err) => {
+        setIsLoading(false);
+        console.error("Exception - >", err);
+        navigate("/NHAI/Error/500");
+      }
+    );
+  }
 
   //------------------------------------------------------------------------------------------------------------------------------------------
   // const onEditorValueChange = (props, value) => {
@@ -544,10 +687,30 @@ const CALAPDTransaction = () => {
                   className=" btn addUser min me-2 mt-2 mb-4"
                   type="submit"
                   onClick={() => {
+                    processCalapdTransaction();
+                  }}
+                >
+                  Process
+                </button>
+                <button
+                  className=" btn addUser min me-2 mt-2 mb-4"
+                  type="submit"
+                  disabled={!isProcess}
+                  onClick={() => {
                     onSave();
                   }}
                 >
                   Update All
+                </button>
+                <button
+                  className=" btn addUser min me-2 mt-2 mb-4"
+                  type="submit"
+                  disabled={!isProcess}
+                  onClick={() => {
+                    DownloadCALATransaction();
+                  }}
+                >
+                  Download
                 </button>
               </div>
             </div>

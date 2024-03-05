@@ -4,6 +4,7 @@ import { ProfileService } from "../../Service/ProfileService";
 import {
   ConvertFormat,
   getCheckValueByName,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
@@ -12,6 +13,7 @@ function ProfileDetails() {
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
   const locationData = location.state ? location.state.user : {};
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -276,7 +278,7 @@ function ProfileDetails() {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: "35607",
+        requsterUserId: USER.userId, // "35607",
         id: Number(userId),
         userName: "nhai",
         requestType: "Delete",

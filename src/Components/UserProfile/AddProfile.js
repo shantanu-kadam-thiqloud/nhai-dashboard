@@ -10,6 +10,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import {
   DateFormatFunction,
   ConvertFormat,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { ProfileService } from "../../Service/ProfileService";
 import { toast } from "react-toastify";
@@ -29,6 +30,7 @@ const AddProfile = () => {
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
   const locationData = location.state ? location.state.user : {};
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   // const profiles = [
   //   {
   //     id: 1,
@@ -462,7 +464,7 @@ const AddProfile = () => {
           correlationId: uuid(),
         },
         userName: "nhai",
-        requsterUserId: "35607",
+        requsterUserId: USER.userId, // "35607",
         profileName: values.profileName,
         profileDescription: values.profileDescription,
         //group: values.group,
@@ -470,7 +472,7 @@ const AddProfile = () => {
         groupName: group.groupName,
         isActive: false,
         createdDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        createdBy: "Admin",
+        createdBy: USER.userName, //"Admin",
         requestType: "Add",
         status: "Initiated",
         mapping: menuData || [],
@@ -558,7 +560,7 @@ const AddProfile = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: "35607",
+        requsterUserId: USER.userId, // "35607",
         id: Number(userId),
         profileName: values.profileName,
         profileDescription: values.profileDescription,
@@ -567,7 +569,7 @@ const AddProfile = () => {
         groupName: group.groupName,
         isActive: Boolean(values.isActive),
         updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        updatedBy: "Admin",
+        updatedBy: USER.userName, //"Admin",
         requestType: "Update",
         status: "Initiated",
         mapping: menuData || [],

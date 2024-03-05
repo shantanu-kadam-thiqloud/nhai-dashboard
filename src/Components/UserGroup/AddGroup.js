@@ -5,7 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { GroupService } from "../../Service/GroupService";
-import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
+import {
+  DateFormatFunction,
+  getCookie,
+} from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
@@ -13,6 +16,7 @@ const AddGroup = () => {
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
   const locationData = location.state ? location.state.user : {};
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const path = window.location.pathname;
   const isEdit = path.includes("EditGroup") ? true : false;
   const navigate = useNavigate();
@@ -97,7 +101,7 @@ const AddGroup = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: "35605",
+        requsterUserId: USER.userId, // "35605",
         //id: 903,
         groupName: values.groupName, //"Backend Developer",
         groupDescription: values.groupDescription, //"Developer Group",
@@ -105,7 +109,7 @@ const AddGroup = () => {
         createdDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
         requestType: "Add",
         status: "Initiated",
-        createdBy: "Admin",
+        createdBy: USER.userName, //"Admin",
       },
       (res) => {
         if (res.status === 200) {
@@ -191,13 +195,13 @@ const AddGroup = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: "35605",
+        requsterUserId: USER.userId, // "35605",
         id: Number(userId),
         groupName: values.groupName, //"Backend Developer",
         groupDescription: values.groupDescription, //"Developer Group",
         isActive: Boolean(values.isActive),
         updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        updatedBy: "Admin",
+        updatedBy: USER.userName, //"Admin",
         requestType: "Update",
         status: "Initiated",
       },

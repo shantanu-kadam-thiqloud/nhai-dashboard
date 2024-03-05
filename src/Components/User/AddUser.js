@@ -5,13 +5,17 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
-import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
+import {
+  DateFormatFunction,
+  getCookie,
+} from "../HtmlComponents/CommonFunction";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 const AddUser = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const locationData = location.state ? location.state.user : {};
   // const users = [
   //   {
@@ -130,7 +134,7 @@ const AddUser = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //uuid
         },
-        requsterUserId: "35605",
+        requsterUserId: USER.userId, // "35605",
         userName: values.userId, //"Shantanu",
         fullName: values.userName, //"Shanatnu",
         userType: "", //"Admin",
@@ -139,11 +143,11 @@ const AddUser = () => {
         userRole: roleName.profileName, //role, //"Administrator",
         gender: "", //"Male",
         email: values.email, //"shantanu@example.com",
-        mobileNumber: values.mobile, //"123-456-7890",
+        mobileNumber: "+91" + values.mobile, //"123-456-7890",
         workNo: "", //"W123",
         isActive: false,
         createdDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        createdBy: "Admin",
+        createdBy: USER.userName, //"Admin",
         requestType: "Add",
         status: "Initiated",
         profileId: Number(values.role),
@@ -242,7 +246,7 @@ const AddUser = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //uuid
         },
-        requsterUserId: "201",
+        requsterUserId: USER.userId, // "201",
         userName: values.userId, //"Shantanu",
         fullName: values.userName, //"Shanatnu",
         userType: "", //"Admin",
@@ -255,7 +259,7 @@ const AddUser = () => {
         workNo: "", //"W123",
         isActive: Boolean(values.isActive),
         updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        updatedBy: "Admin",
+        updatedBy: USER.userName, //"Admin",
         requestType: "Update",
         status: "Initiated",
         profileId: Number(values.role),

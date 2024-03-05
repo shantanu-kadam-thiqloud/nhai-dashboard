@@ -9,6 +9,7 @@ import { CheckerUserService } from "../../Service/CheckerService/CheckerUserServ
 import {
   DateFormatFunction,
   ConvertFormat,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { UserService } from "../../Service/UserService";
 import { v4 as uuid } from "uuid";
@@ -18,6 +19,7 @@ const UserCheckerDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [remark, setRemark] = useState("");
   const userId = location.state ? location.state.requestId : ""; //useParams();
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [currentValue, setCurrentValue] = useState({});
@@ -73,7 +75,7 @@ const UserCheckerDetails = () => {
       mobileNumber: "999-333-4400",
       workNo: "W123",
       createdDate: "15-01-2024", //"2023-08-08",
-      createdBy: "Admin",
+      createdBy: USER.userName, //"Admin",
     },
     {
       id: 2,
@@ -89,7 +91,7 @@ const UserCheckerDetails = () => {
       mobileNumber: "999-333-4400",
       workNo: "W123",
       createdDate: "15-01-2024", //"2023-08-08",
-      createdBy: "Admin",
+      createdBy: USER.userName, //"Admin",
     },
     {
       id: 1,
@@ -107,7 +109,7 @@ const UserCheckerDetails = () => {
       workNo: "W123",
 
       createdDate: "15-01-2024", //"2023-08-08",
-      createdBy: "Admin",
+      createdBy: USER.userName, //"Admin",
     },
     //{
     //   id: 3,
@@ -320,7 +322,7 @@ const UserCheckerDetails = () => {
           : "Delete",
         action: action, //"Approved",
         checkerRemark: action == "Declined" ? remark : "Approved", //"Test",
-        checkerId: "35604", //"601",
+        checkerId: USER.userId, //"35604", //"601",
         userName: path.includes("userUpdateRequestDetails")
           ? currentValue.userId
           : user.userId,

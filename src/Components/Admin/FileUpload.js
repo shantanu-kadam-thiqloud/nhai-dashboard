@@ -4,11 +4,13 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { getBase64 } from "../HtmlComponents/CommonFunction";
-import { ValueType } from "exceljs";
-
+import { toast } from "react-toastify";
+import { FileService } from "../../Service/FileService";
+import { v4 as uuid } from "uuid";
 const FileUpload = () => {
   const navigate = useNavigate();
-
+  const [fileBase64, setFileBase64] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState("");
   const [fileData, setFileData] = useState("");
   const validationSchema = Yup.object({
@@ -22,24 +24,108 @@ const FileUpload = () => {
         }
         return value.type === "text/plain";
       }),
-    //   if (value.endsWith(".txt")) {
-    //     return true;
-    //   } else {
-    //     return false; //endsWith(".txt"); //
-    //   }
-    // }),
   });
 
-  async function Upload(file) {
+  async function Upload(file, values) {
     const base64String = await getBase64(file);
     // Remove the prefix
     const base64Data = base64String.replace(/^data:[^;]+;base64,/, "");
+    setFileBase64(base64Data);
     console.log("BASE64->", base64Data);
+    if (values.fileType === "Account Summary") {
+      UploadAccount();
+    } else {
+      UploadSanction();
+    }
   }
+
+  function UploadAccount() {
+    FileService.uploadAccountFile(
+      {
+        // requestMetaData: {
+        //   applicationId: "nhai-dashboard",
+        //   correlationId: uuid(),
+        // },
+        file: fileBase64,
+      },
+      (res) => {
+        if (res.status === 200) {
+          toast.success(res.data.data.responseMetaData.message, {
+            //"Request raised successful!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          setFileBase64("");
+        } else if (res.status === 404) {
+          toast.error("404 Not found !", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          toast.error("Request failed 500. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (err) => {
+        setIsLoading(false);
+        console.error("Exception - >", err);
+        navigate("/NHAI/Error/500");
+      }
+    );
+  }
+  function UploadSanction() {
+    FileService.uploadSanctionFile(
+      {
+        // requestMetaData: {
+        //   applicationId: "nhai-dashboard",
+        //   correlationId: uuid(),
+        // },
+        file: fileBase64,
+      },
+      (res) => {
+        if (res.status === 200) {
+          toast.success(res.data.data.responseMetaData.message, {
+            //"Request raised successful!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          setFileBase64("");
+        } else if (res.status === 404) {
+          toast.error("404 Not found !", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          toast.error("Request failed 500. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (err) => {
+        setIsLoading(false);
+        console.error("Exception - >", err);
+        navigate("/NHAI/Error/500");
+      }
+    );
+  }
+
   const handleSubmit = (values, { resetForm, setSubmitting }, actions) => {
     debugger;
     console.log("--->", values, fileData);
-    Upload(fileData);
+    Upload(fileData, values);
   };
   return (
     <div className="wrapper">

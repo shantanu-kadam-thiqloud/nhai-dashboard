@@ -60,9 +60,7 @@ const UserCheckerList = () => {
     {
       Header: <div className="float-center">Request Date</div>,
       accessor: "requestRaisedTime",
-      Cell: ({ row }) => (
-        <div>{DateFormatFunction(row.values.requestRaisedTime)}</div>
-      ),
+      Cell: ({ row }) => <div>{row.values.requestRaisedTime}</div>,
     },
     {
       Header: <div className="float-center">Request Raised By</div>,

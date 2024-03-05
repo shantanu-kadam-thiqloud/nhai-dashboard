@@ -5,6 +5,7 @@ import { GroupService } from "../../Service/GroupService";
 import {
   ConvertFormat,
   getCheckValueByName,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
@@ -13,6 +14,7 @@ function GroupDetails() {
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
   const locationData = location.state ? location.state.user : {};
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,7 +108,7 @@ function GroupDetails() {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: "6789",
+        requsterUserId: USER.userId, // "6789",
         id: Number(userId),
         userName: "nhai",
         requestType: "Delete",

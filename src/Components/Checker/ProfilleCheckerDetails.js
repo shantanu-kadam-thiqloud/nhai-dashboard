@@ -9,11 +9,13 @@ import { CheckerProfileService } from "../../Service/CheckerService/CheckerProfi
 import {
   ConvertFormat,
   DateFormatFunction,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 const ProfilleCheckerDetails = () => {
   const location = useLocation();
   const userId = location.state ? location.state.requestId : ""; //useParams();
+  const USER = getCookie("USER") === null ? "" : getCookie("USER");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState({});
@@ -392,7 +394,7 @@ const ProfilleCheckerDetails = () => {
           : "Delete",
         action: action, //"Approved",
         checkerRemark: action == "Declined" ? remark : "Approved", //"Test",
-        checkerId: "35604", //"601",
+        checkerId: USER.userId, //"35604", //"601",
         userName: "nhai", //path.includes("userUpdateRequestDetails")
         //   ? currentValue.userId
         //   : group.userId,

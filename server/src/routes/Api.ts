@@ -18,6 +18,7 @@ import DropdownController from "../controllers/Api/Secure/Dropdown";
 import DashboardDownloadController from "../controllers/Api/Secure/DashboardDownload";
 import MenuSubmenuActionController from "../controllers/Api/Secure/MenuSubmenuAction";
 import ExternalUserController from "../controllers/Api/Auth/ExternalUser";
+import TransactionFileController from "../controllers/Api/Secure/TransactionFile";
 const router = Router();
 
 router.post("/auth/login", LoginController.login);
@@ -126,6 +127,20 @@ router.post(
 router.post("/secure/menuSubmenuActionApproval", MenuSubmenuActionController.menuSubmenuActionApproval);
 router.post("/secure/getMenuJson", MenuSubmenuActionController.getMenuSubmenuActionJson);
 router.post("/secure/UpdateMenuJson", MenuSubmenuActionController.UpdateMenuSubmenuActionJson);
+
+
+router.post("/secure/uploadAccountFile", TransactionFileController.uploadAcccountSummaryFile);
+router.post("/secure/uploadSanctionFile", TransactionFileController.uploadSanctionLimitFile);
+router.post("/secure/processMainTransaction", TransactionFileController.processMain);
+router.post("/secure/processCalapdTransaction", TransactionFileController.processCalapd);
+router.post("/secure/getMainTransaction", TransactionFileController.getMainTransaction);
+router.post(
+    "/secure/getCALAPDTransaction", TransactionFileController.getCALAPDTransaction);
+router.post(
+    "/secure/updateCALAPDTransaction", TransactionFileController.updateCALAPDTransaction);
+router.post("/secure/updateMainTransaction", TransactionFileController.updateMainTransaction);
+router.post("/secure/downloadCALAPDTransaction", TransactionFileController.downloadCALAPDTransaction);
+router.post("/secure/downloadMainTransaction", TransactionFileController.downloadMainTransaction);
 
 
 

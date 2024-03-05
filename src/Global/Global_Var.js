@@ -98,9 +98,10 @@ export const Global_var = {
   URL_GET_MENU_JSON: "/secure/getMenuSubmenuActionJson",
   URL_UPDATE_MENU_JSON: "/secure/UpdateMenuSubmenuActionJson",
   //-------------File-Upload----------------------------------------------------------------------------------------
-  URL_UPLOAD_FILE: "/secure/uploadFile",
-  URL_PROCESS_SUMMARY: "/secure/processAccountSummary",
-  URL_PROCESS_SANCTION: "/secure/processSanctionLimit",
+  URL_UPLOAD_ACCOUNT_FILE: "/secure/uploadAccountFile",
+  URL_UPLOAD_SANCTION_FILE: "/secure/uploadSanctionFile",
+  URL_PROCESS_MAIN: "/secure/processMainTransaction",
+  URL_PROCESS_CALAPD: "/secure/processCalapdTransaction",
   //-------------Transaction-Type---------------------------------------------------
   URL_GET_MAIN_TRANSACTION: "/secure/getMainTransaction",
   URL_GET_CALAPD_TRANSACTION: "/secure/getCALAPDTransaction",
