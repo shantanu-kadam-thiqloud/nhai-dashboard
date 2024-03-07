@@ -14,10 +14,28 @@ import {
 import sideBarDataChecker from "../Checker/sideBarData";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
+import {
+  useGetReduxData,
+  useSetReduxProfile,
+} from "../HtmlComponents/CommonFunction";
 const Sidebar = () => {
   const location = useLocation();
+  const reduxData = useGetReduxData();
+  const setReduxProfile = useSetReduxProfile();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const reduxProfile =
+    reduxData.length != 0
+      ? reduxData.profileData !== null
+        ? reduxData.profileData.profile
+        : null
+      : "";
+  const MAPPING =
+    reduxProfile === "" || reduxProfile === null ? null : reduxProfile.mapping;
   const userData = location.state ? location.state.userData : ""; //useParams();
-  const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
+  const MappingData =
+    JSON.parse(sessionStorage.getItem("Mapping")) === null
+      ? MAPPING
+      : JSON.parse(sessionStorage.getItem("Mapping"));
   const [activeItem, setActiveItem] = useState("Home"); // Initialize with the default active item
   const [mappingData, setMappingData] = useState([]);
   // Create a state object to hold the dynamic toggle states
@@ -81,8 +99,10 @@ const Sidebar = () => {
       (res) => {
         if (res.status === 200) {
           profile = res.data.data;
+          setReduxProfile({ profile });
           console.log("Profile ->", profile);
           setMappingData(res.data.data.mapping);
+
           setIsLoading(false);
         } else if (res.status === 404) {
           setIsLoading(false);

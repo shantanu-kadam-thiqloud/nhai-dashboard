@@ -8,6 +8,7 @@ import { GroupService } from "../../Service/GroupService";
 import {
   DateFormatFunction,
   getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import { toast } from "react-toastify";
@@ -16,7 +17,9 @@ const AddGroup = () => {
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
   const locationData = location.state ? location.state.user : {};
-  const USER = getCookie("USER") === null ? "" : getCookie("USER");
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
   const path = window.location.pathname;
   const isEdit = path.includes("EditGroup") ? true : false;
   const navigate = useNavigate();

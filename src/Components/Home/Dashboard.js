@@ -18,11 +18,30 @@ import Spinner from "../HtmlComponents/Spinner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
+import {
+  useGetReduxData,
+  useSetReduxProfile,
+} from "../HtmlComponents/CommonFunction";
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userData = location.state ? location.state.userData : ""; //useParams();
+
+  const setReduxProfile = useSetReduxProfile();
+  const reduxData = useGetReduxData();
+  // const reduxProfile =
+  //   reduxData.length != 0
+  //     ? reduxData.profileData !== null
+  //       ? reduxData.profileData.profile
+  //       : null
+  //     : "";
+  // const MAPPING =
+  //   reduxProfile === "" || reduxProfile === null ? null : reduxProfile.mapping;
   const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
+  // === null
+  //   ? MAPPING
+  //   : JSON.parse(sessionStorage.getItem("Mapping"));
+
   const [activeTab, setActiveTab] = useState("Snapshot");
   const [isLoading, setIsLoading] = useState(false);
   const [mData, setMData] = useState([]);
@@ -53,7 +72,7 @@ const Dashboard = () => {
         if (res.status === 200) {
           profile = res.data.data;
           console.log("Profile ->", profile);
-
+          setReduxProfile({ profile });
           var mappingData = JSON.stringify(res.data.data.mapping);
           setMData(res.data.data.mapping);
           sessionStorage.clear();

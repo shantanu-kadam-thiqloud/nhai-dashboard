@@ -10,7 +10,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import { LoginService } from "../../Service/LoginService";
 import { v4 as uuid } from "uuid";
 import { ProfileService } from "../../Service/ProfileService";
-import { setCookie } from "../HtmlComponents/CommonFunction";
+import { setCookie, useSetReduxData } from "../HtmlComponents/CommonFunction";
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -26,6 +26,7 @@ const InternalLogin = () => {
   const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState("");
   const location = useLocation();
+  const setReduxData = useSetReduxData();
   React.useEffect(() => {
     async function fetchPublicKey() {
       try {
@@ -57,6 +58,7 @@ const InternalLogin = () => {
             autoClose: 3000,
           });
           var userData = res.data.data.responseObject;
+          setReduxData({ userData });
           localStorage.setItem("UUID", res.data.data.sessionId);
           setCookie("USER", userData, 1);
           setUserDetails(userData);

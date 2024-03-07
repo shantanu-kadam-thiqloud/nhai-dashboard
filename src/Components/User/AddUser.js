@@ -8,6 +8,7 @@ import { UserService } from "../../Service/UserService";
 import {
   DateFormatFunction,
   getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
@@ -15,7 +16,9 @@ const AddUser = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
-  const USER = getCookie("USER") === null ? "" : getCookie("USER");
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
   const locationData = location.state ? location.state.user : {};
   // const users = [
   //   {
@@ -96,7 +99,25 @@ const AddUser = () => {
     // userDomainName: Yup.string("User Domain Name is invalid"),
     // workPhone: Yup.string("Work Phone is invalid"),
     userId: Yup.string("User ID is invalid"),
-    role: Yup.string("Role is invalid"),
+    memberType: Yup.number()
+      .transform((value, originalValue) => {
+        if (originalValue.trim() === "") {
+          return false; // Return false for empty or whitespace strings
+        }
+        return value;
+      })
+      .nullable()
+      .required("Member type is required")
+      .oneOf([0, 1], "Member type is required"),
+    role: Yup.number()
+      .transform((value, originalValue) => {
+        if (originalValue.trim() === "") {
+          return false; // Return false for empty or whitespace strings
+        }
+        return value;
+      })
+      .nullable()
+      .required("Role is required"),
     mobile: Yup.string("Mobile Number is invalid").matches(
       phoneRegExp,
       "Mobile number is not valid"
@@ -135,7 +156,7 @@ const AddUser = () => {
           correlationId: uuid(), //uuid
         },
         requsterUserId: USER.userId, // "35605",
-        userName: values.userId, //"Shantanu",
+        userName: Number(values.memberType) == 0 ? values.email : values.userId, //"Shantanu",
         fullName: values.userName, //"Shanatnu",
         userType: "", //"Admin",
         employeeNumber: values.employeeNumber, //"12345",
@@ -151,6 +172,7 @@ const AddUser = () => {
         requestType: "Add",
         status: "Initiated",
         profileId: Number(values.role),
+        memberType: Number(values.memberType),
       },
       (res) => {
         if (res.status === 200) {
@@ -358,6 +380,35 @@ const AddUser = () => {
                         <div className="col">
                           <div className="mb-3">
                             <label
+                              htmlFor="role"
+                              className="form-label required"
+                            >
+                              Member Type
+                            </label>
+                            <Field
+                              as="select"
+                              className="form-control form-select"
+                              id="memberType"
+                              name="memberType"
+                              // onChange={(e) => {
+                              //   setRole(e.target.value);
+                              // }}
+                            >
+                              {" "}
+                              <option value="" className="greyText">
+                                Select
+                              </option>
+                              <option value={0}>Internal</option>
+                              <option value={1}>External</option>
+                            </Field>
+                            <ErrorMessage
+                              name="memberType"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label
                               htmlFor="userName"
                               className="form-label required"
                             >
@@ -405,7 +456,7 @@ const AddUser = () => {
                             />
                           </div>
                           <div className="mb-3">
-                            <label htmlFor="mobile" className="form-label">
+                            <label htmlFor="mobile" className="form-label ">
                               Mobile Number
                             </label>
                             <Field
@@ -455,6 +506,15 @@ const AddUser = () => {
                               id="userId"
                               name="userId"
                               placeholder="Enter user ID"
+                              disabled={
+                                Number(values.memberType) == 0 || isEdit
+                              }
+                              value={
+                                Number(values.memberType) == 0
+                                  ? values.email
+                                  : values.userId
+                              }
+
                               // onChange={(e) => {
                               //   setUserid(e.target.value);
                               // }}
@@ -489,7 +549,10 @@ const AddUser = () => {
                             />
                           </div>
                           <div className="mb-3">
-                            <label htmlFor="role" className="form-label">
+                            <label
+                              htmlFor="role"
+                              className="form-label required"
+                            >
                               Role
                             </label>
                             <Field

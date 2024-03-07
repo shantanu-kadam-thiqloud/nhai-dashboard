@@ -34,18 +34,18 @@ class ExternalUser {
         // console.log('convert to object ',JSON.parse(decrypted));
         // console.log('Decrypted Data:',decryptedText);
 
-        // const unencryptedData = req.body.encrypted;
-        // const URL = BASE_URL + `/api/auth/generate-token`;
-        // //Internal API call for single use Token 
-        // const singleUseJwt = await api.get(URL);
+        const unencryptedData = req.body.encrypted;
+        const URL = BASE_URL + `/api/auth/generate-token`;
+        //Internal API call for single use Token 
+        const singleUseJwt = await api.get(URL);
 
-        // //adding jwt token to header
-        // const headers: any = {
-        //     'Content-Type': 'application/json', // Example: setting Content-Type
-        //     'Authorization': singleUseJwt.token, // Example: setting an Authorization header
-        // };
-        // // axios.defaults.headers = headers;
-        // //console.log(headers);
+        //adding jwt token to header
+        const headers: any = {
+            'Content-Type': 'application/json', // Example: setting Content-Type
+            'Authorization': singleUseJwt.token, // Example: setting an Authorization header
+        };
+        // axios.defaults.headers = headers;
+        //console.log(headers);
 
         try {
             // Dummy login API
@@ -53,25 +53,25 @@ class ExternalUser {
             console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
             if (LoginUser) {
-                // const session_id = uuid();
-                // delete LoginUser.token;
-                // //Internal API call for session Token(30 min) 
-                // const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
+                const session_id = uuid();
+                delete LoginUser.token;
+                //Internal API call for session Token(30 min) 
+                const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
 
-                // LoginUser.sessionId = session_id;
-                // LoginUser.sessionToken = session_token.token;
-                // // const usage = 2;
-                // // const ttlInSeconds = null; 
-                // console.log("User Details ->", LoginUser);
-                // const jsonString = JSON.stringify(LoginUser);
+                LoginUser.sessionId = session_id;
+                LoginUser.sessionToken = session_token.token;
+                // const usage = 2;
+                // const ttlInSeconds = null; 
+                console.log("User Details ->", LoginUser);
+                const jsonString = JSON.stringify(LoginUser);
 
-                // const redisRES = await useRedis.set(session_id, jsonString, ttlInSeconds);
+                const redisRES = await useRedis.set(session_id, jsonString, ttlInSeconds);
                 //console.log(redisRES);
                 // Sending the response after processing
                 res.json({
                     message: "User login successfully.",
                     data: LoginUser,
-                    // session_id: session_id
+                    session_id: session_id
                 });
                 // await useRedis.get(session_id);
             } else {
@@ -121,7 +121,7 @@ class ExternalUser {
 
         try {
             // Dummy login API
-            const pwdData = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+            const pwdData = await api.post("http://172.16.16.99:8091/usermanagement/changePassword/v1", req.body, "");//'https://dummyjson.com/auth/login'
             console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
             if (pwdData) {

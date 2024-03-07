@@ -10,6 +10,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import { LoginService } from "../../Service/LoginService";
 import { v4 as uuid } from "uuid";
 import { ExternalUserService } from "../../Service/ExternalUserService";
+import { setCookie } from "../HtmlComponents/CommonFunction";
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -51,27 +52,28 @@ const Login = () => {
       },
       (res) => {
         if (res.status === 200) {
-          // toast.success("Login successful!", {
-          //   //"Request raised successful!", {
-          //   position: "top-right",
-          //   autoClose: 3000,
-          // });
           var userData = res.data.data.responseObject;
           var isPwdChng =
             res.data.data.responseObject.pwdReset == -1 ? true : false;
-
-          // localStorage.setItem("UUID", res.data.data.sessionId);
+          localStorage.setItem("UUID", res.data.data.sessionId);
+          localStorage.setItem("userName", userData.userName);
+          setCookie("USER", userData, 1);
+          //--------------------------------------------------------------------------------------------------
           setUserDetails(userData);
           setIsLoading(false);
           if (isPwdChng) {
+            setIsLoading(false);
             navigate("/NHAI/ResetPassword", { state: { userData: userData } });
           } else {
+            setIsLoading(false);
+            toast.success("Login successful!", {
+              //"Request raised successful!", {
+              position: "top-right",
+              autoClose: 3000,
+            });
             navigate("/NHAI/Dashboard", {
               state: { userData: userData },
             });
-            // navigate("/NHAI/TwofactorAuthentication", {
-            //   state: { userData: userData },
-            // });
           }
         } else if (res.status === 404) {
           toast.error("404 Not found !", {

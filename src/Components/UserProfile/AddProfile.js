@@ -11,6 +11,7 @@ import {
   DateFormatFunction,
   ConvertFormat,
   getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { ProfileService } from "../../Service/ProfileService";
 import { toast } from "react-toastify";
@@ -30,7 +31,9 @@ const AddProfile = () => {
   const location = useLocation();
   const userId = location.state ? location.state.user.id : ""; //useParams();
   const locationData = location.state ? location.state.user : {};
-  const USER = getCookie("USER") === null ? "" : getCookie("USER");
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
   // const profiles = [
   //   {
   //     id: 1,

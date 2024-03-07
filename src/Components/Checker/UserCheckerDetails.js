@@ -10,6 +10,7 @@ import {
   DateFormatFunction,
   ConvertFormat,
   getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { UserService } from "../../Service/UserService";
 import { v4 as uuid } from "uuid";
@@ -19,7 +20,9 @@ const UserCheckerDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [remark, setRemark] = useState("");
   const userId = location.state ? location.state.requestId : ""; //useParams();
-  const USER = getCookie("USER") === null ? "" : getCookie("USER");
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [currentValue, setCurrentValue] = useState({});

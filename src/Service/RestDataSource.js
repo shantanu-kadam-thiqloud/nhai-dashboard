@@ -36,7 +36,7 @@ export default class RestDataSource {
     const headers = {
       XUuid: uuid,
     };
-    console.log(uuid, "from frontend");
+    //console.log(uuid, "from frontend");
 
     try {
       let response = await Axios.request({

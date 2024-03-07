@@ -4,14 +4,18 @@ import * as Yup from "yup";
 import axios from "axios";
 import forge from "node-forge";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import chngPwd from "../../Assets/images/pwd.avif";
+import { ExternalUserService } from "../../Service/ExternalUserService";
 
 const validationSchema = Yup.object().shape({
   currentPassword: Yup.string().required("Current Password is required"),
-  newPassword: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .required("New Password is required"),
+  newPassword: Yup.string().matches(
+    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()-_=+]).{8,}$/,
+    "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+  ),
+  // .min(6, "Password must be at least 6 characters")
+  // .required("New Password is required"),
   confirmNewPassword: Yup.string()
     .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
     .required("Confirm New Password is required"),
@@ -20,6 +24,10 @@ const validationSchema = Yup.object().shape({
 const ResetPassword = () => {
   const [publicKey, setPublicKey] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const userData = location.state ? location.state.userData : "";
+  console.log("UserData-> ", userData);
   const initialValues = {
     currentPassword: "",
     newPassword: "",
@@ -41,39 +49,83 @@ const ResetPassword = () => {
   }, []);
 
   const handleSubmit = async (values) => {
-    if (!publicKey) {
-      console.error("Public key not available");
-      return;
-    }
+    // if (!publicKey) {
+    //   console.error("Public key not available");
+    //   return;
+    // }
 
-    try {
-      const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
-      const encrypted = publicKeyObject.encrypt(
-        JSON.stringify(values),
-        "RSA-OAEP"
-      );
-      const encryptedValues = forge.util.encode64(encrypted);
-      const response = await axios.post(
-        "http://localhost:3007/api/auth/change-password",
-        { encrypted: encryptedValues }
-      );
-      console.log(response.data);
-      if (response.data) {
-        toast.success("Password changed successfully", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        navigate("/NHAI/login");
-      } else {
-        toast.error("Password change failed. Please try again.", {
-          position: "top-right",
-          autoClose: 5000,
-        });
-      }
-    } catch (error) {
-      console.error("Error changing password:", error);
-    }
+    // try {
+    //   const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
+    //   const encrypted = publicKeyObject.encrypt(
+    //     JSON.stringify(values),
+    //     "RSA-OAEP"
+    //   );
+    //   const encryptedValues = forge.util.encode64(encrypted);
+    //   const response = await axios.post(
+    //     "http://localhost:3007/api/auth/change-password",
+    //     { encrypted: encryptedValues }
+    //   );
+    //   console.log(response.data);
+    //   if (response.data) {
+    //     toast.success("Password changed successfully", {
+    //       position: "top-right",
+    //       autoClose: 3000,
+    //     });
+    //     navigate("/NHAI/login");
+    //   } else {
+    //     toast.error("Password change failed. Please try again.", {
+    //       position: "top-right",
+    //       autoClose: 5000,
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.error("Error changing password:", error);
+    // }
+    changepassword(values);
   };
+
+  function changepassword(values) {
+    debugger;
+    var userName = localStorage.getItem("userName");
+    ExternalUserService.changePassword(
+      {
+        username: userName, //userData.username, //"Pritam",
+        oldPassword: values.currentPassword, //"Pritam@123",
+        newPassword: values.newPassword, //"Pritam@123456",
+      },
+      (res) => {
+        if (res.status === 200) {
+          toast.success("Password change successfully ! Please Login again.", {
+            //"Request raised successful!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+
+          setIsLoading(false);
+
+          navigate("/NHAI/login");
+        } else if (res.status === 404) {
+          toast.error("404 Not found !", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          toast.error("Request failed 500. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
 
   return (
     <div className="container changePasswordContainer">

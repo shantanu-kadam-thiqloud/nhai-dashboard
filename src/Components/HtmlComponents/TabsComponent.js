@@ -9,10 +9,25 @@ import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 import { useLocation } from "react-router";
 import Spinner from "./Spinner";
+import { useGetReduxData, useSetReduxProfile } from "./CommonFunction";
 
 const TabsComponent = (props) => {
   const location = useLocation();
+
+  const reduxData = useGetReduxData();
+  // const reduxProfile =
+  //   reduxData.length != 0
+  //     ? reduxProfile === "" || reduxProfile === null
+  //       ? null
+  //       : reduxData.profileData.profile
+  //     : "";
+  // const MAPPING =
+  //   reduxProfile === "" || reduxProfile === null ? null : reduxProfile.mapping;
   const MappingData = JSON.parse(sessionStorage.getItem("Mapping"));
+  //  === null
+  //   ? MAPPING
+  //   : JSON.parse(sessionStorage.getItem("Mapping"));
+
   const [homeTabs, setHomeTabs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const data = [

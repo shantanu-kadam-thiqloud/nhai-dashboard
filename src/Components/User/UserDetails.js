@@ -3,14 +3,20 @@ import { useNavigate, useLocation } from "react-router-dom"; //, useParams
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { UserService } from "../../Service/UserService";
-import { ConvertFormat, getCookie } from "../HtmlComponents/CommonFunction";
+import {
+  ConvertFormat,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
 
 function UserDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
-  const USER = getCookie("USER") === null ? "" : getCookie("USER");
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
   const navigate = useNavigate();
   const location = useLocation();
   // const users = [

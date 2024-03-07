@@ -3,6 +3,11 @@ import { v4 as uuid } from "uuid";
 import sideBarDataChecker from "../Checker/sideBarData";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../Store/Reducers/userReducer"; // Correct import path
+import { setProfile } from "../../Store/Reducers/profileReducer"; // Import action creator for profile
+
+import { useSelector } from "react-redux";
 
 export const DateFormatFunction = (inputDate) => {
   if (inputDate) {
@@ -251,7 +256,6 @@ export const usePIUDataList = (locationId, piuStateName) => {
 
   return piuList;
 };
-//export const ZoneDataList = useZoneDataList("");
 
 export async function getBase64(file) {
   if (file === null) {
@@ -307,3 +311,33 @@ export function getCookie(name) {
 export function clearCookie(name) {
   document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
+
+//-------------------------------------------------------------------------------------
+
+export const useSetReduxData = () => {
+  const dispatch = useDispatch();
+
+  const setReduxData = (data) => {
+    dispatch(addUser(data));
+  };
+
+  return setReduxData;
+};
+
+export const useSetReduxProfile = () => {
+  const dispatch = useDispatch();
+
+  const setReduxProfile = (data) => {
+    dispatch(setProfile(data));
+  };
+
+  return setReduxProfile;
+};
+
+export const useGetReduxData = () => {
+  // const userData = useSelector((state) => state.NHAIUser.data); // Assuming 'NHAIUser' is the slice name
+  // const profileData = useSelector((state) => state.profile.profile);
+  const userData = useSelector((state) => state.NHAIUser.data[0]?.userData); // Accessing userData directly
+  const profileData = useSelector((state) => state.profile.profile);
+  return { userData, profileData };
+};

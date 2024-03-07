@@ -10,12 +10,15 @@ import {
   ConvertFormat,
   DateFormatFunction,
   getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 const ProfilleCheckerDetails = () => {
   const location = useLocation();
   const userId = location.state ? location.state.requestId : ""; //useParams();
-  const USER = getCookie("USER") === null ? "" : getCookie("USER");
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState({});
