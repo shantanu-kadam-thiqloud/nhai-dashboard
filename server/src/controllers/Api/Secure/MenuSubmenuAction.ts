@@ -7,7 +7,7 @@ class MenuSubmenuAction {
         fetchData(BASE_URL_A + '/usermanagement/submenu/action/v1', req, res, next);
     }
     public static async updateMenuSubmenuAction(req: any, res: any, next: any): Promise<any> {
-        fetchData(BASE_URL_A + '', req, res, next);
+        fetchPutData(BASE_URL_A + '/usermanagement/submenu/action/v1', req, res, next);
     }
     public static async deleteMenuSubmenuAction(req: any, res: any, next: any): Promise<any> {
         fetchData(BASE_URL_A + '/usermanagement/submenu/action/v1', req, res, next);
@@ -16,10 +16,10 @@ class MenuSubmenuAction {
         fetchData(BASE_URL_A + '/usermanagement/submenu/detail/v1', req, res, next);
     }
     public static async getMenuSubmenuActionAddDeleteDetails(req: any, res: any, next: any): Promise<any> {
-        fetchData(BASE_URL_A + '', req, res, next);
+        fetchData(BASE_URL_A + '/usermanagement/menumgmt/detail/v1', req, res, next);
     }
     public static async getMenuSubmenuActionUpdateDetails(req: any, res: any, next: any): Promise<any> {
-        fetchData(BASE_URL_A + '/usermanagement/submenu/detail/v1', req, res, next);
+        fetchPutData(BASE_URL_A + '/usermanagement/submenu/detail/v1', req, res, next);
     }
     public static async menuSubmenuActionApproval(req: any, res: any, next: any): Promise<any> {
         fetchData(BASE_URL_A + '/usermanagement/submenu/approval/v1', req, res, next);

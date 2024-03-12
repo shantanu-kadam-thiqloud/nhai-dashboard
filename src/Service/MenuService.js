@@ -1,4 +1,4 @@
-import RestDataSource from "../RestDataSource";
+import RestDataSource from "./RestDataSource.js";
 import { Global_var } from "../Global/Global_Var.js";
 
 export const MenuService = {

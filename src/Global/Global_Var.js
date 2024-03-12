@@ -95,8 +95,8 @@ export const Global_var = {
   URL_DETAILS_U_MENU_SUBMENU_ACTION:
     "/secure/getMenuSubmenuActionUpdateDetails",
   URL_APPROVAL_MENU_SUBMENU_ACTION: "/secure/menuSubmenuActionApproval",
-  URL_GET_MENU_JSON: "/secure/getMenuSubmenuActionJson",
-  URL_UPDATE_MENU_JSON: "/secure/UpdateMenuSubmenuActionJson",
+  URL_GET_MENU_JSON: "/secure/getMenuJson",
+  URL_UPDATE_MENU_JSON: "/secure/UpdateMenuJson",
   //-------------File-Upload----------------------------------------------------------------------------------------
   URL_UPLOAD_ACCOUNT_FILE: "/secure/uploadAccountFile",
   URL_UPLOAD_SANCTION_FILE: "/secure/uploadSanctionFile",

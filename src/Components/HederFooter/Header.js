@@ -67,6 +67,7 @@ function Header() {
                   localStorage.clear();
                   clearCookie("USER");
                   navigate("/NHAI/login");
+                  window.location.reload();
                 }}
               />
             </div>

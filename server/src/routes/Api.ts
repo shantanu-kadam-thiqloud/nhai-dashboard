@@ -122,7 +122,7 @@ router.post("/secure/deleteMenuSubmenuAction", MenuSubmenuActionController.delet
 router.post("/secure/getMenuSubmenuActionRequests", MenuSubmenuActionController.getMenuSubmenuActionRequests);
 router.post(
     "/secure/getMenuSubmenuActionAddDeleteDetails", MenuSubmenuActionController.getMenuSubmenuActionAddDeleteDetails);
-router.post(
+router.put(
     "/secure/getMenuSubmenuActionUpdateDetails", MenuSubmenuActionController.getMenuSubmenuActionUpdateDetails);
 router.post("/secure/menuSubmenuActionApproval", MenuSubmenuActionController.menuSubmenuActionApproval);
 router.post("/secure/getMenuJson", MenuSubmenuActionController.getMenuSubmenuActionJson);

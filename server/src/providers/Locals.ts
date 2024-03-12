@@ -28,7 +28,7 @@ class Locals {
 		const baseUrl = `http://localhost:${process.env.PORT || 3007}`;
 		const aBaseUrl = 'http://172.16.16.201:8085';//Ayush
 		const amBaseUrl = 'http://172.16.16.201:8091';//Amol
-		const sBaseUrl = 'http://172.16.16.201:7091';//Sumit
+		const sBaseUrl = 'http://172.16.16.113:8091';//Sumit
 
 		return {
 			appSecret,

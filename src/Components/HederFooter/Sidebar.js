@@ -30,7 +30,9 @@ const Sidebar = () => {
         : null
       : "";
   const MAPPING =
-    reduxProfile === "" || reduxProfile === null ? null : reduxProfile.mapping;
+    reduxProfile === "" || reduxProfile === null || reduxProfile === undefined
+      ? null
+      : reduxProfile.mapping;
   const userData = location.state ? location.state.userData : ""; //useParams();
   const MappingData =
     JSON.parse(sessionStorage.getItem("Mapping")) === null

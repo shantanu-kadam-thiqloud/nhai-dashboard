@@ -10,7 +10,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import { LoginService } from "../../Service/LoginService";
 import { v4 as uuid } from "uuid";
 import { ExternalUserService } from "../../Service/ExternalUserService";
-import { setCookie } from "../HtmlComponents/CommonFunction";
+import { setCookie, useSetReduxData } from "../HtmlComponents/CommonFunction";
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -26,6 +26,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState("");
   const location = useLocation();
+  const setReduxData = useSetReduxData();
   React.useEffect(() => {
     async function fetchPublicKey() {
       try {
@@ -53,6 +54,7 @@ const Login = () => {
       (res) => {
         if (res.status === 200) {
           var userData = res.data.data.responseObject;
+          setReduxData({ userData });
           var isPwdChng =
             res.data.data.responseObject.pwdReset == -1 ? true : false;
           localStorage.setItem("UUID", res.data.data.sessionId);
@@ -72,7 +74,7 @@ const Login = () => {
               autoClose: 3000,
             });
             navigate("/NHAI/Dashboard", {
-              state: { userData: userData },
+              state: { userData: res.data.data.responseObject },
             });
           }
         } else if (res.status === 404) {
@@ -99,6 +101,7 @@ const Login = () => {
   }
 
   const handleSubmit = async (values) => {
+    setIsLoading(true);
     Login(values);
     // if (!publicKey) {
     //   console.error("Public key not available");

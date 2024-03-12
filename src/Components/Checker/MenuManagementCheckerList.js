@@ -1,13 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "../HtmlComponents/DataTable";
 import { useNavigate, useParams } from "react-router-dom";
 import Accordion from "react-bootstrap/Accordion";
-
+import { MenuService } from "../../Service/MenuService";
+import Spinner from "../HtmlComponents/Spinner";
+import { v4 as uuid } from "uuid";
 const MenuManagementCheckerList = () => {
   const navigate = useNavigate();
   const [menuRequest, setMenuRequest] = useState("Add");
   const [submenuRequest, setSubMenuRequest] = useState("Add");
   const [actionRequest, setActionRequest] = useState("Add");
+  const [isLoading, setIsLoading] = useState(false);
+  const [menulist, setMenuList] = useState([]);
+  const [submenulist, setSubmenuList] = useState([]);
+  const [actionlist, setActionList] = useState([]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    FetchRequests("Menu");
+    FetchRequests("Submenu");
+    FetchRequests("Action");
+  }, []);
 
   const data = [
     {
@@ -120,21 +133,27 @@ const MenuManagementCheckerList = () => {
       requestType: "Delete Menu",
     },
   ];
-  const [rows, setRows] = useState(data);
+  const [menurows, setMenuRows] = useState([]);
+  const [submenurows, setSubMenuRows] = useState([]);
+  const [actionrows, setActionRows] = useState([]);
+
   const menuColumns = [
     {
       Header: <div className="float-center">Request Id</div>,
       accessor: "requestId",
     },
     {
-      Header: <div className="float-center">Request Name</div>,
-      accessor: "requestName",
+      Header: <div className="float-center">Request Type</div>,
+      accessor: "requestType",
     },
     {
-      Header: <div className="float-center">Request Details</div>,
-      accessor: "requestDetails",
+      Header: <div className="float-center">Request Date</div>,
+      accessor: "requestedDate",
     },
-    // { Header: <div className="float-center">Role</div>, accessor: "role" },
+    {
+      Header: <div className="float-center">Raised By</div>,
+      accessor: "requestRaisedBy",
+    },
     {
       Header: "Actions",
       accessor: "id",
@@ -144,7 +163,9 @@ const MenuManagementCheckerList = () => {
             className="btn addUser dashbutton"
             type="button"
             onClick={() => {
-              navigate(`/NHAI/MenuRequestDetails/${menuRequest}`);
+              navigate(`/NHAI/MenuRequestDetails/${menuRequest}`, {
+                state: { requestId: row.values.requestId },
+              });
             }}
           >
             Details
@@ -159,14 +180,17 @@ const MenuManagementCheckerList = () => {
       accessor: "requestId",
     },
     {
-      Header: <div className="float-center">Request Name</div>,
-      accessor: "requestName",
+      Header: <div className="float-center">Request Type</div>,
+      accessor: "requestType",
     },
     {
-      Header: <div className="float-center">Request Details</div>,
-      accessor: "requestDetails",
+      Header: <div className="float-center">Request Date</div>,
+      accessor: "requestedDate",
     },
-    // { Header: <div className="float-center">Role</div>, accessor: "role" },
+    {
+      Header: <div className="float-center">Raised By</div>,
+      accessor: "requestRaisedBy",
+    },
     {
       Header: "Actions",
       accessor: "id",
@@ -176,7 +200,9 @@ const MenuManagementCheckerList = () => {
             className="btn addUser dashbutton"
             type="button"
             onClick={() => {
-              navigate(`/NHAI/SubmenuRequestDetails/${submenuRequest}`);
+              navigate(`/NHAI/SubmenuRequestDetails/${submenuRequest}`, {
+                state: { requestId: row.values.requestId },
+              });
             }}
           >
             Details
@@ -191,14 +217,17 @@ const MenuManagementCheckerList = () => {
       accessor: "requestId",
     },
     {
-      Header: <div className="float-center">Request Name</div>,
-      accessor: "requestName",
+      Header: <div className="float-center">Request Type</div>,
+      accessor: "requestType",
     },
     {
-      Header: <div className="float-center">Request Details</div>,
-      accessor: "requestDetails",
+      Header: <div className="float-center">Request Date</div>,
+      accessor: "requestedDate",
     },
-    // { Header: <div className="float-center">Role</div>, accessor: "role" },
+    {
+      Header: <div className="float-center">Raised By</div>,
+      accessor: "requestRaisedBy",
+    },
     {
       Header: "Actions",
       accessor: "id",
@@ -208,7 +237,9 @@ const MenuManagementCheckerList = () => {
             className="btn addUser dashbutton"
             type="button"
             onClick={() => {
-              navigate(`/NHAI/ActionRequestDetails/${actionRequest}`);
+              navigate(`/NHAI/ActionRequestDetails/${actionRequest}`, {
+                state: { requestId: row.values.requestId },
+              });
             }}
           >
             Details
@@ -218,9 +249,63 @@ const MenuManagementCheckerList = () => {
     },
   ];
 
+  function FetchRequests(type) {
+    MenuService.getMenu_Submenu_ActionRequests(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
+        },
+        menuType: type,
+      },
+      (res) => {
+        if (res.status === 200) {
+          var reqList = res.data.data.menus;
+          console.log("request list->", reqList);
+
+          // setRows(reqList);
+          if (type === "Menu") {
+            setMenuList(reqList);
+            const list = (reqList || []).filter((x) => {
+              if (x.requestType === "Add") return x;
+            });
+            setMenuRows(list);
+            setMenuRequest("Add");
+          } else if (type === "Submenu") {
+            setSubmenuList(reqList);
+            const list = (reqList || []).filter((x) => {
+              if (x.requestType === "Add") return x;
+            });
+            setSubMenuRows(list);
+            setSubMenuRequest("Add");
+          } else {
+            setActionList(reqList);
+            const list = (reqList || []).filter((x) => {
+              if (x.requestType === "Add") return x;
+            });
+            setActionRows(list);
+            setActionRequest("Add");
+          }
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  }
+
   return (
     <div className="wrapper">
       <div className="container">
+        <Spinner isLoading={isLoading} />
         <div className="ULContainer">
           <div className="row">
             <div className="col-md-12">
@@ -231,7 +316,12 @@ const MenuManagementCheckerList = () => {
           <div className="row mb-3">
             <div className="col-md-11 mx-auto flex">
               <Accordion defaultActiveKey="0">
-                <Accordion.Item eventKey="0">
+                <Accordion.Item
+                  eventKey="0"
+                  onClick={() => {
+                    //FetchRequests("Menu");
+                  }}
+                >
                   <Accordion.Header>
                     <h6 className="pageTitle mb-0">Menu</h6>
                   </Accordion.Header>
@@ -252,7 +342,11 @@ const MenuManagementCheckerList = () => {
                         value="Add"
                         defaultChecked={true}
                         onClick={() => {
-                          setRows(data);
+                          const list = (menulist || []).filter((x) => {
+                            if (x.requestType == "Add") return x;
+                          });
+                          setMenuRows([]);
+                          setMenuRows(list);
                           setMenuRequest("Add");
                         }}
                       />
@@ -267,7 +361,11 @@ const MenuManagementCheckerList = () => {
                         name="menuRequest"
                         value="Update"
                         onClick={() => {
-                          setRows(updatedData);
+                          const list = (menulist || []).filter((x) => {
+                            if (x.requestType == "Update") return x;
+                          });
+                          setMenuRows([]);
+                          setMenuRows(list);
                           setMenuRequest("Update");
                         }}
                       />
@@ -282,7 +380,11 @@ const MenuManagementCheckerList = () => {
                         name="menuRequest"
                         value="Delete"
                         onClick={() => {
-                          setRows(DeletedData);
+                          const list = (menulist || []).filter((x) => {
+                            if (x.requestType == "Delete") return x;
+                          });
+                          setMenuRows([]);
+                          setMenuRows(list);
                           setMenuRequest("Delete");
                         }}
                       />
@@ -295,7 +397,7 @@ const MenuManagementCheckerList = () => {
                     </div>
                     <DataTable
                       columns={menuColumns}
-                      data={rows}
+                      data={menurows}
                       // customClass="ULTable"
                       // detailpage="UserDetails"
                       // editpage="EditUser"
@@ -304,7 +406,12 @@ const MenuManagementCheckerList = () => {
                     />
                   </Accordion.Body>
                 </Accordion.Item>
-                <Accordion.Item eventKey="1">
+                <Accordion.Item
+                  eventKey="1"
+                  onClick={() => {
+                    // FetchRequests("Submenu");
+                  }}
+                >
                   <Accordion.Header>
                     {" "}
                     <h6 className="pageTitle mb-0">Submenu</h6>
@@ -325,7 +432,11 @@ const MenuManagementCheckerList = () => {
                         value="Add"
                         defaultChecked={true}
                         onClick={() => {
-                          setRows(data);
+                          const list = (submenulist || []).filter((x) => {
+                            if (x.requestType == "Add") return x;
+                          });
+                          setSubMenuRows([]);
+                          setSubMenuRows(list);
                           setSubMenuRequest("Add");
                         }}
                       />
@@ -340,7 +451,11 @@ const MenuManagementCheckerList = () => {
                         name="submenuRequest"
                         value="Update"
                         onClick={() => {
-                          setRows(updatedData);
+                          const list = (submenulist || []).filter((x) => {
+                            if (x.requestType == "Update") return x;
+                          });
+                          setSubMenuRows([]);
+                          setSubMenuRows(list);
                           setSubMenuRequest("Update");
                         }}
                       />
@@ -355,8 +470,12 @@ const MenuManagementCheckerList = () => {
                         name="submenuRequest"
                         value="Delete"
                         onClick={() => {
-                          setRows(DeletedData);
-                          setSubMenuRequest("Delete Submenu");
+                          const list = (submenulist || []).filter((x) => {
+                            if (x.requestType == "Delete") return x;
+                          });
+                          setSubMenuRows([]);
+                          setSubMenuRows(list);
+                          setSubMenuRequest("Delete");
                         }}
                       />
                       <label
@@ -368,7 +487,7 @@ const MenuManagementCheckerList = () => {
                     </div>
                     <DataTable
                       columns={submenuColumns}
-                      data={rows}
+                      data={submenurows}
                       // customClass="ULTable"
                       // detailpage="UserDetails"
                       // editpage="EditUser"
@@ -377,7 +496,12 @@ const MenuManagementCheckerList = () => {
                     />
                   </Accordion.Body>
                 </Accordion.Item>
-                <Accordion.Item eventKey="2">
+                <Accordion.Item
+                  eventKey="2"
+                  onClick={() => {
+                    // FetchRequests("Action");
+                  }}
+                >
                   <Accordion.Header>
                     <h6 className="pageTitle mb-0">Action</h6>
                   </Accordion.Header>
@@ -398,7 +522,11 @@ const MenuManagementCheckerList = () => {
                         value="Add"
                         defaultChecked={true}
                         onClick={() => {
-                          setRows(data);
+                          const list = (actionlist || []).filter((x) => {
+                            if (x.requestType == "Add") return x;
+                          });
+                          setActionRows([]);
+                          setActionRows(list);
                           setActionRequest("Add");
                         }}
                       />
@@ -413,7 +541,11 @@ const MenuManagementCheckerList = () => {
                         name="actionRequest"
                         value="Update"
                         onClick={() => {
-                          setRows(updatedData);
+                          const list = (actionlist || []).filter((x) => {
+                            if (x.requestType == "Update") return x;
+                          });
+                          setActionRows([]);
+                          setActionRows(list);
                           setActionRequest("Update");
                         }}
                       />
@@ -428,7 +560,11 @@ const MenuManagementCheckerList = () => {
                         name="actionRequest"
                         value="Delete"
                         onClick={() => {
-                          setRows(DeletedData);
+                          const list = (actionlist || []).filter((x) => {
+                            if (x.requestType == "Delete") return x;
+                          });
+                          setActionRows([]);
+                          setActionRows(list);
                           setActionRequest("Delete");
                         }}
                       />
@@ -441,7 +577,7 @@ const MenuManagementCheckerList = () => {
                     </div>
                     <DataTable
                       columns={actionColumns}
-                      data={rows}
+                      data={actionrows}
                       // customClass="ULTable"
                       // detailpage="UserDetails"
                       // editpage="EditUser"
