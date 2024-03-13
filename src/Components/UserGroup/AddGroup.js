@@ -19,7 +19,8 @@ const AddGroup = () => {
   const locationData = location.state ? location.state.user : {};
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
-  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
   const path = window.location.pathname;
   const isEdit = path.includes("EditGroup") ? true : false;
   const navigate = useNavigate();
@@ -142,6 +143,10 @@ const AddGroup = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -185,6 +190,10 @@ const AddGroup = () => {
         setIsLoading(false);
         console.error("Error->", error);
         navigate("/NHAI/Error/500");
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
     console.log("group->", group);
@@ -235,7 +244,10 @@ const AddGroup = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
-        navigate("/NHAI/Error/500");
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

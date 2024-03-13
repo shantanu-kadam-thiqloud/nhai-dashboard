@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Accordion from "react-bootstrap/Accordion";
 import { MenuService } from "../../Service/MenuService";
 import Spinner from "../HtmlComponents/Spinner";
+import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 const MenuManagementCheckerList = () => {
   const navigate = useNavigate();
@@ -296,6 +297,10 @@ const MenuManagementCheckerList = () => {
         }
       },
       (error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setIsLoading(false);
         console.error("Error->", error);
       }

@@ -9,6 +9,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import { v4 as uuid } from "uuid";
 import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { toast } from "react-toastify";
 const UserList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -143,6 +144,10 @@ const UserList = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
     console.log("UserList->", UserList);

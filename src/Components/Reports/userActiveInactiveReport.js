@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Spinner from "../HtmlComponents/Spinner";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { toast } from "react-toastify";
 const UserActiveInactiveReport = () => {
   const [fromDate, setFromDate] = useState(
     "2023-04-01" //  new Date().toISOString().split("T")[0]
@@ -213,6 +214,10 @@ const UserActiveInactiveReport = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -247,6 +252,10 @@ const UserActiveInactiveReport = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

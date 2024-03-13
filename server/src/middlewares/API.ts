@@ -17,7 +17,8 @@ export const post = async (url: string, data: any, customHeaders: any) => {
 
   try {
     const response = await axios.post(url, data, customHeaders);
-    return response.data;
+
+    return response;
   } catch (error) {
     throw error;
   }
@@ -27,7 +28,7 @@ export const downloadPost = async (url: string, data: any) => {
   const headers = { 'Content-Type': 'blob' };
   try {
     const response = await axios.post(url, data);//, { headers: headers }responseType: 'arraybuffer',
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }
@@ -39,7 +40,7 @@ export const put = async (url: string, data: any, customHeaders: any) => {
 
   try {
     const response = await axios.put(url, data);
-    return response.data; // Sending the response back to the client
+    return response; // Sending the response back to the client
   } catch (error) {
     throw (error); // Passing the error to the error handling middleware
   }

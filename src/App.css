@@ -826,3 +826,13 @@ ul.p-column-filter-row-items {
 .custom-paginator .p-paginator-page.p-paginator-element-active {
   background-color: #0056b3 !important;
 }
+
+.error-img {
+  max-width: 40% !important;
+  height: auto;
+}
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

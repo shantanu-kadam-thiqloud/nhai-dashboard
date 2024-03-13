@@ -27,7 +27,8 @@ const MenuManagement = () => {
   const userId = location.state ? location.state.requestId : ""; //useParams();
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
-  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
   //----------------------------------------------
   const [selectedMenu, setSelectedMenu] = useState("");
   const [selectedMenuId, setSelectedMenuId] = useState("");
@@ -266,6 +267,10 @@ const MenuManagement = () => {
         }
       },
       (error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setIsLoading(false);
         console.error("Error->", error);
       }
@@ -312,6 +317,10 @@ const MenuManagement = () => {
         }
       },
       (error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setIsLoading(false);
         console.error("Error->", error);
       }
@@ -355,6 +364,10 @@ const MenuManagement = () => {
         }
       },
       (error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setIsLoading(false);
         console.error("Error->", error);
       }

@@ -48,9 +48,10 @@ class Login {
 
     try {
       // Dummy login API
-      const LoginUser = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+      const LoginUserr = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
       console.log('Incoming Data-->', req.body);
       //Set to redis-----------------------------------------------------------------
+      const LoginUser = LoginUserr.data;
       if (LoginUser) {
         const session_id = uuid();
         delete LoginUser.token;
@@ -80,7 +81,23 @@ class Login {
 
     } catch (error) {
       console.error('Error during POST request:', error);
-      res.status(500).json({ error: 'Error during POST request' + error });
+      if (error.response) {
+        // If the error has a response object, meaning it's an HTTP error response
+        const statusCode = error.response.status;
+        if (statusCode === 400) {
+          // Handle Bad Request error (status code 400) here
+          res.status(400).json({ error: 'Bad Request: ' + error.response.data });
+        } else if (statusCode === 500) {
+          // Handle Internal Server Error (status code 500) here
+          res.status(500).json({ error: 'Internal Server Error: ' + error.response.data });
+        } else {
+          // Handle other HTTP errors here if needed
+          res.status(statusCode).json({ error: 'HTTP Error: ' + error.response.data });
+        }
+      } else {
+        // Handle non-HTTP errors here
+        res.status(500).json({ error: 'Error during POST request: ' + error });
+      }
     }
   }
 

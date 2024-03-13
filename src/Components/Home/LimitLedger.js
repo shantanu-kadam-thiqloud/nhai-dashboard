@@ -15,7 +15,7 @@ import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
-
+import { toast } from "react-toastify";
 const LimitLedger = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
@@ -368,6 +368,10 @@ const LimitLedger = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -393,6 +397,10 @@ const LimitLedger = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

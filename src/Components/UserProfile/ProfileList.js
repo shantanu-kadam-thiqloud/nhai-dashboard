@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
 import sideBarDataChecker from "../Checker/sideBarData";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
+import { toast } from "react-toastify";
 const UserList = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -168,6 +169,10 @@ const UserList = () => {
       (error) => {
         console.error("error->", error);
         setIsLoading(false);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
     return ProfileList;

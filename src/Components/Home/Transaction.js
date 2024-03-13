@@ -15,6 +15,7 @@ import Spinner from "../HtmlComponents/Spinner";
 import Hyperlink from "./Hyperlink";
 import { v4 as uuid } from "uuid";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
+import { toast } from "react-toastify";
 const Transaction = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
@@ -286,6 +287,10 @@ const Transaction = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -322,6 +327,10 @@ const Transaction = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

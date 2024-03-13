@@ -15,7 +15,7 @@ import {
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
-
+import { toast } from "react-toastify";
 const Snapshot = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -320,6 +320,10 @@ const Snapshot = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -342,6 +346,10 @@ const Snapshot = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

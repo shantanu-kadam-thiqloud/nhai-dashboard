@@ -13,7 +13,7 @@ import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
-
+import { toast } from "react-toastify";
 const PIU = () => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -228,6 +228,10 @@ const PIU = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -263,6 +267,10 @@ const PIU = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -294,6 +302,10 @@ const PIU = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

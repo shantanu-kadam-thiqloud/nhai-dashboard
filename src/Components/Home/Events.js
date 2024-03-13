@@ -12,7 +12,7 @@ import { v4 as uuid } from "uuid";
 import Hyperlink from "./Hyperlink";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
-
+import { toast } from "react-toastify";
 const Events = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [rowdata, setRData] = useState("");
@@ -339,6 +339,10 @@ const Events = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -370,6 +374,10 @@ const Events = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

@@ -17,7 +17,8 @@ function GroupDetails() {
   const locationData = location.state ? location.state.user : {};
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
-  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -151,6 +152,10 @@ function GroupDetails() {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

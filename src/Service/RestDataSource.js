@@ -58,7 +58,9 @@ export default class RestDataSource {
 
       if (err && err.response && err.response.data) {
         errorMessage =
-          err.response.data.reasonText || "Error encountered, Please try again";
+          err.message ||
+          err.response.data.reasonText ||
+          "Error encountered, Please try again";
         let errbx = document.getElementById("processing-status");
         if (errbx != null) {
           errbx.innerHTML = errorMessage + ", Please try again.";

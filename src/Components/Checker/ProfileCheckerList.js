@@ -198,6 +198,10 @@ const ProfileCheckerList = () => {
         }
       },
       (error) => {
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setIsLoading(false);
         console.error("Error->", error);
       }

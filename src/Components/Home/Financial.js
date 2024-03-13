@@ -12,6 +12,7 @@ import { v4 as uuid } from "uuid";
 import Spinner from "../HtmlComponents/Spinner";
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
+import { toast } from "react-toastify";
 const Financial = () => {
   const [dbdata, setDbdata] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -192,9 +193,9 @@ const Financial = () => {
         },
         userName: "NHAI",
         // statusAsOn: "21-05-2020",
-        year: year,
-        fromDate: ConvertFormat(fromDate),
-        toDate: ConvertFormat(toDate),
+        financialYear: year,
+        statusAsOnFrom: ConvertFormat(fromDate),
+        statusAsOnTO: ConvertFormat(toDate),
       },
       (res) => {
         if (res.status === 200) {
@@ -212,6 +213,10 @@ const Financial = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

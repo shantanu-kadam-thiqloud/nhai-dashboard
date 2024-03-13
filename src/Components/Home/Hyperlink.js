@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
+import { toast } from "react-toastify";
 const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
   const customStyles = {
     content: {
@@ -265,6 +266,10 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -290,6 +295,10 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

@@ -11,14 +11,17 @@ import {
   getCookie,
   useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
+import Spinner from "../HtmlComponents/Spinner";
 
 function Header() {
   const navigate = useNavigate();
   const [lastLogin, setLastLogin] = useState("8 Aug 2023, 05:18 PM");
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
-  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
+  const cookieUser = getCookie("USER");
+  const USER = cookieUser === "" ? reduxUser : cookieUser;
 
   const isDashboard =
     location.pathname === "Dashboard" || location.pathname === "Dashboard"
@@ -33,6 +36,7 @@ function Header() {
   return (
     <header>
       <div className="row">
+        <Spinner isLoading={isLoading} />
         <div className="logo kotakDiv col-md-10">
           <a href="/">
             {" "}
@@ -44,10 +48,15 @@ function Header() {
           <span className="lastLogin">
             {USER === "" || USER === undefined
               ? ""
-              : USER.userRole == null
+              : USER?.userRole === null || USER?.userRole === undefined
               ? ""
-              : USER.userRole + " "}
-            |{USER === "" || USER === undefined ? "" : " " + USER.userName}
+              : USER?.userRole + " "}
+            |
+            {USER === "" || USER === undefined
+              ? ""
+              : " " + USER?.userName === undefined
+              ? ""
+              : USER?.userName}
           </span>
         </div>
         <div className="logoNHAI nhaiDiv col-md-2">
@@ -63,11 +72,13 @@ function Header() {
                 icon={faPowerOff}
                 className="MenuIcon"
                 onClick={() => {
+                  setIsLoading(true);
                   sessionStorage.clear();
                   localStorage.clear();
                   clearCookie("USER");
                   navigate("/NHAI/login");
                   window.location.reload();
+                  setIsLoading(false);
                 }}
               />
             </div>

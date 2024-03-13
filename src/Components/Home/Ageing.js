@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import PieChart from "../Charts/PieChart";
 import BarChart from "../Charts/BarChart";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import {
@@ -320,6 +321,10 @@ const Ageing = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

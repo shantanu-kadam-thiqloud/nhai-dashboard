@@ -22,7 +22,8 @@ const UserCheckerDetails = () => {
   const userId = location.state ? location.state.requestId : ""; //useParams();
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
-  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [currentValue, setCurrentValue] = useState({});
@@ -273,6 +274,10 @@ const UserCheckerDetails = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -305,6 +310,10 @@ const UserCheckerDetails = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -358,6 +367,10 @@ const UserCheckerDetails = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

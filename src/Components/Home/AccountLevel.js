@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "../HtmlComponents/DataTable";
 import { v4 as uuid } from "uuid";
+import { toast } from "react-toastify";
 import Hyperlink from "./Hyperlink";
 import {
   DateFormatFunction,
@@ -444,6 +445,10 @@ const AccountLevel = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -469,6 +474,10 @@ const AccountLevel = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

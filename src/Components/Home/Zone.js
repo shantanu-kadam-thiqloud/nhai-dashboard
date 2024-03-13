@@ -10,7 +10,7 @@ import {
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router";
-
+import { toast } from "react-toastify";
 const Zone = ({ setTab }) => {
   const [asOnDate, setAsOnDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -372,6 +372,10 @@ const Zone = ({ setTab }) => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

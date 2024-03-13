@@ -10,7 +10,7 @@ import {
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
-
+import { toast } from "react-toastify";
 const FinanacialD = () => {
   const [fromDate, setFromDate] = useState(
     "2023-04-01" // new Date().toISOString().split("T")[0]
@@ -18,7 +18,7 @@ const FinanacialD = () => {
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
 
   const [Decimal, setDecimal] = useState(true);
-  const [bankD, setBank] = useState("");
+
   const [yearD, setYear] = useState("");
 
   const navigate = useNavigate();
@@ -40,6 +40,14 @@ const FinanacialD = () => {
     //   body: tableData,
     //   startY: 20,
     // });
+    doc.autoTable({ html: "#pdfTable" });
+    // Get the HTML content of the table
+    // const table = document.getElementById("pdfTable");
+    // const tableHtml = table.outerHTML;
+
+    // Generate PDF
+    // doc.fromHTML(tableHtml, 10, 10);
+    // doc.save('table.pdf');
 
     // Save the PDF with a unique name
     const fileName = `Financial(D)_${ConvertFormat(
@@ -257,17 +265,43 @@ const FinanacialD = () => {
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
   ];
-
+  const fdata = {
+    responseMetaData: {
+      status: "200",
+      message: "Success",
+    },
+    deposits: {
+      cumulativeDeposits: "649550736",
+      interestCredited: "0",
+      totalBalance: "649550736",
+      OtherCredit: null,
+      Less: "0",
+    },
+    disbursements: {
+      paidtoBeneficiary: "369413128",
+      Less_Return_Benfeciary: null,
+      paidforAdminExpenses: null,
+      Less_Return_Admin_Expense: null,
+      paidforTDS: null,
+      otherDebits: "0",
+      suspense: null,
+      suspense_Debit: null,
+      suspense_Credit: null,
+      Surplus_Deficit: null,
+    },
+    summary: null,
+  };
+  const [fd_Data, setFd_data] = useState(fdata);
   const reqBody = {
     requestMetaData: {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "nhai",
-    year: yearD, //"28-09-2023",
-    bank: bankD, //"All", //Kotak,
-    fromDate: fromDate, //"01-04-2017",
-    toData: toDate, //"01-09-2023",
+    userName: "NHAI",
+    financialYear: yearD || "", //"28-09-2023",
+    //  bank: bankD, //"All", //Kotak,
+    statusAsOnFrom: ConvertFormat(fromDate) || "", //"01-04-2017",
+    statusAsOnTO: ConvertFormat(toDate) || "", //"01-09-2023",
   };
 
   function FetchFinancial_D() {
@@ -276,7 +310,7 @@ const FinanacialD = () => {
       (res) => {
         if (res.status === 200) {
           console.log(res.data.data);
-          // setRows(res.data.data.zones);
+          setFd_data(res.data.data);
           setIsLoading(false);
         } else if (res.status === 404) {
           setIsLoading(false);
@@ -289,6 +323,10 @@ const FinanacialD = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -309,10 +347,10 @@ const FinanacialD = () => {
                   setYear(e.target.value);
                 }}
               >
-                <option value="2018">2014</option>
-                <option value="2019">2015</option>
-                <option value="2020">2016</option>
-                <option value="2021">2017</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
                 <option value="2018">2018</option>
                 <option value="2019">2019</option>
                 <option value="2020">2020</option>
@@ -421,7 +459,7 @@ const FinanacialD = () => {
             showSearchBar={false}
           />{" "} */}
           {/* //-------------------------------------------------------------------------------------------------------------- */}
-          <table className="">
+          <table id="pdfTable" className="">
             <tr>
               <th>Deposits</th>
               <th>Amount</th>
@@ -433,23 +471,31 @@ const FinanacialD = () => {
             <tr>
               <td>Cumulative Deposit</td>
               <td className="tright"></td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {fd_Data?.deposits?.cumulativeDeposits}
+              </td>
               <td>Paid to Beneficiary</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {fd_Data?.disbursements?.paidtoBeneficiary}
+              </td>
               <td className="tright"></td>
             </tr>
             <tr>
               <td>Interest Credited</td>
               <td className="tright"></td>
-              <td className="tright">0.00</td>
+              <td className="tright">{fd_Data?.deposits?.interestCredited}</td>
               <td>Less: Returns</td>
               <td className="tright">(0.00)</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {fd_Data?.disbursements?.Less_Return_Benfeciary}
+              </td>
             </tr>
             <tr>
               <td>Total Balance</td>
               <td className="tright"></td>
-              <td className="tright upperb">0.00</td>
+              <td className="tright upperb">
+                {fd_Data?.deposits?.totalBalance}
+              </td>
               <td></td>
               <td className="tright upperb"></td>
               <td className="tright"></td>
@@ -459,7 +505,9 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td className="tright"></td>
               <td>Paid for Admin Expenses</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {fd_Data?.disbursements?.paidforAdminExpenses}
+              </td>
               <td className="tright"></td>
             </tr>
             <tr>
@@ -468,7 +516,10 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>Less: Returns</td>
               <td className="tright bottomb">(0.00)</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {" "}
+                {fd_Data?.disbursements?.Less_Return_Admin_Expense}
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -476,15 +527,17 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>Paid for TDS</td>
               <td className="tright"></td>
-              <td className="tright">0.00</td>
+              <td className="tright">{fd_Data?.disbursements?.paidforTDS}</td>
             </tr>
             <tr>
               <td>Other Credit</td>
               <td className="tright"></td>
-              <td className="tright bottomb">0.00</td>
+              <td className="tright bottomb">
+                {fd_Data?.deposits?.OtherCredit}
+              </td>
               <td>Other Debit</td>
               <td className="tright"></td>
-              <td className="tright">0.00</td>
+              <td className="tright">{fd_Data?.disbursements?.otherDebits}</td>
             </tr>
             <tr>
               <td></td>
@@ -492,7 +545,7 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>Suspense</td>
               <td className="tright"></td>
-              <td className="tright"></td>
+              <td className="tright">{fd_Data?.disbursements.suspense}</td>
             </tr>
             <tr>
               <td></td>
@@ -500,15 +553,19 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>- Debit</td>
               <td className="tright"></td>
-              <td className="tright"></td>
+              <td className="tright">
+                {fd_Data?.disbursements.suspense_Debit}
+              </td>
             </tr>
             <tr>
               <td>Less: Interest Transferred</td>
               <td className="tright"></td>
-              <td className="tright">0.00</td>
+              <td className="tright">{fd_Data?.deposits?.Less}</td>
               <td>- Credit</td>
               <td className="tright bottomb">(0.00)</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {fd_Data?.disbursements?.suspense_Credit}
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -524,7 +581,9 @@ const FinanacialD = () => {
               <td className="tright upperb"></td>
               <td>Surplus/Deficit</td>
               <td className="tright"></td>
-              <td className="tright upperb">0.00</td>
+              <td className="tright upperb">
+                {fd_Data?.disbursements?.Surplus_Deficit}
+              </td>
             </tr>
             <tr>
               <td className="upperb">Nodal Account Balance</td>

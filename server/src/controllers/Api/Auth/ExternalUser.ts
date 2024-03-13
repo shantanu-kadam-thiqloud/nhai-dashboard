@@ -49,9 +49,10 @@ class ExternalUser {
 
         try {
             // Dummy login API
-            const LoginUser = await api.post("http://172.16.16.99:8091/usermanagement/external_login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+            const LoginUserr = await api.post("http://172.16.16.99:8091/usermanagement/external_login/v1", req.body, "");//'https://dummyjson.com/auth/login'
             console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
+            const LoginUser = LoginUserr.data;
             if (LoginUser) {
                 const session_id = uuid();
                 delete LoginUser.token;
@@ -121,9 +122,10 @@ class ExternalUser {
 
         try {
             // Dummy login API
-            const pwdData = await api.post("http://172.16.16.99:8091/usermanagement/changePassword/v1", req.body, "");//'https://dummyjson.com/auth/login'
+            const pwdDataa = await api.post("http://172.16.16.99:8091/usermanagement/changePassword/v1", req.body, "");//'https://dummyjson.com/auth/login'
             console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
+            const pwdData = pwdDataa.data
             if (pwdData) {
                 // const session_id = uuid();
                 // delete LoginUser.token;
@@ -140,6 +142,8 @@ class ExternalUser {
                 // const redisRES = await useRedis.set(session_id, jsonString, ttlInSeconds);
                 // //console.log(redisRES);
                 // // Sending the response after processing
+
+
                 res.json({
                     message: "User login successfully.",
                     data: pwdData,
@@ -193,9 +197,10 @@ class ExternalUser {
 
         try {
             // Dummy login API
-            const otpData = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+            const otpDataa = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
             console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
+            const otpData = otpDataa.data;
             if (otpData) {
                 // const session_id = uuid();
                 // delete LoginUser.token;

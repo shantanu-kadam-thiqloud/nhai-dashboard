@@ -8,6 +8,7 @@ import {
   ConvertFormat,
   useZoneDataList,
 } from "../HtmlComponents/CommonFunction";
+import { toast } from "react-toastify";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../HtmlComponents/Spinner";
@@ -225,6 +226,10 @@ const Bank = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }

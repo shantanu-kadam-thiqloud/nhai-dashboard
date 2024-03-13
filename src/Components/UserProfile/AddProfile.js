@@ -33,7 +33,8 @@ const AddProfile = () => {
   const locationData = location.state ? location.state.user : {};
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
-  const USER = reduxUser === "" ? getCookie("USER") : reduxUser;
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
   // const profiles = [
   //   {
   //     id: 1,
@@ -508,6 +509,10 @@ const AddProfile = () => {
       (error) => {
         setIsLoading(false);
         console.error("Error->", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
@@ -605,6 +610,10 @@ const AddProfile = () => {
         setIsLoading(false);
         console.error("Error->", error);
         navigate("/NHAI/Error/500");
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     );
   }
