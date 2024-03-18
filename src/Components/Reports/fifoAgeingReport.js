@@ -5,6 +5,8 @@ import {
   DateFormatFunction,
   ConvertFormat,
   DownloadByteArray,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { ReportService } from "../../Service/ReportService";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +21,12 @@ const FifoAgeingReport = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [rows, setRows] = useState([]); //data
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const columns = [
     {
       field: "piu",
@@ -176,7 +184,7 @@ const FifoAgeingReport = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
+        userName: USER.userName || "",
         asOnDate: "31-12-2023", //ConvertFormat(asOnDate);
       },
       (res) => {
@@ -212,7 +220,7 @@ const FifoAgeingReport = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
+        userName: USER.userName || "",
         asOnDate: "31-12-2017", //ConvertFormat(asOnDate);
       },
       (res) => {

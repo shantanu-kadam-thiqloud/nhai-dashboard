@@ -7,6 +7,8 @@ import jsPDF from "jspdf";
 import {
   DateFormatFunction,
   ConvertFormat,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 import Spinner from "../HtmlComponents/Spinner";
@@ -26,6 +28,12 @@ const Financial = () => {
   const [apiData, setApiData] = useState([]);
   const [year, setYear] = useState("2014");
   const navigate = useNavigate();
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   useEffect(() => {
     setIsLoading(true);
     FetchFinancial();
@@ -191,7 +199,7 @@ const Financial = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
         // statusAsOn: "21-05-2020",
         financialYear: year,
         statusAsOnFrom: ConvertFormat(fromDate),

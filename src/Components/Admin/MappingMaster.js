@@ -12,6 +12,8 @@ import {
   usePIUDataList,
   useZoneDataList,
   useRoDataList,
+  useGetReduxData,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 
 const MappingMaster = () => {
@@ -21,6 +23,7 @@ const MappingMaster = () => {
   const [isPIU, setPIU] = useState(false);
   const [isPD, setPD] = useState(false);
   const [isZone, setZone] = useState(false);
+  const [isRO, setRO] = useState(false);
   //-----------DD List-----------------------------------------
   const [locationList, setLocationList] = useState([]);
   const [branchList, setBranchList] = useState([]);
@@ -41,6 +44,14 @@ const MappingMaster = () => {
   const piuList = usePIUDataList(location, ro);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
+
   const validationSchema = Yup.object({
     userName: Yup.string().required("User Name is required"),
     location: Yup.string().required("Location is required"),
@@ -73,7 +84,7 @@ const MappingMaster = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
+        userName: USER?.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -108,7 +119,7 @@ const MappingMaster = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
+        userName: USER?.userName || "",
         branchId: branchId, //"586", // null
       },
       (res) => {
@@ -144,7 +155,7 @@ const MappingMaster = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
+        userName: USER?.userName || "",
         piuId: piuId, //"210",
       },
       (res) => {
@@ -174,7 +185,58 @@ const MappingMaster = () => {
       }
     );
   }
-
+  //-------------------------------------------------------------------------------
+  const handleSubmit = (values, { resetForm, setSubmitting }, actions) => {
+    DropdownService.getPDData(
+      {
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: "",
+        },
+        userName: "",
+        requestObject: {
+          branchId: 3,
+          addZone: isZone ? 1 : 0,
+          addRo: isRO ? 1 : 0,
+          zoneName: "UnMapped",
+          roName: "Jaipur",
+          locationId: 2,
+          locationName: "Agra",
+          piuId: 1,
+          piuName: "Agra",
+          pdId: 187,
+          pdName: "Col Sh",
+          pdEmail: "hajipur@nhai",
+          pdMobileNo: "7",
+        },
+      },
+      (res) => {
+        //   {
+        //     "pdId": 187,
+        //     "pdName": "Col Sh",
+        //     "pdEmail": "hajipur@nhai",
+        //     "pdMobileNo": "7"
+        // },
+        if (res.status === 200) {
+          var data = res.data.data.pds;
+          console.log("->", data);
+          setPDList(data);
+          setIsLoading(false);
+        } else if (res.status === 404) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/404");
+        } else if (res.status === 500) {
+          setIsLoading(false);
+          navigate("/NHAI/Error/500");
+        }
+        //   return data;
+      },
+      (error) => {
+        setIsLoading(false);
+        console.error("Error->", error);
+      }
+    );
+  };
   return (
     <div className="wrapper">
       <Spinner isLoading={isLoading} />
@@ -198,317 +260,345 @@ const MappingMaster = () => {
                 }}
                 validationSchema={validationSchema}
                 enableReinitialize
-                onSubmit={(values) => {
-                  // Handle form submission here
-                  console.log(values);
-                }}
+                onSubmit={handleSubmit}
               >
-                <Form>
-                  <div className="modal-body">
-                    <div className="row">
-                      <div className="col">
-                        <div className="mb-3">
-                          <label htmlFor="userName" className="form-label">
-                            Select Branch
-                          </label>
-                          <Field
-                            as="select"
-                            className="form-control form-select"
-                            id="branch"
-                            name="branch"
-                          >
-                            {" "}
-                            <option value="">--Select Branch--</option>
-                            {(branchList || []).map((x) => {
-                              return (
-                                <option value={x.branchId}>
-                                  {x.branchName}
-                                </option>
-                              );
-                            })}
-                          </Field>
-                          <ErrorMessage
-                            name="branch"
-                            component="div"
-                            className="error"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="location" className="form-label">
-                            {isLocation ? "Add" : "Select"} Location
-                          </label>
-                          <div className="row">
-                            <div className="col-md-9">
+                {({ values }) => (
+                  <Form>
+                    <div className="modal-body">
+                      <div className="row">
+                        <div className="col">
+                          <div className="mb-3">
+                            <label htmlFor="userName" className="form-label">
+                              Select Branch
+                            </label>
+                            <Field
+                              as="select"
+                              className="form-control form-select"
+                              id="branch"
+                              name="branch"
+                            >
                               {" "}
-                              {!isLocation ? (
-                                <Field
-                                  as="select"
-                                  className="form-control form-select"
-                                  id="location"
+                              <option value="">--Select Branch--</option>
+                              {(branchList || []).map((x) => {
+                                return (
+                                  <option value={x.branchId}>
+                                    {x.branchName}
+                                  </option>
+                                );
+                              })}
+                            </Field>
+                            <ErrorMessage
+                              name="branch"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="location" className="form-label">
+                              {isLocation ? "Add" : "Select"} Location
+                            </label>
+                            <div className="row">
+                              <div className="col-md-9">
+                                {" "}
+                                {!isLocation ? (
+                                  <Field
+                                    as="select"
+                                    className="form-control form-select"
+                                    id="location"
+                                    name="location"
+                                  >
+                                    <option value="">
+                                      --Select Location--
+                                    </option>
+                                    {(locationList || []).map((x) => {
+                                      return (
+                                        <option value={x.locationId}>
+                                          {x.locationName}
+                                        </option>
+                                      );
+                                    })}
+                                  </Field>
+                                ) : (
+                                  <Field
+                                    type="text"
+                                    className="form-control"
+                                    id="location"
+                                    name="location"
+                                  />
+                                )}
+                                <ErrorMessage
                                   name="location"
+                                  component="div"
+                                  className="error"
+                                />{" "}
+                              </div>
+                              <div className="col-md-2 p-0">
+                                {" "}
+                                <button
+                                  className="btn addUser min min-width-110px"
+                                  onClick={() => {
+                                    setLocation(!isLocation);
+                                  }}
                                 >
-                                  <option value="">--Select Location--</option>
-                                  {(locationList || []).map((x) => {
-                                    return (
-                                      <option value={x.locationId}>
-                                        {x.locationName}
-                                      </option>
-                                    );
-                                  })}
-                                </Field>
-                              ) : (
-                                <Field
-                                  type="text"
-                                  className="form-control"
-                                  id="location"
-                                  name="location"
-                                />
-                              )}
-                              <ErrorMessage
-                                name="location"
-                                component="div"
-                                className="error"
-                              />{" "}
-                            </div>
-                            <div className="col-md-2 p-0">
-                              {" "}
-                              <button
-                                className="btn addUser min min-width-110px"
-                                onClick={() => {
-                                  setLocation(!isLocation);
-                                }}
-                              >
-                                {!isLocation ? "Add New" : "Cancel"}
-                              </button>{" "}
+                                  {!isLocation ? "Add New" : "Cancel"}
+                                </button>{" "}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="mb-3">
-                          <label
-                            htmlFor="userDomainName"
-                            className="form-label"
-                          >
-                            {isPIU ? "Add" : "Select"} PIU
-                          </label>
-                          <div className="row">
-                            <div className="col-md-9">
-                              {isPIU ? (
-                                <Field
-                                  type="text"
-                                  className="form-control"
-                                  id="piu"
+                          <div className="mb-3">
+                            <label
+                              htmlFor="userDomainName"
+                              className="form-label"
+                            >
+                              {isPIU ? "Add" : "Select"} PIU
+                            </label>
+                            <div className="row">
+                              <div className="col-md-9">
+                                {isPIU ? (
+                                  <Field
+                                    type="text"
+                                    className="form-control"
+                                    id="piu"
+                                    name="piu"
+                                  />
+                                ) : (
+                                  <Field
+                                    as="select"
+                                    className="form-control form-select"
+                                    id="piu"
+                                    name="piu"
+                                  >
+                                    <option value="">--Select PIU--</option>
+                                    <option value="">All</option>
+                                    {(piuList || []).map((x) => {
+                                      return (
+                                        <option value={x.piuId}>
+                                          {x.piuName}
+                                        </option>
+                                      );
+                                    })}
+                                  </Field>
+                                )}
+                                <ErrorMessage
                                   name="piu"
+                                  component="div"
+                                  className="error"
                                 />
-                              ) : (
-                                <Field
-                                  as="select"
-                                  className="form-control form-select"
-                                  id="piu"
-                                  name="piu"
+                              </div>
+                              <div className="col-md-2 p-0">
+                                <button
+                                  className="btn addUser min min-width-110px"
+                                  onClick={() => {
+                                    setPIU(!isPIU);
+                                  }}
                                 >
-                                  <option value="">--Select PIU--</option>
-                                  <option value="">All</option>
-                                  {(piuList || []).map((x) => {
-                                    return (
-                                      <option value={x.piuId}>
-                                        {x.piuName}
-                                      </option>
-                                    );
-                                  })}
-                                </Field>
-                              )}
-                              <ErrorMessage
-                                name="piu"
-                                component="div"
-                                className="error"
-                              />
+                                  {!isPIU ? "Add New" : "Cancel"}
+                                </button>{" "}
+                              </div>
                             </div>
-                            <div className="col-md-2 p-0">
-                              <button
-                                className="btn addUser min min-width-110px"
-                                onClick={() => {
-                                  setPIU(!isPIU);
-                                }}
-                              >
-                                {!isPIU ? "Add New" : "Cancel"}
-                              </button>{" "}
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="gender" className="form-label">
+                              {isRO ? "Add" : "Select"} RO
+                            </label>
+                            <div className="row">
+                              <div className="col-md-9">
+                                {isRO ? (
+                                  <Field
+                                    type="text"
+                                    className="form-control"
+                                    id="ro"
+                                    name="ro"
+                                  />
+                                ) : (
+                                  <Field
+                                    as="select"
+                                    className="form-control form-select "
+                                    id="ro"
+                                    name="ro"
+                                  >
+                                    <option value="">--Select RO--</option>
+                                    <option value="">All</option>
+                                    {(roList || []).map((x) => {
+                                      return (
+                                        <option value={x.roName}>
+                                          {x.roName}
+                                        </option>
+                                      );
+                                    })}
+                                  </Field>
+                                )}
+                                <ErrorMessage
+                                  name="ro"
+                                  component="div"
+                                  className="error"
+                                />
+                              </div>
+                              <div className="col-md-2 p-0">
+                                <button
+                                  className="btn addUser min min-width-110px"
+                                  onClick={() => {
+                                    setRO(!isRO);
+                                  }}
+                                >
+                                  {!isPIU ? "Add New" : "Cancel"}
+                                </button>{" "}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="email" className="form-label">
+                              {isZone ? "Add" : "Select"} Zone
+                            </label>
+                            <div className="row">
+                              <div className="col-md-9">
+                                {isZone ? (
+                                  <Field
+                                    type="text"
+                                    className="form-control "
+                                    id="zone"
+                                    name="zone"
+                                  />
+                                ) : (
+                                  <Field
+                                    as="select"
+                                    className="form-control form-select"
+                                    id="zone"
+                                    name="zone"
+                                  >
+                                    <option value="">--Select Zone--</option>
+                                    <option value="">All</option>
+                                    {(zoneList || []).map((x) => {
+                                      return (
+                                        <option value={x.zoneName}>
+                                          {x.zoneName}
+                                        </option>
+                                      );
+                                    })}
+                                  </Field>
+                                )}
+                                <ErrorMessage
+                                  name="zone"
+                                  component="div"
+                                  className="error"
+                                />
+                              </div>
+                              <div className="col-md-2 p-0">
+                                <button
+                                  className="btn addUser min min-width-110px"
+                                  onClick={() => {
+                                    setZone(!isZone);
+                                  }}
+                                >
+                                  {isZone ? "Cancel" : "Add New"}
+                                </button>{" "}
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div className="mb-3">
-                          <label htmlFor="gender" className="form-label">
-                            Select RO
-                          </label>
-                          <Field
-                            as="select"
-                            className="form-control form-select "
-                            id="gender"
-                            name="gender"
-                          >
-                            <option value="">--Select RO--</option>
-                            <option value="">All</option>
-                            {(roList || []).map((x) => {
-                              return (
-                                <option value={x.roName}>{x.roName}</option>
-                              );
-                            })}
-                          </Field>
-                          <ErrorMessage
-                            name="gender"
-                            component="div"
-                            className="error"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="email" className="form-label">
-                            {isZone ? "Add" : "Select"} Zone
-                          </label>
-                          <div className="row">
-                            <div className="col-md-9">
-                              {isZone ? (
-                                <Field
-                                  type="text"
-                                  className="form-control "
-                                  id="zone"
-                                  name="zone"
-                                />
-                              ) : (
-                                <Field
-                                  as="select"
-                                  className="form-control form-select"
-                                  id="zone"
-                                  name="zone"
-                                >
-                                  <option value="">--Select Zone--</option>
-                                  <option value="">All</option>
-                                  {(zoneList || []).map((x) => {
-                                    return (
-                                      <option value={x.zoneName}>
-                                        {x.zoneName}
-                                      </option>
-                                    );
-                                  })}
-                                </Field>
-                              )}
-                              <ErrorMessage
-                                name="zone"
-                                component="div"
-                                className="error"
-                              />
-                            </div>
-                            <div className="col-md-2 p-0">
-                              <button
-                                className="btn addUser min min-width-110px"
-                                onClick={() => {
-                                  setZone(!isZone);
-                                }}
-                              >
-                                {isZone ? "Cancel" : "Add New"}
-                              </button>{" "}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col">
-                        <div className="mb-3">
-                          <label htmlFor="role" className="form-label">
-                            {!isPD ? " Select" : "Add"} PD
-                          </label>
+                        <div className="col">
+                          <div className="mb-3">
+                            <label htmlFor="role" className="form-label">
+                              {!isPD ? " Select" : "Add"} PD
+                            </label>
 
-                          <div className="row">
-                            <div className="col-md-9">
-                              {isPD ? (
-                                <Field
-                                  type="text"
-                                  className="form-control"
-                                  id="pd"
+                            <div className="row">
+                              <div className="col-md-9">
+                                {isPD ? (
+                                  <Field
+                                    type="text"
+                                    className="form-control"
+                                    id="pd"
+                                    name="pd"
+                                  />
+                                ) : (
+                                  <Field
+                                    as="select"
+                                    className="form-control form-select"
+                                    id="pd"
+                                    name="pd"
+                                  >
+                                    <option value="">--Select PD--</option>
+                                    {(PDList || []).map((x) => {
+                                      return (
+                                        <option value={x.pdId}>
+                                          {x.pdName}
+                                        </option>
+                                      );
+                                    })}
+                                  </Field>
+                                )}
+                                <ErrorMessage
                                   name="pd"
+                                  component="div"
+                                  className="error"
                                 />
-                              ) : (
-                                <Field
-                                  as="select"
-                                  className="form-control form-select"
-                                  id="pd"
-                                  name="pd"
+                              </div>
+                              <div className="col-md-2 p-0">
+                                <button
+                                  className="btn addUser min min-width-110px"
+                                  onClick={() => {
+                                    setPD(!isPD);
+                                  }}
                                 >
-                                  <option value="">--Select PD--</option>
-                                  {(PDList || []).map((x) => {
-                                    return (
-                                      <option value={x.pdId}>{x.pdName}</option>
-                                    );
-                                  })}
-                                </Field>
-                              )}
-                              <ErrorMessage
-                                name="pd"
-                                component="div"
-                                className="error"
-                              />
-                            </div>
-                            <div className="col-md-2 p-0">
-                              <button
-                                className="btn addUser min min-width-110px"
-                                onClick={() => {
-                                  setPD(!isPD);
-                                }}
-                              >
-                                {isPD ? "Cancel" : "Add New"}
-                              </button>{" "}
+                                  {isPD ? "Cancel" : "Add New"}
+                                </button>{" "}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="email" className="form-label">
-                            Email
-                          </label>
-                          <Field
-                            type="text"
-                            className="form-control"
-                            id="email"
-                            name="email"
-                            placeholder="Enter email"
-                          />
-                          <ErrorMessage
-                            name="email"
-                            component="div"
-                            className="error"
-                          />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="mobile" className="form-label">
-                            Mobile
-                          </label>
-                          <Field
-                            type="text"
-                            className="form-control"
-                            id="mobile"
-                            name="mobile"
-                            placeholder="Enter mobile no."
-                          />
-                          <ErrorMessage
-                            name="mobile"
-                            component="div"
-                            className="error"
-                          />
+                          <div className="mb-3">
+                            <label htmlFor="email" className="form-label">
+                              Email
+                            </label>
+                            <Field
+                              type="text"
+                              className="form-control"
+                              id="email"
+                              name="email"
+                              placeholder="Enter email"
+                            />
+                            <ErrorMessage
+                              name="email"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="mobile" className="form-label">
+                              Mobile
+                            </label>
+                            <Field
+                              type="text"
+                              className="form-control"
+                              id="mobile"
+                              name="mobile"
+                              placeholder="Enter mobile no."
+                            />
+                            <ErrorMessage
+                              name="mobile"
+                              component="div"
+                              className="error"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <hr />
-                  <div className="modal-footer">
-                    <button className="btn BackBtn me-2" onClick={() => {}}>
-                      Reset
-                    </button>
-                    <button
-                      className="btn addUser min me-2"
-                      type="submit"
-                      onClick={() => {}}
-                    >
-                      Save
-                    </button>
-                    {"  "}
-                  </div>
-                </Form>
+                    <hr />
+                    <div className="modal-footer">
+                      <button className="btn BackBtn me-2" onClick={() => {}}>
+                        Reset
+                      </button>
+                      <button
+                        className="btn addUser min me-2"
+                        type="submit"
+                        onClick={() => {}}
+                      >
+                        Save
+                      </button>
+                      {"  "}
+                    </div>
+                  </Form>
+                )}
               </Formik>
             </div>
           </div>

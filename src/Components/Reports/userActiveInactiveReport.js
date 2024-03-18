@@ -5,6 +5,8 @@ import {
   DateFormatFunction,
   ConvertFormat,
   DownloadByteArray,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { ReportService } from "../../Service/ReportService";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +23,12 @@ const UserActiveInactiveReport = () => {
   const [status, setStatus] = useState("ALL");
   const [rows, setRows] = useState([]); //data
   const navigate = useNavigate();
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   // const columns = [
   //   {
   //     Header: "User ID",
@@ -191,9 +199,9 @@ const UserActiveInactiveReport = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
-        fromDate: "01-01-2017", //ConvertFormat(fromDate), //
-        toDate: "31-12-2023", //ConvertFormat(toDate), //
+        userName: USER.userName || "",
+        fromDate: ConvertFormat(fromDate), // "01-01-2017", //
+        toDate: ConvertFormat(toDate), // "31-12-2023", //
         status: status, //"Inactive",
       },
       (res) => {
@@ -229,9 +237,9 @@ const UserActiveInactiveReport = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "nhai",
-        fromDate: "01-01-2017", //ConvertFormat(fromDate), //
-        toDate: "31-12-2023", //ConvertFormat(toDate), //
+        userName: USER.userName || "",
+        fromDate: ConvertFormat(fromDate), //"01-01-2017", //
+        toDate: ConvertFormat(toDate), //"31-12-2023", //
         status: status, //"Inactive",
       },
       (res) => {

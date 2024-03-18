@@ -18,7 +18,7 @@ const LoginSchema = Yup.object().shape({
 
 const InternalLogin = () => {
   const initialValues = {
-    username: "",
+    userName: "",
     password: "",
   };
   const [userDetails, setUserDetails] = useState({});
@@ -42,13 +42,32 @@ const InternalLogin = () => {
   }, []);
 
   function Login(values) {
+    if (!publicKey) {
+      console.error("Public key not available");
+      return;
+    }
+    const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
+    console.log("object type :-", typeof publicKeyObject);
+    // const requestData = {
+    //   username: values.username,
+    //   password: values.password,
+    // };
+    const encodedData = forge.util.encodeUtf8(JSON.stringify(values));
+    //  console.log("login data", values);
+    const encrypted = publicKeyObject.encrypt(encodedData, "RSA-OAEP");
+    const encryptedValues = forge.util.encode64(encrypted);
+    console.log(encryptedValues);
+    // const response = await axios.post("http://localhost:3007/api/auth/login", {
+    //   encrypted: requestData,
+    // });
     LoginService.userLogin(
       {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
-        },
-        email: values.username, //"ro_telang@nhai.com",
+        encrypted: encryptedValues,
+        // requestMetaData: {
+        //   applicationId: "nhai-dashboard",
+        //   correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
+        // },
+        // email: values.username, //"ro_telang@nhai.com",
       },
       (res) => {
         if (res.status === 200) {

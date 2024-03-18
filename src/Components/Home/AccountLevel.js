@@ -7,6 +7,8 @@ import {
   DateFormatFunction,
   ConvertFormat,
   DownloadByteArray,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
@@ -29,6 +31,13 @@ const AccountLevel = () => {
   const [propPIU, setPropPIU] = useState("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
+
   const columns = [
     {
       field: "bank",
@@ -372,7 +381,7 @@ const AccountLevel = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "nhai",
+    userName: USER.userName || "",
     statusAsOn: ConvertFormat(asOnDate), //"28-09-2023",
     bank: bankD, //"All", //Kotak,
   };

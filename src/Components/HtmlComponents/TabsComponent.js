@@ -9,11 +9,15 @@ import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 import { useLocation } from "react-router";
 import Spinner from "./Spinner";
-import { useGetReduxData, useSetReduxProfile } from "./CommonFunction";
+import {
+  useGetReduxData,
+  useSetReduxProfile,
+  getCookie,
+} from "./CommonFunction";
 
 const TabsComponent = (props) => {
   const location = useLocation();
-
+  const PROFILE = getCookie("PROFILE");
   const reduxData = useGetReduxData();
   // const reduxProfile =
   //   reduxData.length != 0
@@ -96,7 +100,7 @@ const TabsComponent = (props) => {
           correlationId: uuid(),
         },
         id: userData.profileId, //"", //profileId, //47,
-        userName: "nhai",
+        userName: userData.userName || "", //"nhai",
       },
       (res) => {
         if (res.status === 200) {

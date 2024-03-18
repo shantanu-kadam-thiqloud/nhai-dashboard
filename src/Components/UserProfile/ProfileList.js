@@ -6,7 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
 import Spinner from "../HtmlComponents/Spinner";
 import { v4 as uuid } from "uuid";
-import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
+import {
+  getCheckValueByName,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import sideBarDataChecker from "../Checker/sideBarData";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { toast } from "react-toastify";
@@ -19,6 +23,12 @@ const UserList = () => {
   const [isShow, setIsShow] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   const data = [
     {
@@ -150,7 +160,7 @@ const UserList = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

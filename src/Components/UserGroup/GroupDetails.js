@@ -82,7 +82,7 @@ function GroupDetails() {
           correlationId: uuid(),
         },
         id: Number(userId),
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         //meta data issue
@@ -112,9 +112,9 @@ function GroupDetails() {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
+        userName: USER.userName || "",
         requsterUserId: USER.userId, // "6789",
         id: Number(userId),
-        userName: "nhai",
         requestType: "Delete",
         status: "Initiated",
         //------------------------

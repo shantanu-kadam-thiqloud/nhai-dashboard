@@ -15,12 +15,15 @@ import sideBarDataChecker from "../Checker/sideBarData";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 import {
+  getCookie,
+  setCookie,
   useGetReduxData,
   useSetReduxProfile,
 } from "../HtmlComponents/CommonFunction";
 const Sidebar = () => {
   const location = useLocation();
   const reduxData = useGetReduxData();
+  const PROFILE = getCookie("PROFILE");
   const setReduxProfile = useSetReduxProfile();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
   const reduxProfile =
@@ -31,13 +34,17 @@ const Sidebar = () => {
       : "";
   const MAPPING =
     reduxProfile === "" || reduxProfile === null || reduxProfile === undefined
-      ? null
+      ? PROFILE
       : reduxProfile.mapping;
   const userData = location.state ? location.state.userData : ""; //useParams();
   const MappingData =
     JSON.parse(sessionStorage.getItem("Mapping")) === null
       ? MAPPING
       : JSON.parse(sessionStorage.getItem("Mapping"));
+  //-----------------------------------------------------------------
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const [activeItem, setActiveItem] = useState("Home"); // Initialize with the default active item
   const [mappingData, setMappingData] = useState([]);
   // Create a state object to hold the dynamic toggle states
@@ -96,14 +103,16 @@ const Sidebar = () => {
           correlationId: uuid(),
         },
         id: userData.profileId, //profileId, //47,
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
           profile = res.data.data;
           setReduxProfile({ profile });
           console.log("Profile ->", profile);
-          setMappingData(res.data.data.mapping);
+          var m = profile.mapping;
+          setCookie("PROFILE", m, 1);
+          setMappingData(m);
 
           setIsLoading(false);
         } else if (res.status === 404) {

@@ -167,6 +167,7 @@ const MenuManagementCheckerDetails = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         requestId: userId, //"de253364-5b36-4173-aebe-52389b16b3fe",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -220,6 +221,7 @@ const MenuManagementCheckerDetails = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
+        userName: USER.userName || "",
         requestId: userId, //"de253364-5b36-4173-aebe-52389b16b3fe",
       },
       (res) => {
@@ -278,7 +280,7 @@ const MenuManagementCheckerDetails = () => {
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
         requestId: userId, //"de253364-5b36-4173-aebe-52389b16b3fe",
-        userName: USER.userName, //"Sumit",
+        userName: USER.userName || "",
         chekerId: USER.userId, //"123",
         status: isApprove ? "Approved" : "Declined",
         remark: isApprove ? "Approved" : remark,
@@ -315,7 +317,7 @@ const MenuManagementCheckerDetails = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: USER.userName, //"Sumit",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

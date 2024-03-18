@@ -3,7 +3,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { getBase64 } from "../HtmlComponents/CommonFunction";
+import {
+  getBase64,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { toast } from "react-toastify";
 import { FileService } from "../../Service/FileService";
 import { v4 as uuid } from "uuid";
@@ -13,6 +17,12 @@ const FileUpload = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState("");
   const [fileData, setFileData] = useState("");
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const validationSchema = Yup.object({
     bank: Yup.string().required("Bank is required"),
     fileType: Yup.string().required("File Type is required"),
@@ -42,10 +52,11 @@ const FileUpload = () => {
   function UploadAccount() {
     FileService.uploadAccountFile(
       {
-        // requestMetaData: {
-        //   applicationId: "nhai-dashboard",
-        //   correlationId: uuid(),
-        // },
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        userName: USER.userName || "",
         file: fileBase64,
       },
       (res) => {
@@ -83,10 +94,11 @@ const FileUpload = () => {
   function UploadSanction() {
     FileService.uploadSanctionFile(
       {
-        // requestMetaData: {
-        //   applicationId: "nhai-dashboard",
-        //   correlationId: uuid(),
-        // },
+        requestMetaData: {
+          applicationId: "nhai-dashboard",
+          correlationId: uuid(),
+        },
+        userName: USER.userName || "",
         file: fileBase64,
       },
       (res) => {

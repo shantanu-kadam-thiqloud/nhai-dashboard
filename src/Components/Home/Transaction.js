@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import {
   ConvertFormat,
   DownloadByteArray,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import Spinner from "../HtmlComponents/Spinner";
 import Hyperlink from "./Hyperlink";
@@ -31,7 +33,12 @@ const Transaction = () => {
   const [isLoading, setIsLoading] = useState(false);
   // const [dbdata, setDbdata] = useState([]);
   const [transactionTable, settransactionTable] = useState([]);
-
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   useEffect(() => {
     setIsLoading(true);
     FetchTransaction();
@@ -264,7 +271,7 @@ const Transaction = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
         filter: filter, //"0",
         dataType: dataType, //"CALAPD",
         fromDate: ConvertFormat(fromDate), //"",
@@ -301,13 +308,13 @@ const Transaction = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
         filter: filter, //"0",
         dataType: dataType, //"CALAPD",
-        fromDate: "21-01-2020",
-        toData: "21-01-2020",
-        // fromDate: ConvertFormat(fromDate), //"",
-        // toData:ConvertFormat(toDate), //"",
+        //fromDate: "21-01-2020",
+        // toData: "21-01-2020",
+        fromDate: ConvertFormat(fromDate), //"",
+        toData: ConvertFormat(toDate), //"",
       },
       (res) => {
         if (res.status === 200) {

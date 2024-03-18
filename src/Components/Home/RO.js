@@ -9,6 +9,8 @@ import {
   ConvertFormat,
   useZoneDataList,
   DownloadByteArray,
+  useGetReduxData,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
@@ -26,6 +28,12 @@ const RO = () => {
   const [isLoading, setIsLoading] = useState(false);
   //---------------------------------------------------------------------------------------
   const zoneList = useZoneDataList("");
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   useEffect(() => {
     setIsLoading(true);
@@ -208,7 +216,7 @@ const RO = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
         statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
         zone: zoneD, //"All",
       },
@@ -240,7 +248,7 @@ const RO = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
         statusAsOn: ConvertFormat(asOnDate), //"21-05-2020", //
         zone: zoneD, //"All",
       },
@@ -273,7 +281,7 @@ const RO = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

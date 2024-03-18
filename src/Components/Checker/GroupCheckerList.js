@@ -5,7 +5,11 @@ import DataTable from "../HtmlComponents/DataTable";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { CheckerGroupService } from "../../Service/CheckerService/CheckerGroupService";
-import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
+import {
+  DateFormatFunction,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 const GroupCheckerList = () => {
   const navigate = useNavigate();
@@ -13,6 +17,12 @@ const GroupCheckerList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [groupRequests, setGroupRequests] = useState([]);
   const [rows, setRows] = useState([]);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   useEffect(() => {
     setIsLoading(true);
@@ -180,7 +190,7 @@ const GroupCheckerList = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

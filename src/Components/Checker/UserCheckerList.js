@@ -4,7 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../HtmlComponents/Spinner";
 import { CheckerUserService } from "../../Service/CheckerService/CheckerUserService";
-import { DateFormatFunction } from "../HtmlComponents/CommonFunction";
+import {
+  DateFormatFunction,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 const UserCheckerList = () => {
   const navigate = useNavigate();
@@ -12,6 +16,12 @@ const UserCheckerList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [userRequests, setUserRequests] = useState([]);
   const [rows, setRows] = useState([]);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   useEffect(() => {
     setIsLoading(true);
     fetchUserRequsts();
@@ -97,7 +107,7 @@ const UserCheckerList = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

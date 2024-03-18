@@ -7,7 +7,11 @@ import { InputNumber } from "primereact/inputnumber";
 import { FileService } from "../../Service/FileService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
+import {
+  DownloadByteArray,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { v4 as uuid } from "uuid";
 var id = [];
 const transactionTableData = [
@@ -193,6 +197,12 @@ const MainTransaction = () => {
   const [editedRows, setEditedRows] = useState([]); //only edited row
   const [isLoading, setIsLoading] = useState(false);
   const [editedRowIndex, setEditedRowIndex] = useState({});
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   const Tcolumns = [
     {
@@ -532,7 +542,7 @@ const MainTransaction = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -600,7 +610,7 @@ const MainTransaction = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

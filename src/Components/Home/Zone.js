@@ -7,6 +7,8 @@ import BarChart from "../Charts/BarChart";
 import {
   DateFormatFunction,
   ConvertFormat,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router";
@@ -19,6 +21,12 @@ const Zone = ({ setTab }) => {
   const [Decimal, setDecimal] = useState(true);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   function columnClick(columnName) {
     if (columnName == "No of Regional Offices") {
@@ -387,7 +395,7 @@ const Zone = ({ setTab }) => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     statusAsOn: ConvertFormat(asOnDate), //"28-09-2023",
     //  bank: bankD, //"All", //Kotak,
   };

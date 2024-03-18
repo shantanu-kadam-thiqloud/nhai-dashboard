@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
 import {
+  getCookie,
+  useGetReduxData,
   usePIUDataList,
   useRoDataList,
   useZoneDataList,
@@ -31,7 +33,12 @@ const Ageing = () => {
   const roList = useRoDataList(piuD, zoneD);
   // ---------------------------------------------------------------------------------------
   const piuList = usePIUDataList("", roD);
-
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const columns = [
     {
       Header: "Parameters",
@@ -208,7 +215,7 @@ const Ageing = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     date: "21-01-2020",
     bank: "All", //Kotak,
     zone: zoneD,

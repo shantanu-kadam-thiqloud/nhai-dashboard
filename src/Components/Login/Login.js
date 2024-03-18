@@ -42,14 +42,38 @@ const Login = () => {
   }, []);
 
   function Login(values) {
+    if (!publicKey) {
+      console.error("Public key not available");
+      return;
+    }
+    const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
+    console.log("object type :-", typeof publicKeyObject);
+    // const requestData = {
+    //   username: values.username,
+    //   password: values.password,
+    // };
+    const encodedData = forge.util.encodeUtf8(JSON.stringify(values));
+    console.log("login data", values);
+    const encrypted = publicKeyObject.encrypt(encodedData, "RSA-OAEP");
+    const encryptedValues = forge.util.encode64(encrypted);
+    console.log(encryptedValues);
+    // const response = await axios.post("http://localhost:3007/api/auth/login", {
+    //   encrypted: requestData,
+    // });
+
     ExternalUserService.externalUserLogin(
       {
-        requestMetaData: {
-          applicationId: "nhai-dashboard",
-          correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
-        },
-        username: values.username, //"ro_telang@nhai.com",
-        password: values.password, //"2oCz5N1GPu4=",
+        // requestMetaData: {
+        //   applicationId: "nhai-dashboard",
+        //   correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
+        // },
+        encrypted: encryptedValues,
+        // requestMetaData: {
+        //   applicationId: "nhai-dashboard",
+        //   correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
+        // },
+        // username: values.username, //"ro_telang@nhai.com",
+        // password: values.password, //"2oCz5N1GPu4=",
       },
       (res) => {
         if (res.status === 200) {

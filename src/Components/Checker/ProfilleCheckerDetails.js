@@ -323,7 +323,7 @@ const ProfilleCheckerDetails = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
         requestId: userId, //"1697eece-b424-4fb4-95e6-03f946871c38000",
         requestType: path.includes("profileAddRequestDetails")
           ? "Add"
@@ -361,7 +361,7 @@ const ProfilleCheckerDetails = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
         requestId: userId, //"7ba67c86-aad4-4214-ba01-aca6955c2be8",
         requestType: "Update",
       },
@@ -407,7 +407,7 @@ const ProfilleCheckerDetails = () => {
         action: action, //"Approved",
         checkerRemark: action == "Declined" ? remark : "Approved", //"Test",
         checkerId: USER.userId, //"35604", //"601",
-        userName: "nhai", //path.includes("userUpdateRequestDetails")
+        userName: USER.userName || "", //path.includes("userUpdateRequestDetails")
         //   ? currentValue.userId
         //   : group.userId,
       },

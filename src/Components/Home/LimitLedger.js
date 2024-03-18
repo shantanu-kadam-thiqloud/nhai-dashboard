@@ -10,6 +10,8 @@ import {
   usePIUDataList,
   useZoneDataList,
   DownloadByteArray,
+  useGetReduxData,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import Spinner from "../HtmlComponents/Spinner";
@@ -40,6 +42,12 @@ const LimitLedger = () => {
   const roList = useRoDataList(piuD, zoneD);
   // ---------------------------------------------------------------------------------------
   const piuList = usePIUDataList("", roD);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const columns = [
     {
       field: "bank",
@@ -294,7 +302,7 @@ const LimitLedger = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     bank: bankD, //"All", //Kotak,
     ro: roD, //"All", // Bhubaneswar
     zone: zoneD, //"All", //East,West,North South
@@ -303,7 +311,7 @@ const LimitLedger = () => {
     accountNumber: accNo,
 
     fromDate: "21-05-2020", //ConvertFormat(fromDate), //"01-04-2017",
-    toData: "21-05-2023", //ConvertFormat(toDate), //"01-09-2023",
+    toData: ConvertFormat(toDate), //"01-09-2023",
     transactionType: typeTransaction, //"All",
     dateFilter: fromDate && toDate ? 1 : 0,
     isActive: "All",

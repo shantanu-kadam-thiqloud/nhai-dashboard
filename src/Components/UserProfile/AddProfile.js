@@ -429,7 +429,7 @@ const AddProfile = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -467,7 +467,7 @@ const AddProfile = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
         requsterUserId: USER.userId, // "35607",
         profileName: values.profileName,
         profileDescription: values.profileDescription,
@@ -527,7 +527,7 @@ const AddProfile = () => {
           correlationId: uuid(),
         },
         id: profileId, // 47, //
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -568,19 +568,24 @@ const AddProfile = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: USER.userId, // "35607",
-        id: Number(userId),
-        profileName: values.profileName,
-        profileDescription: values.profileDescription,
-        //  group: values.group,
-        groupId: Number(values.group),
-        groupName: group.groupName,
-        isActive: Boolean(values.isActive),
-        updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        updatedBy: USER.userName, //"Admin",
-        requestType: "Update",
-        status: "Initiated",
-        mapping: menuData || [],
+        userName: USER.userName || "",
+        requestObject: {
+          requsterUserId: USER.userId, // "35607",
+          id: Number(userId),
+          profileName: values.profileName,
+          profileDescription: values.profileDescription,
+          //  group: values.group,
+          groupId: Number(values.group),
+          groupName: group.groupName,
+          isActive: Boolean(values.isActive),
+          updatedDate: DateFormatFunction(
+            new Date().toISOString().split("T")[0]
+          ),
+          updatedBy: USER.userName, //"Admin",
+          requestType: "Update",
+          status: "Initiated",
+          mapping: menuData || [],
+        },
       },
       (res) => {
         if (res.status === 200) {

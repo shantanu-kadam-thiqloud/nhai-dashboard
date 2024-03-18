@@ -11,7 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import Hyperlink from "./Hyperlink";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
-import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
+import {
+  DownloadByteArray,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { toast } from "react-toastify";
 const Events = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +24,12 @@ const Events = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [eventTable, setEventTable] = useState([]);
   // const [dbdata, setDbdata] = useState([]);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   useEffect(() => {
     setIsLoading(true);
@@ -322,7 +332,7 @@ const Events = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -354,7 +364,7 @@ const Events = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
         },
-        userName: "NHAI",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

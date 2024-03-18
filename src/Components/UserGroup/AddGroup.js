@@ -105,15 +105,20 @@ const AddGroup = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: USER.userId, // "35605",
-        //id: 903,
-        groupName: values.groupName, //"Backend Developer",
-        groupDescription: values.groupDescription, //"Developer Group",
-        isActive: false,
-        createdDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        requestType: "Add",
-        status: "Initiated",
-        createdBy: USER.userName, //"Admin",
+        userName: USER.userName || "",
+        requestObject: {
+          requsterUserId: USER.userId, // "35605",
+          //id: 903,
+          groupName: values.groupName, //"Backend Developer",
+          groupDescription: values.groupDescription, //"Developer Group",
+          isActive: false,
+          createdDate: DateFormatFunction(
+            new Date().toISOString().split("T")[0]
+          ),
+          requestType: "Add",
+          status: "Initiated",
+          createdBy: USER.userName, //"Admin",
+        },
       },
       (res) => {
         if (res.status === 200) {
@@ -160,7 +165,7 @@ const AddGroup = () => {
           correlationId: uuid(),
         },
         id: Number(userId),
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         //meta data issue
@@ -207,15 +212,20 @@ const AddGroup = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        requsterUserId: USER.userId, // "35605",
-        id: Number(userId),
-        groupName: values.groupName, //"Backend Developer",
-        groupDescription: values.groupDescription, //"Developer Group",
-        isActive: Boolean(values.isActive),
-        updatedDate: DateFormatFunction(new Date().toISOString().split("T")[0]),
-        updatedBy: USER.userName, //"Admin",
-        requestType: "Update",
-        status: "Initiated",
+        userName: USER.userName || "",
+        requestObject: {
+          requsterUserId: USER.userId, // "35605",
+          id: Number(userId),
+          groupName: values.groupName, //"Backend Developer",
+          groupDescription: values.groupDescription, //"Developer Group",
+          isActive: Boolean(values.isActive),
+          updatedDate: DateFormatFunction(
+            new Date().toISOString().split("T")[0]
+          ),
+          updatedBy: USER.userName, //"Admin",
+          requestType: "Update",
+          status: "Initiated",
+        },
       },
       (res) => {
         if (res.status === 200) {

@@ -13,27 +13,25 @@ const BASE_URL = Locals.config().baseUrl;
 const ttlInSeconds = 180; // 30 min
 class Login {
   public static async login(req: any, res: any, next: any): Promise<any> {
-    // console.log("login API i/p -> ", req, res);
-    //   const privateKey = Crypto.getPrivateKeyPem();
-    //   const publicKey = Crypto.getPublicKeyPem();
-
-    //   if (!privateKey || !publicKey) {
-    //     return res.status(500).json({ error: "Key pair is not available." });
-    //   }
-    //   console.log('decryption publicKeyPem :---', publicKey );
-    //   console.log('Decryption privateKeyPem :---', privateKey);
-    //   const base64EncodedEncryptedData = req.body.encrypted; // Replace with your received data
-
-    // const encryptedData = forge.util.decode64(base64EncodedEncryptedData);
-
-    // const privateKeyObject = forge.pki.privateKeyFromPem(privateKey);
-    // const decrypted = privateKeyObject.decrypt(encryptedData, "RSA-OAEP");
-    // // Convert the decrypted binary data back to a UTF-8 string
-    // const decryptedText = forge.util.decodeUtf8(JSON.parse(decrypted));
-    // console.log('convert to object ',JSON.parse(decrypted));
-    // console.log('Decrypted Data:',decryptedText);
-
-    const unencryptedData = req.body.encrypted;
+    console.log("Encrypted value from FE -> ", req?.body?.encrypted);
+    const privateKey = Crypto.getPrivateKeyPem();
+    const publicKey = Crypto.getPublicKeyPem();
+    if (!privateKey || !publicKey) {
+      return res.status(500).json({ error: "Key pair is not available." });
+    }
+    // console.log('decryption publicKeyPem :---', publicKey);
+    // console.log('Decryption privateKeyPem :---', privateKey);
+    const base64EncodedEncryptedData = req.body.encrypted; // Replace with your received data
+    const encryptedData = forge.util.decode64(base64EncodedEncryptedData);
+    const privateKeyObject = forge.pki.privateKeyFromPem(privateKey);
+    const decrypted = privateKeyObject.decrypt(encryptedData, "RSA-OAEP");
+    // Convert the decrypted binary data back to a UTF-8 string
+    const decryptedText = forge.util.decodeUtf8(decrypted);
+    // console.log('convert to object ', JSON.parse(decrypted));
+    // console.log('Decrypted Data:', decryptedText);
+    const unencryptedData = JSON.parse(decryptedText);
+    console.log("Decrypted value from BE---->", JSON.parse(decryptedText));
+    //------------------------------------------------------------------------------------------------------------
     const URL = BASE_URL + `/api/auth/generate-token`;
     //Internal API call for single use Token 
     const singleUseJwt = await api.get(URL);
@@ -45,10 +43,16 @@ class Login {
     };
     // axios.defaults.headers = headers;
     //console.log(headers);
-
+    req.body = {
+      requestMetaData: {
+        applicationId: "nhai-dashboard",
+        correlationId: uuid(), //"ed75993b-c55c-45b4-805a-c26bda53f0b8",
+      },
+      email: unencryptedData.username, //"ro_telang@nhai.com",
+    };
     try {
       // Dummy login API
-      const LoginUserr = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+      const LoginUserr = await api.post("http://172.16.16.99:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
       console.log('Incoming Data-->', req.body);
       //Set to redis-----------------------------------------------------------------
       const LoginUser = LoginUserr.data;

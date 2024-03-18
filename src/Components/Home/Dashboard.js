@@ -19,6 +19,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ProfileService } from "../../Service/ProfileService";
 import { v4 as uuid } from "uuid";
 import {
+  getCookie,
+  setCookie,
   useGetReduxData,
   useSetReduxProfile,
 } from "../HtmlComponents/CommonFunction";
@@ -28,7 +30,12 @@ const Dashboard = () => {
   const userData = location.state ? location.state.userData : ""; //useParams();
 
   const setReduxProfile = useSetReduxProfile();
+  //-----------------------------------------------------------------
   const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   // const reduxProfile =
   //   reduxData.length != 0
   //     ? reduxData.profileData !== null
@@ -66,14 +73,16 @@ const Dashboard = () => {
           correlationId: uuid(),
         },
         id: profileId,
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
           profile = res.data.data;
           console.log("Profile ->", profile);
           setReduxProfile({ profile });
-          var mappingData = JSON.stringify(res.data.data.mapping);
+          var m = profile.mapping;
+          setCookie("PROFILE", m, 1);
+          var mappingData = JSON.stringify(m);
           setMData(res.data.data.mapping);
           sessionStorage.clear();
           sessionStorage.setItem("Mapping", mappingData);

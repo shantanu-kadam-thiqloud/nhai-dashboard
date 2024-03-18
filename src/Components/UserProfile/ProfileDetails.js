@@ -248,7 +248,7 @@ function ProfileDetails() {
           correlationId: uuid(),
         },
         id: profileId, //47,
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {
@@ -288,7 +288,7 @@ function ProfileDetails() {
         },
         requsterUserId: USER.userId, // "35607",
         id: Number(userId),
-        userName: "nhai",
+        userName: USER.userName || "",
         requestType: "Delete",
         status: "Initiated",
         //--------------------

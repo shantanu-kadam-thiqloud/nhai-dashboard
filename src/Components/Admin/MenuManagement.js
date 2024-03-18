@@ -25,11 +25,12 @@ const MenuManagement = () => {
   //----------------------------------------------
   const location = useLocation();
   const userId = location.state ? location.state.requestId : ""; //useParams();
+  //-----------------------------------------------------------------
   const reduxData = useGetReduxData();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
   const cookieUser = getCookie("USER");
   const USER = reduxUser === "" ? cookieUser : reduxUser;
-  //----------------------------------------------
+  //-----------------------------------------------------------------
   const [selectedMenu, setSelectedMenu] = useState("");
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedSubmenuList, setSelectedSubmenuList] = useState([]);

@@ -6,6 +6,8 @@ import { v4 as uuid } from "uuid";
 import {
   DateFormatFunction,
   ConvertFormat,
+  useGetReduxData,
+  getCookie,
 } from "../HtmlComponents/CommonFunction";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router";
@@ -16,13 +18,16 @@ const FinanacialD = () => {
     "2023-04-01" // new Date().toISOString().split("T")[0]
   );
   const [toDate, setToDate] = useState(new Date().toISOString().split("T")[0]);
-
   const [Decimal, setDecimal] = useState(true);
-
   const [yearD, setYear] = useState("");
-
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -297,7 +302,7 @@ const FinanacialD = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     financialYear: yearD || "", //"28-09-2023",
     //  bank: bankD, //"All", //Kotak,
     statusAsOnFrom: ConvertFormat(fromDate) || "", //"01-04-2017",

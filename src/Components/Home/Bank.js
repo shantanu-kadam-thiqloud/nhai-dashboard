@@ -7,6 +7,8 @@ import {
   DateFormatFunction,
   ConvertFormat,
   useZoneDataList,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { toast } from "react-toastify";
 import { DashboardService } from "../../Service/DashboardService";
@@ -24,7 +26,13 @@ const Bank = () => {
   const [Decimal, setDecimal] = useState(true);
   const [zone, setZone] = useState("All");
   const [rows, setRows] = useState([]);
-  //---------------------------------------------------------------------------------------
+
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const zoneList = useZoneDataList("");
   const data = {
     decimal: {
@@ -178,7 +186,7 @@ const Bank = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567",
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     statusAsOn: ConvertFormat(asOnDate), //"21-05-2020",
     bank: "Kotak",
     zone: zone,

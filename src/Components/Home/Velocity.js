@@ -9,6 +9,8 @@ import {
   usePIUDataList,
   useZoneDataList,
   DownloadByteArray,
+  getCookie,
+  useGetReduxData,
 } from "../HtmlComponents/CommonFunction";
 import { useNavigate } from "react-router-dom";
 import { DashboardService } from "../../Service/DashboardService";
@@ -42,6 +44,12 @@ const Velocity = () => {
   const roList = useRoDataList(piuD, zoneD);
   // ---------------------------------------------------------------------------------------
   const piuList = usePIUDataList("", roD);
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   const columns = [
     {
       field: "bank",
@@ -248,7 +256,7 @@ const Velocity = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     asOnDate: ConvertFormat(asOnDate), //"21-05-2020", //
     bank: bankD, //"All", //Kotak,
     ro: roD, //"All", // Bhubaneswar

@@ -7,7 +7,11 @@ import TablesDataChecker from "../Checker/fieldData";
 import { UserService } from "../../Service/UserService";
 import Spinner from "../HtmlComponents/Spinner";
 import { v4 as uuid } from "uuid";
-import { getCheckValueByName } from "../HtmlComponents/CommonFunction";
+import {
+  getCheckValueByName,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
 import { toast } from "react-toastify";
 const UserList = () => {
@@ -17,9 +21,13 @@ const UserList = () => {
   const [isShow, setIsShow] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-
   const [userList, setUserList] = useState([]);
-
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   //User Data
   // var jsonData = TablesDataChecker.find((item) => item.type === "User_list");
   //const data = jsonData.data;
@@ -126,7 +134,7 @@ const UserList = () => {
           applicationId: "nhai-dashboard",
           correlationId: uuid(),
         },
-        userName: "nhai",
+        userName: USER.userName || "",
       },
       (res) => {
         if (res.status === 200) {

@@ -81,7 +81,7 @@ export async function DownloadByteArray(filename, response) {
 
 export const useZoneDataList = (piuId) => {
   const [zoneList, setZoneList] = useState([]);
-
+  const USER = getCookie("USER");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,7 +91,7 @@ export const useZoneDataList = (piuId) => {
               applicationId: "nhai-dashboard",
               correlationId: uuid(),
             },
-            userName: "nhai",
+            userName: USER.userName || "",
             piuId: piuId,
           },
           (res) => {
@@ -143,7 +143,7 @@ export const useZoneDataList = (piuId) => {
 
 export const useRoDataList = (piuId, piuZoneName) => {
   const [roList, setRoList] = useState([]);
-
+  const USER = getCookie("USER");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -153,7 +153,7 @@ export const useRoDataList = (piuId, piuZoneName) => {
               applicationId: "nhai-dashboard",
               correlationId: uuid(),
             },
-            userName: "nhai",
+            userName: USER.userName || "",
             piuId: piuId,
             piuZoneName: piuZoneName,
           },
@@ -200,7 +200,7 @@ export const useRoDataList = (piuId, piuZoneName) => {
 
 export const usePIUDataList = (locationId, piuStateName) => {
   const [piuList, setPiuList] = useState([]);
-
+  const USER = getCookie("USER");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -210,7 +210,7 @@ export const usePIUDataList = (locationId, piuStateName) => {
               applicationId: "nhai-dashboard",
               correlationId: uuid(),
             },
-            userName: "nhai",
+            userName: USER.userName || "",
             locationId: locationId,
             piuStateName: piuStateName,
           },
@@ -282,6 +282,7 @@ export function setCookie(name, value, days) {
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = "; expires=" + date.toUTCString();
   }
+
   document.cookie =
     name +
     "=" +

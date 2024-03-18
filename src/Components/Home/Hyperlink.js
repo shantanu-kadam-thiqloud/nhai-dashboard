@@ -9,7 +9,12 @@ import Spinner from "../HtmlComponents/Spinner";
 import { DashboardService } from "../../Service/DashboardService";
 import { useNavigate } from "react-router-dom";
 import GenericDataTable from "../HtmlComponents/GenericDataTable";
-import { DownloadByteArray } from "../HtmlComponents/CommonFunction";
+import {
+  ConvertFormat,
+  DownloadByteArray,
+  getCookie,
+  useGetReduxData,
+} from "../HtmlComponents/CommonFunction";
 import { DashboardDownloadService } from "../../Service/DashboardDownloadService";
 import { toast } from "react-toastify";
 const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
@@ -221,12 +226,18 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
       },
     ],
   };
-  const [rows, setRows] = useState(mockRes.limitLedgerDetails);
+  const [rows, setRows] = useState([]); //mockRes.limitLedgerDetails
   const navigate = useNavigate();
+  //-----------------------------------------------------------------
+  const reduxData = useGetReduxData();
+  const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
+  const cookieUser = getCookie("USER");
+  const USER = reduxUser === "" ? cookieUser : reduxUser;
+  //-----------------------------------------------------------------
   useEffect(() => {
     console.log("rdata->", row);
-    //setIsLoading(true);
-    // FetchLimitLedger();
+    setIsLoading(true);
+    FetchLimitLedger();
   }, [row]);
   //---------------------------------------------------------------------------------------
   const reqBody = {
@@ -234,7 +245,7 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(), //"ere353535-456fdgfdg-4564fghfh-ghjg567", //UUID
     },
-    userName: "NHAI",
+    userName: USER.userName || "",
     bank: "All", //Kotak,
     ro: "All", // Bhubaneswar
     zone: "All", //East,West,North South
@@ -243,7 +254,7 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
     accountNumber: row.accountNumber ? row.accountNumber : "",
 
     fromDate: "21-05-2020", //ConvertFormat(fromDate), //"01-04-2017",
-    toData: "21-05-2023", //ConvertFormat(toDate), //"01-09-2023",
+    toData: ConvertFormat(new Date().toISOString().split("T")[0]), //"01-09-2023",
     transactionType: "All",
     dateFilter: 0, //fromDate && toDate ? 1 : 0,
     isActive: "All",
@@ -253,7 +264,7 @@ const Hyperlink = ({ isOpen, setModal, row, accountNumber, PIU }) => {
       reqBody,
       (res) => {
         if (res.status === 200) {
-          // setRows(res.data.data.limitLedgerDetails);
+          setRows(res.data.data.limitLedgerDetails);
           setIsLoading(false);
         } else if (res.status === 404) {
           setIsLoading(false);
