@@ -357,65 +357,65 @@ const Snapshot = () => {
     {
       title: "Nodal Account Balance",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.nodalAccountBalance
-          : snapData.crore.nodalAccountBalance, //"₹10,360,07",
+          ? snapData.decimal?.nodalAccountBalance
+          : snapData.crore?.nodalAccountBalance, //"₹10,360,07",
     },
     {
       title: "No of Subsidiary Accounts",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.subsidiaryAccountsCount
-          : snapData.crore.subsidiaryAccountsCount, //"618",
+          ? snapData.decimal?.subsidiaryAccountsCount
+          : snapData.crore?.subsidiaryAccountsCount, //"618",
     },
     {
       title: "Sanction Limit",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.sanctionLimit
-          : snapData.crore.sanctionLimit, //"₹39,430.72",
+          ? snapData.decimal?.sanctionLimit
+          : snapData.crore?.sanctionLimit, //"₹39,430.72",
     },
     {
       title: "Utilized Limit",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.utilizedLimit
-          : snapData.crore.utilizedLimit, //"₹29,927.98",
+          ? snapData.decimal?.utilizedLimit
+          : snapData.crore?.utilizedLimit, //"₹29,927.98",
     },
     {
       title: "Un-Utilized Limit",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.unutilizedLimit
-          : snapData.crore.unutilizedLimit, //"₹10,132,74",
+          ? snapData.decimal?.unutilizedLimit
+          : snapData.crore?.unutilizedLimit, //"₹10,132,74",
     },
     {
       title: "Utilization Percentage",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.utilizationPercentage
-          : snapData.crore.utilizationPercentage, //"74.30%",
+          ? snapData.decimal?.utilizationPercentage
+          : snapData.crore?.utilizationPercentage, //"74.30%",
     },
     {
       title: "QTD Accued Intrest",
       count:
-        snapData == ""
+        snapData == "" || snapData == undefined || snapData == null
           ? ""
           : Decimal
-          ? snapData.decimal.qtdAccruedInterest
-          : snapData.crore.qtdAccruedInterest, //"₹0.00",
+          ? snapData.decimal?.qtdAccruedInterest
+          : snapData.crore?.qtdAccruedInterest, //"₹0.00",
     },
   ];
   return (

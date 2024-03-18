@@ -13,10 +13,10 @@ export const get = async (url: string) => {
 };
 
 // Middleware function to make a POST request
-export const post = async (url: string, data: any, customHeaders: any) => {
-
+export const post = async (url: string, data: any, token: string) => {
+  const headers = { token: token };
   try {
-    const response = await axios.post(url, data, customHeaders);
+    const response = await axios.post(url, data, { headers: headers });
 
     return response;
   } catch (error) {
@@ -24,10 +24,10 @@ export const post = async (url: string, data: any, customHeaders: any) => {
   }
 };
 
-export const downloadPost = async (url: string, data: any) => {
-  const headers = { 'Content-Type': 'blob' };
+export const downloadPost = async (url: string, data: any, token: string) => {
+  const headers = { token: token };
   try {
-    const response = await axios.post(url, data);//, { headers: headers }responseType: 'arraybuffer',
+    const response = await axios.post(url, data, { headers: headers });
     return response;
   } catch (error) {
     throw error;
@@ -35,11 +35,11 @@ export const downloadPost = async (url: string, data: any) => {
 };
 
 // Middleware function to make a PUT request
-export const put = async (url: string, data: any, customHeaders: any) => {
+export const put = async (url: string, data: any, token: string) => {
   //const { endpoint, data } = req.body;
-
+  const headers = { token: token };
   try {
-    const response = await axios.put(url, data);
+    const response = await axios.put(url, data, { headers: headers });
     return response; // Sending the response back to the client
   } catch (error) {
     throw (error); // Passing the error to the error handling middleware

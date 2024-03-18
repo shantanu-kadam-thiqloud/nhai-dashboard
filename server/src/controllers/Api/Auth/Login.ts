@@ -48,7 +48,7 @@ class Login {
 
     try {
       // Dummy login API
-      const LoginUserr = await api.post("http://172.16.16.201:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+      const LoginUserr = await api.post("http://172.16.16.99:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
       console.log('Incoming Data-->', req.body);
       //Set to redis-----------------------------------------------------------------
       const LoginUser = LoginUserr.data;
