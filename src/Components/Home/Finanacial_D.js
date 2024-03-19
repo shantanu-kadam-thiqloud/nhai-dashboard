@@ -275,26 +275,93 @@ const FinanacialD = () => {
       status: "200",
       message: "Success",
     },
+    // deposits: {
+    //   cumulativeDeposits: "649550736",
+    //   interestCredited: "0",
+    //   totalBalance: "649550736",
+    //   OtherCredit: null,
+    //   Less: "0",
+    // },
+    // disbursements: {
+    //   paidtoBeneficiary: "369413128",
+    //   Less_Return_Benfeciary: null,
+    //   paidforAdminExpenses: null,
+    //   Less_Return_Admin_Expense: null,
+    //   paidforTDS: null,
+    //   otherDebits: "0",
+    //   suspense: null,
+    //   suspense_Debit: null,
+    //   suspense_Credit: null,
+    //   Surplus_Deficit: null,
+    // },
+    // summary: {
+    //   nodalAccountBalance: "4.733086465231E10",
+    //   AssignedLimit: null,
+    //   UnAssignedLimit: null,
+    //   surplusDeficit: null,
+    //   interestAccuredTillLP: null,
+    //   closingBalance: null,
+    // },
     deposits: {
-      cumulativeDeposits: "649550736",
-      interestCredited: "0",
-      totalBalance: "649550736",
-      OtherCredit: null,
-      Less: "0",
+      decimal: {
+        cumulativeDeposits: "649550736",
+        interestCredited: "0",
+        totalBalance: "649550736",
+        OtherCredit: null,
+        Less: "0",
+      },
+      crore: {
+        cumulativeDeposits: "649550736",
+        interestCredited: "0",
+        totalBalance: "649550736",
+        OtherCredit: null,
+        Less: "0",
+      },
     },
     disbursements: {
-      paidtoBeneficiary: "369413128",
-      Less_Return_Benfeciary: null,
-      paidforAdminExpenses: null,
-      Less_Return_Admin_Expense: null,
-      paidforTDS: null,
-      otherDebits: "0",
-      suspense: null,
-      suspense_Debit: null,
-      suspense_Credit: null,
-      Surplus_Deficit: null,
+      decimal: {
+        paidtoBeneficiary: "369413128",
+        Less_Return_Benfeciary: null,
+        paidforAdminExpenses: null,
+        Less_Return_Admin_Expense: null,
+        paidforTDS: null,
+        otherDebits: "0",
+        suspense: null,
+        suspense_Debit: null,
+        suspense_Credit: null,
+        Surplus_Deficit: null,
+      },
+      crore: {
+        paidtoBeneficiary: "369413128",
+        Less_Return_Benfeciary: null,
+        paidforAdminExpenses: null,
+        Less_Return_Admin_Expense: null,
+        paidforTDS: null,
+        otherDebits: "0",
+        suspense: null,
+        suspense_Debit: null,
+        suspense_Credit: null,
+        Surplus_Deficit: null,
+      },
     },
-    summary: null,
+    summary: {
+      decimal: {
+        nodalAccountBalance: "4.733086465231E10",
+        AssignedLimit: null,
+        UnAssignedLimit: null,
+        surplusDeficit: null,
+        interestAccuredTillLP: null,
+        closingBalance: null,
+      },
+      crore: {
+        nodalAccountBalance: "4.733086465231E10",
+        AssignedLimit: null,
+        UnAssignedLimit: null,
+        surplusDeficit: null,
+        interestAccuredTillLP: null,
+        closingBalance: null,
+      },
+    },
   };
   const [fd_Data, setFd_data] = useState(fdata);
   const reqBody = {
@@ -477,29 +544,41 @@ const FinanacialD = () => {
               <td>Cumulative Deposit</td>
               <td className="tright"></td>
               <td className="tright">
-                {fd_Data?.deposits?.cumulativeDeposits}
+                {Decimal
+                  ? fd_Data?.decimal?.deposits?.cumulativeDeposits
+                  : fd_Data?.crore?.deposits?.cumulativeDeposits}
               </td>
               <td>Paid to Beneficiary</td>
               <td className="tright">
-                {fd_Data?.disbursements?.paidtoBeneficiary}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.paidtoBeneficiary
+                  : fd_Data?.crore?.disbursements?.paidtoBeneficiary}
               </td>
               <td className="tright"></td>
             </tr>
             <tr>
               <td>Interest Credited</td>
               <td className="tright"></td>
-              <td className="tright">{fd_Data?.deposits?.interestCredited}</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.deposits?.interestCredited
+                  : fd_Data?.crore?.deposits?.interestCredited}
+              </td>
               <td>Less: Returns</td>
               <td className="tright">(0.00)</td>
               <td className="tright">
-                {fd_Data?.disbursements?.Less_Return_Benfeciary}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.Less_Return_Benfeciary
+                  : fd_Data?.crore?.disbursements?.Less_Return_Benfeciary}
               </td>
             </tr>
             <tr>
               <td>Total Balance</td>
               <td className="tright"></td>
               <td className="tright upperb">
-                {fd_Data?.deposits?.totalBalance}
+                {Decimal
+                  ? fd_Data?.decimal?.deposits?.totalBalance
+                  : fd_Data?.crore?.deposits?.totalBalance}
               </td>
               <td></td>
               <td className="tright upperb"></td>
@@ -511,7 +590,9 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>Paid for Admin Expenses</td>
               <td className="tright">
-                {fd_Data?.disbursements?.paidforAdminExpenses}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.paidforAdminExpenses
+                  : fd_Data?.crore?.disbursements?.paidforAdminExpenses}
               </td>
               <td className="tright"></td>
             </tr>
@@ -523,7 +604,9 @@ const FinanacialD = () => {
               <td className="tright bottomb">(0.00)</td>
               <td className="tright">
                 {" "}
-                {fd_Data?.disbursements?.Less_Return_Admin_Expense}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.Less_Return_Admin_Expense
+                  : fd_Data?.crore?.Less_Return_Admin_Expense}
               </td>
             </tr>
             <tr>
@@ -532,17 +615,27 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>Paid for TDS</td>
               <td className="tright"></td>
-              <td className="tright">{fd_Data?.disbursements?.paidforTDS}</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.paidforTDS
+                  : fd_Data?.crore?.disbursements?.paidforTDS}
+              </td>
             </tr>
             <tr>
               <td>Other Credit</td>
               <td className="tright"></td>
               <td className="tright bottomb">
-                {fd_Data?.deposits?.OtherCredit}
+                {Decimal
+                  ? fd_Data?.decimal?.deposits?.OtherCredit
+                  : fd_Data?.crore?.deposits?.OtherCredit}
               </td>
               <td>Other Debit</td>
               <td className="tright"></td>
-              <td className="tright">{fd_Data?.disbursements?.otherDebits}</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.otherDebits
+                  : fd_Data?.crore?.disbursements?.otherDebits}
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -550,7 +643,11 @@ const FinanacialD = () => {
               <td className="tright"></td>
               <td>Suspense</td>
               <td className="tright"></td>
-              <td className="tright">{fd_Data?.disbursements.suspense}</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements.suspense
+                  : fd_Data?.crore?.disbursements.suspense}
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -559,17 +656,25 @@ const FinanacialD = () => {
               <td>- Debit</td>
               <td className="tright"></td>
               <td className="tright">
-                {fd_Data?.disbursements.suspense_Debit}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements.suspense_Debit
+                  : fd_Data?.crore?.disbursements.suspense_Debit}
               </td>
             </tr>
             <tr>
               <td>Less: Interest Transferred</td>
               <td className="tright"></td>
-              <td className="tright">{fd_Data?.deposits?.Less}</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.deposits?.Less
+                  : fd_Data?.crore?.deposits?.Less}
+              </td>
               <td>- Credit</td>
               <td className="tright bottomb">(0.00)</td>
               <td className="tright">
-                {fd_Data?.disbursements?.suspense_Credit}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.suspense_Credit
+                  : fd_Data?.crore?.disbursements?.suspense_Credit}
               </td>
             </tr>
             <tr>
@@ -587,7 +692,9 @@ const FinanacialD = () => {
               <td>Surplus/Deficit</td>
               <td className="tright"></td>
               <td className="tright upperb">
-                {fd_Data?.disbursements?.Surplus_Deficit}
+                {Decimal
+                  ? fd_Data?.decimal?.disbursements?.Surplus_Deficit
+                  : fd_Data?.crore?.disbursements?.Surplus_Deficit}
               </td>
             </tr>
             <tr>
@@ -600,24 +707,46 @@ const FinanacialD = () => {
             </tr>
             <tr>
               <td>- Opening Balance as on 01-Apr-2022</td>
-              <td className="tright">10,459.96</td>
+              <td className="tright">
+                10,459.96
+                {Decimal
+                  ? fd_Data?.decimal?.summary?.nodalAccountBalance
+                  : fd_Data?.crore?.summary?.nodalAccountBalance}
+              </td>
               <td className="tright"></td>
               <td>Available Limits</td>
-              <td className="tright">10,132.74</td>
+              <td className="tright">
+                10,132.74
+                {Decimal
+                  ? fd_Data?.decimal?.summary?.AssignedLimit
+                  : fd_Data?.crore?.summary?.AssignedLimit}
+              </td>
               <td className="tright"></td>
             </tr>
             <tr>
               <td>- Surplus/Deficit for the period</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.summary?.surplusDeficit
+                  : fd_Data?.crore?.summary?.surplusDeficit}
+              </td>
               <td className="tright"></td>
               <td>Unassigned Limits</td>
-              <td className="tright">0.00</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.summary?.UnAssignedLimit
+                  : fd_Data?.crore?.summary?.UnAssignedLimit}
+              </td>
               <td className="tright"></td>
             </tr>
             <tr>
               <td>Closing Balance as on 08-Aug-2023</td>
               <td className="tright"></td>
-              <td className="tright">10,360.07</td>
+              <td className="tright">
+                {Decimal
+                  ? fd_Data?.decimal?.summary?.closingBalance
+                  : fd_Data?.crore?.summary?.closingBalance}
+              </td>
               <td></td>
               <td className="tright"></td>
               <td className="tright"></td>
@@ -633,7 +762,11 @@ const FinanacialD = () => {
             <tr>
               <td className="upperb">Interest Accrued since Last Payment</td>
               <td className="tright upperb"></td>
-              <td className="tright upperb">0.00</td>
+              <td className="tright upperb">
+                {Decimal
+                  ? fd_Data?.decimal?.summary?.interestAccuredTillLP
+                  : fd_Data?.crore?.summary?.interestAccuredTillLP}
+              </td>
               <td className="upperb"></td>
               <td className="tright upperb"></td>
               <td className="tright upperb"></td>

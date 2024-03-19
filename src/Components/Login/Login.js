@@ -10,7 +10,12 @@ import Spinner from "../HtmlComponents/Spinner";
 import { LoginService } from "../../Service/LoginService";
 import { v4 as uuid } from "uuid";
 import { ExternalUserService } from "../../Service/ExternalUserService";
-import { setCookie, useSetReduxData } from "../HtmlComponents/CommonFunction";
+import {
+  getCookie,
+  setCookie,
+  useSetReduxData,
+} from "../HtmlComponents/CommonFunction";
+
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
@@ -27,6 +32,7 @@ const Login = () => {
   const [publicKey, setPublicKey] = useState("");
   const location = useLocation();
   const setReduxData = useSetReduxData();
+
   React.useEffect(() => {
     async function fetchPublicKey() {
       try {
@@ -39,6 +45,9 @@ const Login = () => {
       }
     }
     fetchPublicKey();
+
+    const abc = { name: "satara" };
+    setCookie("TEST", abc, 1);
   }, []);
 
   function Login(values) {
@@ -47,16 +56,16 @@ const Login = () => {
       return;
     }
     const publicKeyObject = forge.pki.publicKeyFromPem(publicKey);
-    console.log("object type :-", typeof publicKeyObject);
+    // console.log("object type :-", typeof publicKeyObject);
     // const requestData = {
     //   username: values.username,
     //   password: values.password,
     // };
     const encodedData = forge.util.encodeUtf8(JSON.stringify(values));
-    console.log("login data", values);
+    // console.log("login data", values);
     const encrypted = publicKeyObject.encrypt(encodedData, "RSA-OAEP");
     const encryptedValues = forge.util.encode64(encrypted);
-    console.log(encryptedValues);
+    // console.log(encryptedValues);
     // const response = await axios.post("http://localhost:3007/api/auth/login", {
     //   encrypted: requestData,
     // });
@@ -207,6 +216,8 @@ const Login = () => {
     //     autoClose: 5000,
     //   });
     // }
+    const test = getCookie("TEST");
+    console.log("cookie test ->", test);
   };
 
   return (

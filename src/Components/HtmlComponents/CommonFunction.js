@@ -6,9 +6,47 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../Store/Reducers/userReducer"; // Correct import path
 import { setProfile } from "../../Store/Reducers/profileReducer"; // Import action creator for profile
-
+import * as forge from "node-forge";
 import { useSelector } from "react-redux";
+import JSEncrypt from "jsencrypt";
 
+const publicKey = `-----BEGIN PUBLIC KEY-----
+MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQB4bo0ViZi3LL4UIh6fShEU
+Q6TIq8PDwyzRq99WHNe2Ue8MFJXOBOL7pOLFvyXVGyO7wDGgw0swuJoHiFuzvq4m
+d6AuMvbjab6DWhxRF3d3cT5fkD4gK2PPe2Z54IDIkq0yLD1ypInHi4TOsV4OqJOL
+I7XIip6q+0zpgaae98sDdYh+IAjWLVGIjX+OEzJn3q8tc2/Qt/wDFZ9LxTiP8Sf6
+1lD6pbmh+oyhYzSlBVC/ZpqEgs3T+zt6zex9PPSmecyzkJ4Qvo0UMBF6oPmfScN4
+SaFiooJfF/3B3vzJzvxzdQkNaAajfB4/9ZMxt8SF8fXpaorQ01+UhuRz5t6Ng9yz
+AgMBAAE=
+-----END PUBLIC KEY-----`;
+
+const privateKey = `-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQB4bo0ViZi3LL4UIh6fShEUQ6TIq8PDwyzRq99WHNe2Ue8MFJXO
+BOL7pOLFvyXVGyO7wDGgw0swuJoHiFuzvq4md6AuMvbjab6DWhxRF3d3cT5fkD4g
+K2PPe2Z54IDIkq0yLD1ypInHi4TOsV4OqJOLI7XIip6q+0zpgaae98sDdYh+IAjW
+LVGIjX+OEzJn3q8tc2/Qt/wDFZ9LxTiP8Sf61lD6pbmh+oyhYzSlBVC/ZpqEgs3T
++zt6zex9PPSmecyzkJ4Qvo0UMBF6oPmfScN4SaFiooJfF/3B3vzJzvxzdQkNaAaj
+fB4/9ZMxt8SF8fXpaorQ01+UhuRz5t6Ng9yzAgMBAAECggEAMYjnJtCtq8oPdKCE
+D+ibFcas5I0hvEdvC96xwe2jHC6fMEzXQSHpaq/rRoLUwM6k5/ipcQJizutfD3Ia
+pdfsMY5KqDX2Lpuz7LsHoqMQVGSTzyK5Kuot541OHRsmXVlXO6fOrnTW5uiP+6Qg
+l87mwPgzMQUzNgifHfxh2Ej7i7Qe9EKwypG3yrmmuW8Cy6D602PQcH4+jefwpvN9
+/E90QI9xCHleDOhbtRrdhV66itSyKPFDHkx/E9nEGApPHCw3VaKtnPc38+2Cpgn6
+D31Sjsmy38V85Ml+uRBKzKSer1vtns+yNGhAk5rsj7V86Er6+HuHim0bhwxY9Nfx
+FxAD4QKBgQDCvxbsMJI6KgUw9aRT8R50on+s7iRS/IRh3S/KR8+PMOSaB6Wg+Xn/
+xi7dj6/i2EGIfQjwZISrtrOdS/HG03M95bt7a9cEf86fki7KLWwn75JR8rdrOdRK
+p5ZgbdN2GWAKPsIQGXsA/ER3IVbSUiOefy+wsfNLUrXKT5m+8yFiXwKBgQCeT615
+qslM0F5HWTRxCKoO95w9Kjv+TpGOvIiLRLLbYaHs0ReprJT7WVZtpVfcgjfnKdKQ
+5OMeJCDEjswA+aCt3ElsWAwRr5DnwCKP2A8MW1ssjOZMMWXa9zE2KcSjhthID0qE
+RUyMfoByFNeAEewEVzZUzX/MpgenELqfvteuLQKBgQCtsiwqy4OQ1yu8KEvCBtwo
+IUuJHPpO/iTA+LwIShZpW615aHqk4f6bT9M7EE5LIKEKsKLJbo4abaE0GalyseQm
+gAHBKkUkIS5UitiqwOqnj/lMmBRaUcD0ORdZuHsT6bwMRz9lhqR8E4SpUJYUjuhw
+FHafvYgHVaUI5gh2FHphNwKBgFI/sTAyBA2tgB3vgahsSPYnvPumMq8oIMWYvBQn
+KAmEiv0fkPytVmXT/2xN5/z/ho3KE8UFtd3WBVQ5oFGtX8aUWW05vWN+5HkTQKGd
+LgxMdm0J8yiIzZNatC2gu7H9/+ZIU32vB1tC6fbbTy8RoJ6MtQSQE6K+a+Fndp5C
+J4otAoGAYuvJS0oqxTDOsc00R2WEawb2FDZbLub/walOFB1GC+F5btu6kgJezPd3
+FBjAVZ8cXtlKhtqgko/z2UP1p0BiElI7J+2eWDlJe46IZrzWb1JWx/nXhPweyZeF
+/vQn6V5iFgcS7JO4bPUpDAZY7JXIt7ugvyU5KLdDEtVoEL0bRas=
+-----END RSA PRIVATE KEY-----`;
 export const DateFormatFunction = (inputDate) => {
   if (inputDate) {
     // Parse the input date string into a Date object
@@ -271,24 +309,77 @@ export async function getBase64(file) {
     });
   }
 }
+//----------Encrypt & Decrypt----------------------------------------------------------------------
+
+// export function encryptData(value, publicKey) {
+//   const forge = require("node-forge");
+//   const publicKeyForge = forge.pki.publicKeyFromPem(publicKey);
+//   try {
+//     const jsonString = JSON.stringify(value);
+//     const encrypted = publicKeyForge.encrypt(jsonString, "RSA-OAEP");
+//     return forge.util.encode64(encrypted);
+//   } catch (error) {
+//     console.error("Error encrypting JSON data:", error);
+//     return null;
+//   }
+// }
+
+// export function decryptData(encryptedText, privateKey) {
+//   const forge = require("node-forge");
+//   const privateKeyForge = forge.pki.privateKeyFromPem(privateKey);
+//   try {
+//     const encrypted = forge.util.decode64(encryptedText);
+//     const decrypted = privateKeyForge.decrypt(encrypted, "RSA-OAEP");
+//     return JSON.parse(decrypted);
+//   } catch (error) {
+//     console.error("Error decrypting JSON data:", error);
+//     return null;
+//   }
+// }
+//-----------------------------------------------------------------------------
+
+export const encryptData = (value) => {
+  try {
+    const encrypt = new JSEncrypt();
+    encrypt.setPublicKey(publicKey);
+    const data = JSON.stringify(value);
+    const encryptedMessage = encrypt.encrypt(data);
+    //setEncrypted(encryptedMessage);
+    return encryptedMessage;
+  } catch (error) {
+    console.error("Encryption error:", error);
+    return null; // Return null on error
+  }
+};
+
+export const decryptData = (encryptedText) => {
+  try {
+    const encrypt = new JSEncrypt();
+    encrypt.setPrivateKey(privateKey);
+    const decryptedMessage = encrypt.decrypt(encryptedText);
+    const decryptedData = JSON.parse(decryptedMessage);
+    return decryptedData;
+  } catch (error) {
+    console.error("Decryption error:", error);
+    return null; // Return null on error
+  }
+};
 
 //-----------Cookie----------------------------------------------------------------
 
 // Function to set a cookie with JSON data
 export function setCookie(name, value, days) {
+  const encryptedValues = encryptData(value);
+
+  //------------------------------------------------------------------------------------------
   let expires = "";
   if (days) {
     let date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = "; expires=" + date.toUTCString();
   }
-
-  document.cookie =
-    name +
-    "=" +
-    encodeURIComponent(JSON.stringify(value)) +
-    expires +
-    "; path=/";
+  document.cookie = name + "=" + encryptedValues + expires + "; path=/";
+  //encodeURIComponent()
 }
 
 // Function to get a cookie and parse JSON data
@@ -301,8 +392,11 @@ export function getCookie(name) {
       cookie = cookie.substring(1, cookie.length);
     }
     if (cookie.indexOf(nameEQ) === 0) {
-      let cookieValue = cookie.substring(nameEQ.length, cookie.length);
-      return JSON.parse(decodeURIComponent(cookieValue));
+      var cookieValue = cookie.substring(nameEQ.length, cookie.length);
+      //--Decryption---------------------------------------------------------------------------------
+      const unencryptedData = decryptData(cookieValue);
+      //---------------------------------------------------------------------------------------------
+      return unencryptedData;
     }
   }
   return null;
