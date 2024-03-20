@@ -74,11 +74,24 @@ const AddProfile = () => {
   const isEdit = path.includes("EditProfile") ? true : false;
   const navigate = useNavigate();
   const validationSchema = Yup.object({
-    profileName: Yup.string().required("Profile Name is required"),
-    profileDescription: Yup.string().required(
-      "Profile Description is required"
-    ),
-    group: Yup.string().required("Group is required"),
+    profileName: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/]*$/,
+        "Profile Name should not contain special characters"
+      )
+      .required("Profile Name is required"),
+    profileDescription: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/]*$/,
+        "Profile Description should not contain special characters"
+      )
+      .required("Profile Description is required"),
+    group: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/]*$/,
+        "Group should not contain special characters"
+      )
+      .required("Group is required"),
   });
 
   useEffect(() => {

@@ -53,20 +53,61 @@ const MappingMaster = () => {
   //-----------------------------------------------------------------
 
   const validationSchema = Yup.object({
-    userName: Yup.string().required("User Name is required"),
-    location: Yup.string().required("Location is required"),
-    employeeNumber: Yup.string().required("Employee Number is required"),
-    gender: Yup.string().required("Gender is required"),
-    password: Yup.string().required("Password is required"),
+    userName: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "User Name should not contain special characters"
+      )
+      .required("User Name is required"),
+    location: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "Location should not contain special characters"
+      )
+      .required("Location is required"),
+    employeeNumber: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "Employee Number should not contain special characters"
+      )
+      .required("Employee Number is required"),
+    gender: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "Gender should not contain special characters"
+      )
+      .required("Gender is required"),
+    password: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "Password should not contain special characters"
+      )
+      .required("Password is required"),
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    //non mandatory
-    userDomainName: Yup.string("User Domain Name is invalid"),
-    workPhone: Yup.string("Work Phone is invalid"),
-    userId: Yup.string("User ID is invalid"),
-    role: Yup.string("Role is invalid"),
-    mobile: Yup.string("Mobile Number is invalid"),
+    userId: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "User ID should not contain special characters"
+      )
+      .required("User ID is required"),
+    userDomainName: Yup.string().matches(
+      /^[a-zA-Z0-9\s.,/_:-]*$/,
+      "User Domain Name should not contain special characters"
+    ),
+    workPhone: Yup.string().matches(
+      /^[a-zA-Z0-9\s.,/_:-]*$/,
+      "Work Phone should not contain special characters"
+    ),
+    role: Yup.string().matches(
+      /^[a-zA-Z0-9\s.,/_:-]*$/,
+      "Role should not contain special characters"
+    ),
+    mobile: Yup.string().matches(
+      /^[a-zA-Z0-9\s.,/_:-]*$/,
+      "Mobile Number should not contain special characters"
+    ),
   });
 
   useEffect(() => {

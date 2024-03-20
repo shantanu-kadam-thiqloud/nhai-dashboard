@@ -81,7 +81,7 @@ const Dashboard = () => {
           console.log("Profile ->", profile);
           setReduxProfile({ profile });
           var m = profile.mapping;
-          setCookie("PROFILE", m, 1);
+          //   setCookie("PROFILE", m, 1);
           var mappingData = JSON.stringify(m);
           setMData(res.data.data.mapping);
           sessionStorage.clear();

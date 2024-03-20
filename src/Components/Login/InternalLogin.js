@@ -79,7 +79,14 @@ const InternalLogin = () => {
           var userData = res.data.data.responseObject;
           setReduxData({ userData });
           localStorage.setItem("UUID", res.data.data.sessionId);
-          setCookie("USER", userData, 1);
+          const user = {
+            userName: userData.userName, //"Siddhesh_96K",
+            userId: userData.userId, //"203",
+            profileId: userData.profileId, //61,
+            memberType: userData.memberType, //1,
+            userRole: userData.userRole,
+          };
+          setCookie("USER", user, 1);
           setUserDetails(userData);
           setIsLoading(false);
           navigate("/NHAI/Dashboard", { state: { userData: userData } });

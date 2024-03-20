@@ -17,6 +17,7 @@ import { DashboardService } from "../../Service/DashboardService";
 import { toast } from "react-toastify";
 const Financial = () => {
   const [dbdata, setDbdata] = useState([]);
+  const [Decimal, setDecimal] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [fromDate, setFromDate] = useState(
     "2023-04-01" // new Date().toISOString().split("T")[0]
@@ -117,7 +118,7 @@ const Financial = () => {
   const columns = [
     {
       Header: "Deposits",
-      accessor: "deposits",
+      accessor: Decimal ? "decimal.deposits" : "crore.deposits",
       Cell: ({ value }) => (
         <div className="float-start">
           {value == "cumulativeDeposits"
@@ -130,7 +131,7 @@ const Financial = () => {
     },
     {
       Header: "Amount",
-      accessor: "amount",
+      accessor: Decimal ? "decimal.amount" : "crore.amount",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
   ];
@@ -138,7 +139,7 @@ const Financial = () => {
   const columnsDisbusment = [
     {
       Header: "Disbursements",
-      accessor: "disbursements",
+      accessor: Decimal ? "decimal.disbursements" : "crore.disbursements",
       Cell: ({ value }) => (
         <div className="float-start">
           {value == "cumulativeDisbursements"
@@ -159,7 +160,7 @@ const Financial = () => {
     },
     {
       Header: "Amount",
-      accessor: "amount",
+      accessor: Decimal ? "decimal.amount" : "crore.amount",
       Cell: ({ value }) => <div className="float-end">{value}</div>,
     },
   ];
@@ -167,7 +168,7 @@ const Financial = () => {
   const columnsSummary = [
     {
       Header: "Summary",
-      accessor: "summary",
+      accessor: Decimal ? "decimal.summary" : "crore.summary",
       Cell: ({ value }) => (
         <div className="float-start">
           {value == "nodalAccountBalance"
@@ -186,7 +187,7 @@ const Financial = () => {
     },
     {
       Header: "Amount",
-      accessor: "amount",
+      accessor: Decimal ? "decimal.amount" : "crore.amount",
       Cell: ({ value }) => <div className="amount float-end">{value}</div>,
     },
   ];

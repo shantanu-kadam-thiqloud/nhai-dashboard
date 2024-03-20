@@ -20,6 +20,15 @@ class Express {
     // Have Node serve the files for our built React app
     this.express.use(express.static(path.join(__dirname, '../../../build')));
     this.express.get('/NHAI', (req, res) => {
+
+      // Set headers here before sending the HTML file
+      res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+      res.setHeader('Content-Security-Policy', "default-src 'self'");
+      res.setHeader('X-Frame-Options', 'DENY');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('X-XSS-Protection', '1; mode=block');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
       res.sendFile(path.join(__dirname, '../../../build', 'index.html'));
     });
     this.express.get('/NHAI/*', (req, res) => {
@@ -38,6 +47,17 @@ class Express {
    * Mounts all the defined middlewares
    */
   private mountMiddlewares(): void {
+    // Middleware to add custom headers
+    this.express.use((req, res, next) => {
+      res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+      res.setHeader('Content-Security-Policy', "default-src 'self'");
+      res.setHeader('X-Frame-Options', 'DENY');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('X-XSS-Protection', '1; mode=block');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      next();
+    });
+
     this.express = Bootstrap.init(this.express);
   }
 

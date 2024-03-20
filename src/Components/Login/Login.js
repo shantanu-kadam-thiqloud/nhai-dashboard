@@ -46,8 +46,8 @@ const Login = () => {
     }
     fetchPublicKey();
 
-    const abc = { name: "satara" };
-    setCookie("TEST", abc, 1);
+    const abc = { userName: "satara", userId: "141", profileId: "61" };
+    // setCookie("TEST", abc, 1);
   }, []);
 
   function Login(values) {
@@ -92,7 +92,14 @@ const Login = () => {
             res.data.data.responseObject.pwdReset == -1 ? true : false;
           localStorage.setItem("UUID", res.data.data.sessionId);
           localStorage.setItem("userName", userData.userName);
-          setCookie("USER", userData, 1);
+          const user = {
+            userName: userData.userName, //"Siddhesh_96K",
+            userId: userData.userId, //"203",
+            profileId: userData.profileId, //61,
+            memberType: userData.memberType, //1,
+            userRole: userData.userRole,
+          };
+          setCookie("USER", user, 1);
           //--------------------------------------------------------------------------------------------------
           setUserDetails(userData);
           setIsLoading(false);

@@ -44,11 +44,20 @@ const MenuManagement = () => {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const validationSchema = yup.object({
-    // menu: yup.string().required("Menu is required"),
-    // submenu: yup.string().required("Submenu is required"),
-    // action: yup.string().required("Action is required"),
-    name: yup.string().required("Name is required"),
-    url: yup.string().required("Url is required"),
+    name: yup
+      .string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "Name should not contain special characters"
+      )
+      .required("Name is required"),
+    url: yup
+      .string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "Url should not contain special characters"
+      )
+      .required("Url is required"),
   });
   const customStyles = {
     content: {

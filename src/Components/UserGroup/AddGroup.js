@@ -83,8 +83,18 @@ const AddGroup = () => {
   };
 
   const validationSchema = Yup.object({
-    groupName: Yup.string().required("Group Name is required"),
-    groupDescription: Yup.string().required("Group Description is required"),
+    groupName: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/]*$/,
+        "Group Name should not contain special characters"
+      )
+      .required("Group Name is required"),
+    groupDescription: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/]*$/,
+        "Group Description should not contain special characters"
+      )
+      .required("Group Description is required"),
   });
 
   //--------HandleSubmit----------------------------------------------------------

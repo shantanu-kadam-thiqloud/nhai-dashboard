@@ -23,7 +23,7 @@ import {
 const Sidebar = () => {
   const location = useLocation();
   const reduxData = useGetReduxData();
-  const PROFILE = getCookie("PROFILE");
+  //const PROFILE = getCookie("PROFILE");
   const setReduxProfile = useSetReduxProfile();
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
   const reduxProfile =
@@ -34,7 +34,7 @@ const Sidebar = () => {
       : "";
   const MAPPING =
     reduxProfile === "" || reduxProfile === null || reduxProfile === undefined
-      ? PROFILE
+      ? ""
       : reduxProfile.mapping;
   const userData = location.state ? location.state.userData : ""; //useParams();
   const MappingData =
@@ -111,7 +111,7 @@ const Sidebar = () => {
           setReduxProfile({ profile });
           console.log("Profile ->", profile);
           var m = profile.mapping;
-          setCookie("PROFILE", m, 1);
+          //  setCookie("PROFILE", m, 1);
           setMappingData(m);
 
           setIsLoading(false);

@@ -17,7 +17,7 @@ import {
 
 const TabsComponent = (props) => {
   const location = useLocation();
-  const PROFILE = getCookie("PROFILE");
+  // const PROFILE = getCookie("PROFILE");
   const reduxData = useGetReduxData();
   // const reduxProfile =
   //   reduxData.length != 0

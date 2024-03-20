@@ -24,8 +24,18 @@ const FileUpload = () => {
   const USER = reduxUser === "" ? cookieUser : reduxUser;
   //-----------------------------------------------------------------
   const validationSchema = Yup.object({
-    bank: Yup.string().required("Bank is required"),
-    fileType: Yup.string().required("File Type is required"),
+    // bank: Yup.string()
+    //   .matches(
+    //     /^[a-zA-Z0-9\s.,/_:-]*$/,
+    //     "Bank should not contain special characters"
+    //   )
+    //   .required("Bank is required"),
+    fileType: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "File Type should not contain special characters"
+      )
+      .required("File Type is required"),
     file: Yup.mixed()
       .required("Text file is required")
       .test("fileType", "Only .txt files are allowed", (value) => {

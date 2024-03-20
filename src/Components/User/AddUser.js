@@ -85,21 +85,82 @@ const AddUser = () => {
   const isEdit = path.includes("EditUser") ? true : false;
   const [profileList, setProfileList] = useState([]);
   const navigate = useNavigate();
-  const phoneRegExp = /^\d{10}$/;
+  const phoneRegExp = /^\+\d{1,3}\d{10}$/;
   // /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
+  // const validationSchema = Yup.object({
+  //   userName: Yup.string().required("User Name is required"),
+  //   // userType: Yup.string().required("User Type is required"),
+  //   employeeNumber: Yup.string().required("Employee Number is required"),
+  //   // gender: Yup.string().required("Gender is required"),
+  //   // password: Yup.string().required("Password is required"),
+  //   email: Yup.string()
+  //     .email("Invalid email address")
+  //     .required("Email is required"),
+  //   // userDomainName: Yup.string("User Domain Name is invalid"),
+  //   // workPhone: Yup.string("Work Phone is invalid"),
+  //   userId: Yup.string("User ID is invalid"),
+  //   memberType: Yup.number()
+  //     .transform((value, originalValue) => {
+  //       if (originalValue.trim() === "") {
+  //         return false; // Return false for empty or whitespace strings
+  //       }
+  //       return value;
+  //     })
+  //     .nullable()
+  //     .required("Member type is required")
+  //     .oneOf([0, 1], "Member type is required"),
+  //   role: Yup.number()
+  //     .transform((value, originalValue) => {
+  //       if (originalValue.trim() === "") {
+  //         return false; // Return false for empty or whitespace strings
+  //       }
+  //       return value;
+  //     })
+  //     .nullable()
+  //     .required("Role is required"),
+  //   mobile: Yup.string("Mobile Number is invalid").matches(
+  //     phoneRegExp,
+  //     "Mobile number is not valid"
+  //   ),
+  // });
+
   const validationSchema = Yup.object({
-    userName: Yup.string().required("User Name is required"),
-    // userType: Yup.string().required("User Type is required"),
-    employeeNumber: Yup.string().required("Employee Number is required"),
-    // gender: Yup.string().required("Gender is required"),
-    // password: Yup.string().required("Password is required"),
+    userName: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/]*$/,
+        "User Name should not contain special characters"
+      )
+      .required("User Name is required"),
+    employeeNumber: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_@:-]*$/,
+        "Employee Number should not contain special characters"
+      )
+      .required("Employee Number is required"),
     email: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_@.\-]*$/,
+        "email should not contain special characters"
+      )
       .email("Invalid email address")
       .required("Email is required"),
     // userDomainName: Yup.string("User Domain Name is invalid"),
     // workPhone: Yup.string("Work Phone is invalid"),
-    userId: Yup.string("User ID is invalid"),
+    userId: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        "User ID should not contain special characters"
+      )
+      .required("User ID is required"),
+    role: Yup.string().matches(
+      /^[a-zA-Z0-9\s.,/]*$/,
+      "role should not contain special characters"
+    ),
+    mobile: Yup.string("Mobile Number is invalid").matches(
+      phoneRegExp,
+      "Mobile number is not valid"
+    ),
     memberType: Yup.number()
       .transform((value, originalValue) => {
         if (originalValue.trim() === "") {
@@ -110,19 +171,6 @@ const AddUser = () => {
       .nullable()
       .required("Member type is required")
       .oneOf([0, 1], "Member type is required"),
-    role: Yup.number()
-      .transform((value, originalValue) => {
-        if (originalValue.trim() === "") {
-          return false; // Return false for empty or whitespace strings
-        }
-        return value;
-      })
-      .nullable()
-      .required("Role is required"),
-    mobile: Yup.string("Mobile Number is invalid").matches(
-      phoneRegExp,
-      "Mobile number is not valid"
-    ),
   });
 
   useEffect(() => {
@@ -444,6 +492,7 @@ const AddUser = () => {
                               id="userName"
                               name="userName"
                               placeholder="Enter user name"
+                              maxLength="100"
                               //value={fullName}
                               // onChange={(e) => {
                               //   setFullName(e.target.value);
@@ -469,6 +518,7 @@ const AddUser = () => {
                               id="email"
                               name="email"
                               placeholder="Enter email"
+                              maxLength="50"
                               // onChange={(e) => {
                               //   setEmail(e.target.value);
                               // }}
@@ -530,6 +580,7 @@ const AddUser = () => {
                               id="userId"
                               name="userId"
                               placeholder="Enter user ID"
+                              maxLength="50"
                               disabled={
                                 Number(values.memberType) == 0 || isEdit
                               }
@@ -562,6 +613,7 @@ const AddUser = () => {
                               id="employeeNumber"
                               name="employeeNumber"
                               placeholder="Enter employee number"
+                              maxLength="50"
                               // onChange={(e) => {
                               //   setEmployeeNumber(e.target.value);
                               // }}

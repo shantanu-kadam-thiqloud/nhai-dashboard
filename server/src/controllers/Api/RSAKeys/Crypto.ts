@@ -9,8 +9,8 @@ class Crypto {
     Crypto.publicKeyPem = forge.pki.publicKeyToPem(keyPair.publicKey);
     Crypto.privateKeyPem = forge.pki.privateKeyToPem(keyPair.privateKey);
     res.send(Crypto.publicKeyPem);
-    console.log('Crypto.publicKeyPem :---', Crypto.publicKeyPem);
-    console.log('Crypto.privateKeyPem :---', Crypto.privateKeyPem);
+    // console.log('Crypto.publicKeyPem :---', Crypto.publicKeyPem);
+    // console.log('Crypto.privateKeyPem :---', Crypto.privateKeyPem);
     //res.json({ message: "Heello" });
   }
   public static getPublicKeyPem(): string | null {

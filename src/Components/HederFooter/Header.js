@@ -15,6 +15,7 @@ import Spinner from "../HtmlComponents/Spinner";
 
 function Header() {
   const navigate = useNavigate();
+
   const [lastLogin, setLastLogin] = useState("8 Aug 2023, 05:18 PM");
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
@@ -22,11 +23,39 @@ function Header() {
   const reduxUser = reduxData.length != 0 ? reduxData.userData : "";
   const cookieUser = getCookie("USER");
   const USER = cookieUser === "" ? reduxUser : cookieUser;
+  const lastCookie = document.cookie;
 
-  const isDashboard =
-    location.pathname === "Dashboard" || location.pathname === "Dashboard"
+  const isLogin =
+    location.pathname === "/NHAI/login" ||
+    location.pathname === "/NHAI/internalLogin"
       ? true
       : false;
+  // const isLogin = location.pathname === "/" ? true : false;
+  const isDashboard =
+    location.pathname === "/NHAI/Dashboard" ||
+    location.pathname === "/NHAI/Dashboard"
+      ? true
+      : false;
+
+  useEffect(() => {
+    const checkCookie = () => {
+      if (!isLogin && USER) {
+        // console.log("lastCookie ",lastCookie);
+        const currentCookie = document.cookie;
+        if (currentCookie !== lastCookie) {
+          console.log("coockie changed.!");
+          clearCookie("TEST");
+          clearCookie("USER");
+          window.location.href = "/NHAI/login";
+          // console.log("cookie data changed");
+          //setLastCookie(currentCookie); // Update lastCookie state
+        }
+      }
+    };
+    const intervalId = setInterval(checkCookie, 1000);
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [lastCookie, isLogin]);
 
   useEffect(() => {
     console.log("USER->", USER);
@@ -85,7 +114,7 @@ function Header() {
           ) : (
             ""
           )}
-          {isDashboard && <Logout />}
+          {/* {isDashboard && <Logout />} */}
         </div>
       </div>
     </header>

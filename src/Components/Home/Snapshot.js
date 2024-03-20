@@ -107,7 +107,7 @@ const Snapshot = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(),
     },
-    userName: USER.userName || "",
+    userName: USER?.userName || "",
     statusAsOn: ConvertFormat(asOnDate), //"21-01-2020",
   };
   const statusReqBody = {
@@ -115,7 +115,7 @@ const Snapshot = () => {
       applicationId: "nhai-dashboard",
       correlationId: uuid(),
     },
-    userName: USER.userName || "",
+    userName: USER?.userName || "",
   };
   // const snapData =
   //   //  {
