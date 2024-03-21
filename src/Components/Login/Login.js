@@ -45,9 +45,6 @@ const Login = () => {
       }
     }
     fetchPublicKey();
-
-    const abc = { userName: "satara", userId: "141", profileId: "61" };
-    // setCookie("TEST", abc, 1);
   }, []);
 
   function Login(values) {

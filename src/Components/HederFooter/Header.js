@@ -71,9 +71,9 @@ function Header() {
             {" "}
             <img src={logo} alt="Logo" className="headerLogo" />
           </a>
-          {isDashboard && (
+          {/* {isDashboard && (
             <span className="lastLogin">Last Logged in {lastLogin}</span>
-          )}
+          )} */}
           <span className="lastLogin">
             {USER === "" || USER === undefined
               ? ""

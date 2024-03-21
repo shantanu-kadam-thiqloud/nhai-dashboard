@@ -153,10 +153,19 @@ const AddUser = () => {
         "User ID should not contain special characters"
       )
       .required("User ID is required"),
-    role: Yup.string().matches(
-      /^[a-zA-Z0-9\s.,/]*$/,
-      "role should not contain special characters"
-    ),
+    // role: Yup.string().matches(
+    //   /^[a-zA-Z0-9\s.,/]*$/,
+    //   "role should not contain special characters"
+    // ),
+    role: Yup.number()
+      .transform((value, originalValue) => {
+        if (originalValue.trim() === "") {
+          return false; // Return false for empty or whitespace strings
+        }
+        return value;
+      })
+      .nullable()
+      .required("Role is required"),
     mobile: Yup.string("Mobile Number is invalid").matches(
       phoneRegExp,
       "Mobile number is not valid"
