@@ -43,6 +43,7 @@ const ProfilleCheckerDetails = () => {
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
   useEffect(() => {
+    setIsLoading(true);
     if (path.includes("profileUpdateRequestDetails")) {
       FetchUpdateDetails();
     } else {

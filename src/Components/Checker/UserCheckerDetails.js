@@ -52,6 +52,7 @@ const UserCheckerDetails = () => {
   // console.log(formattedDate);
 
   useEffect(() => {
+    setIsLoading(true);
     if (path.includes("userUpdateRequestDetails")) {
       FetchUpdateDetails();
     } else {

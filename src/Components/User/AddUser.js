@@ -149,7 +149,7 @@ const AddUser = () => {
     // workPhone: Yup.string("Work Phone is invalid"),
     userId: Yup.string()
       .matches(
-        /^[a-zA-Z0-9\s.,/_:-]*$/,
+        /^[a-zA-Z0-9\s.,/_:-@]*$/,
         "User ID should not contain special characters"
       )
       .required("User ID is required"),
@@ -225,7 +225,7 @@ const AddUser = () => {
           userRole: roleName.profileName, //role, //"Administrator",
           gender: "", //"Male",
           email: values.email, //"shantanu@example.com",
-          mobileNumber: "+91" + values.mobile, //"123-456-7890",
+          mobileNumber: values.mobile, //"123-456-7890",
           workNo: "", //"W123",
           isActive: false,
           createdDate: DateFormatFunction(
