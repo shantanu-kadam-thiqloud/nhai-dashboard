@@ -5,7 +5,7 @@ import { downloadData } from './Common'
 const BASE_URL_A = Locals.config().aBaseUrl;
 class DashboardDownload {
     public static async subsaideryAccountDownload(req: any, res: any, next: any): Promise<any> {
-        downloadData(BASE_URL_A + '/dashboard/snapshort/v1', req, res, next);
+        downloadData(BASE_URL_A + '/dashboard/download/piu/v1', req, res, next);
     }
     public static async limitLedgerDownload(req: any, res: any, next: any): Promise<any> {
         downloadData(BASE_URL_A + '/dashboard/download/limit-ledger/v1', req, res, next);

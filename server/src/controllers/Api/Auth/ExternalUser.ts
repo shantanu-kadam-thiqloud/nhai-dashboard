@@ -9,6 +9,7 @@ import Crypto from '../RSAKeys/Crypto';
 import { json } from 'body-parser';
 
 const useRedis = new Redis();
+const AM_BASE_URL = Locals.config().amBaseUrl;
 const BASE_URL = Locals.config().baseUrl;
 const ttlInSeconds = 180; // 30 min
 class ExternalUser {
@@ -54,7 +55,7 @@ class ExternalUser {
         };
         try {
             // Dummy login API
-            const LoginUserr = await api.post("http://172.16.16.99:8091/usermanagement/external_login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+            const LoginUserr = await api.post(AM_BASE_URL + "/usermanagement/external_login/v1", req.body, "");//'https://dummyjson.com/auth/login'
             // console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
             const LoginUser = LoginUserr.data || "";
@@ -127,7 +128,7 @@ class ExternalUser {
 
         try {
             // Dummy login API
-            const pwdDataa = await api.post("http://172.16.16.99:8091/usermanagement/changePassword/v1", req.body, "");//'https://dummyjson.com/auth/login'
+            const pwdDataa = await api.post(AM_BASE_URL + "/usermanagement/changePassword/v1", req.body, "");//'https://dummyjson.com/auth/login'
             console.log('Incoming Data-->', req.body);
             //Set to redis-----------------------------------------------------------------
             const pwdData = pwdDataa.data

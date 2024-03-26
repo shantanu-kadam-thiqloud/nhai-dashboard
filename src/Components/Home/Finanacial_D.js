@@ -363,7 +363,7 @@ const FinanacialD = () => {
       },
     },
   };
-  const [fd_Data, setFd_data] = useState(fdata);
+  const [fd_Data, setFd_data] = useState([]);
   const reqBody = {
     requestMetaData: {
       applicationId: "nhai-dashboard",

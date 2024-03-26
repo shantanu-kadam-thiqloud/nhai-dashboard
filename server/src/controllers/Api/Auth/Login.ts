@@ -8,8 +8,10 @@ import * as forge from 'node-forge';
 import Crypto from '../RSAKeys/Crypto';
 import { json } from 'body-parser';
 
+
 const useRedis = new Redis();
 const BASE_URL = Locals.config().baseUrl;
+const AM_BASE_URL = Locals.config().amBaseUrl;
 const ttlInSeconds = 180; // 30 min
 class Login {
   public static async login(req: any, res: any, next: any): Promise<any> {
@@ -52,7 +54,7 @@ class Login {
     };
     try {
       // Dummy login API
-      const LoginUserr = await api.post("http://172.16.16.99:8091/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
+      const LoginUserr = await api.post(AM_BASE_URL + "/usermanagement/login/v1", req.body, "");//'https://dummyjson.com/auth/login'
       console.log('Incoming Data-->', req.body);
       //Set to redis-----------------------------------------------------------------
       const LoginUser = LoginUserr.data;

@@ -3,7 +3,7 @@ export const Global_var = {
   BASEURL: "http://172.16.16.99:8091", //Amol local with VPN
   BASEURL1: "http://172.16.16.201:8085", //Ayush
   BASEURL2: "http://172.16.16.201:7091", //Sumit
-  AUTH_BASE: "http://localhost:3007/api",
+  AUTH_BASE: "https://nhai-dashboard-uat.kotak.internal:3007/api",
   //--------Login----------------------------------------
   URL_LOGIN: "http://localhost:3007/api/auth/login", //"/usermanagement/login/v1",
   //-------------------------------------------------------------------------------

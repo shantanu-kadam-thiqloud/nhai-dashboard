@@ -12,7 +12,7 @@ class App {
   // Loads your dotenv file
   public loadConfiguration(): void {
     Log.info("Configuration :: Booting @ Master...");
-    dotenv.config({ path: path.join(__dirname, "../../.env") });
+    // dotenv.config({ path: path.join(__dirname, "../../.env") });
   }
 
   // Loads your Server

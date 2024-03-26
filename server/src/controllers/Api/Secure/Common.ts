@@ -17,51 +17,51 @@ export async function fetchData(API_baseUrl: string, req: any, res: any, next: a
         const userName = redisRES.responseObject.userName;
         console.log("Redis details =>", redisRES);
         console.log("User Name from Redis =>", userName, " Token from Redis =>", token);
-        const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
-        //console.log('tokenVerified:---', tokenVerified.data.message);
-        if (tokenVerified.data.message === "Invalid token") {
-            const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
-            //console.log('session_token', session_token.token);
-            const headers: any = {
-                'Content-Type': 'application/json',
-                'Authorization': session_token.token,
-            };
-            redisRES.sessionToken = session_token.token;
-            const jsonString = JSON.stringify(redisRES);
-            await useRedis.set(uuidHeader, jsonString, ttlInSeconds);
-            res.status(500).json({
-                message: "Token refresh."
-            });
-        } else {
-            try {
-                req.body.userName = userName;
-                const responseData = await api.post(API_baseUrl, req.body, token);
-                console.log("URL =>", API_baseUrl, "Request Headers =>", responseData.headers, "Request Body =>", req.body, " Response =>", responseData.data);
-                if (responseData.status === 200) {
-                    res.json({
-                        data: responseData.data,
-                    });
-                }
-                else if (responseData.status === 404 || responseData.status === 400) {
-                    return res.status(404).json({ error: '404 Bad request' });
-                }
-                else if (responseData.status === 500) {
-                    return res.status(500).json({ error: '500 Bad request' });
-                }
-                else {
-                    res.json({
-                        data: responseData.data,
-                    });
-                }
-
-
-
-            } catch (error) {
-                console.error('Error occurred :', error);
-                res.status(404).json({ error: error.message });
+        //21-30,33-36,
+        // const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
+        // //console.log('tokenVerified:---', tokenVerified.data.message);
+        // if (tokenVerified.data.message === "Invalid token") {
+        //     const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
+        //     //console.log('session_token', session_token.token);
+        //     const headers: any = {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': session_token.token,
+        //     };
+        //     redisRES.sessionToken = session_token.token;
+        const jsonString = JSON.stringify(redisRES);
+        await useRedis.set(uuidHeader, jsonString, ttlInSeconds);
+        //     res.status(500).json({
+        //         message: "Token refresh."
+        //     });
+        // } else {
+        try {
+            req.body.userName = userName;
+            const responseData = await api.post(API_baseUrl, req.body, token);
+            console.log("URL =>", API_baseUrl, "Request Headers =>", responseData.headers, "Request Body =>", req.body, " Response =>", responseData.data);
+            if (responseData.status === 200) {
+                res.json({
+                    data: responseData.data,
+                });
             }
+            else if (responseData.status === 404 || responseData.status === 400) {
+                return res.status(404).json({ error: '404 Bad request' });
+            }
+            else if (responseData.status === 500) {
+                return res.status(500).json({ error: '500 Bad request' });
+            }
+            else {
+                res.json({
+                    data: responseData.data,
+                });
+            }
+
+        } catch (error) {
+            console.error('Error occurred :', error);
+            res.status(404).json({ error: error.message });
         }
-    } else if (redisRES == "Please provide redis key") {
+    }
+    // }
+    else if (redisRES == "Please provide redis key") {
         return res.status(500).json({
             message: "Please provide valid redis key"
         });
@@ -85,49 +85,50 @@ export async function fetchPutData(API_baseUrl: string, req: any, res: any, next
         const userName = redisRES.responseObject.userName;
         console.log("Redis details =>", redisRES);
         console.log("User Name from Redis =>", userName, " Token from Redis =>", token);
-        const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
-        // console.log('tokenVerified:---', tokenVerified.data.message);
-        if (tokenVerified.data.message === "Invalid token") {
-            const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
-            //  console.log('session_token', session_token.token);
-            const headers: any = {
-                'Content-Type': 'application/json',
-                'Authorization': session_token.token,
-            };
-            redisRES.sessionToken = session_token.token;
-            const jsonString = JSON.stringify(redisRES);
-            await useRedis.set(uuidHeader, jsonString, ttlInSeconds);
-            res.status(500).json({
-                message: "Token refresh."
-            });
-        } else {
-            try {
-                req.body.userName = userName;
-                const responseData = await api.put(API_baseUrl, req.body, token);
-                console.log("URL =>", API_baseUrl, "Request Headers =>", responseData.headers, "Request Body =>", req.body, " Response =>", responseData.data);
-                if (responseData.status === 200) {
-                    res.json({
-                        data: responseData.data,
-                    });
-                }
-                else if (responseData.status === 404 || responseData.status === 400) {
-                    return res.status(404).json({ error: '404 Bad request' });
-                }
-                else if (responseData.status === 500) {
-                    return res.status(500).json({ error: '500 Bad request' });
-                }
-                else {
-                    res.json({
-                        data: responseData.data,
-                    });
-                }
-
-            } catch (error) {
-                console.error('Error occurred :', error);
-                res.status(404).json({ error: error.message });
+        // const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
+        // // console.log('tokenVerified:---', tokenVerified.data.message);
+        // if (tokenVerified.data.message === "Invalid token") {
+        //     const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
+        //     //  console.log('session_token', session_token.token);
+        //     const headers: any = {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': session_token.token,
+        //     };
+        //     redisRES.sessionToken = session_token.token;
+        const jsonString = JSON.stringify(redisRES);
+        await useRedis.set(uuidHeader, jsonString, ttlInSeconds);
+        //     res.status(500).json({
+        //         message: "Token refresh."
+        //     });
+        // } else {
+        try {
+            req.body.userName = userName;
+            const responseData = await api.put(API_baseUrl, req.body, token);
+            console.log("URL =>", API_baseUrl, "Request Headers =>", responseData.headers, "Request Body =>", req.body, " Response =>", responseData.data);
+            if (responseData.status === 200) {
+                res.json({
+                    data: responseData.data,
+                });
             }
+            else if (responseData.status === 404 || responseData.status === 400) {
+                return res.status(404).json({ error: '404 Bad request' });
+            }
+            else if (responseData.status === 500) {
+                return res.status(500).json({ error: '500 Bad request' });
+            }
+            else {
+                res.json({
+                    data: responseData.data,
+                });
+            }
+
+        } catch (error) {
+            console.error('Error occurred :', error);
+            res.status(404).json({ error: error.message });
         }
-    } else if (redisRES == "Please provide redis key") {
+    }
+    // }
+    else if (redisRES == "Please provide redis key") {
         return res.status(500).json({
             message: "Please provide valid redis key"
         });
@@ -150,55 +151,56 @@ export async function downloadData(API_baseUrl: string, req: any, res: any, next
         const userName = redisRES.responseObject.userName;
         console.log("Redis details =>", redisRES);
         console.log("User Name from Redis =>", userName, " Token from Redis =>", token);
-        const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
-        // console.log('tokenVerified:---', tokenVerified.data.message);
-        if (tokenVerified.data.message === "Invalid token") {
-            const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
-            // console.log('session_token', session_token.token);
-            const headers: any = {
-                'Content-Type': 'application/json',
-                'Authorization': session_token.token,
-            };
-            redisRES.sessionToken = session_token.token;
-            const jsonString = JSON.stringify(redisRES);
-            await useRedis.set(uuidHeader, jsonString, ttlInSeconds);
-            res.status(500).json({
-                message: "Token refresh."
+        // const tokenVerified = await api.post(BASE_URL + `/api/auth/verify-JWT`, { session_token: redisRES.sessionToken }, "");
+        // // console.log('tokenVerified:---', tokenVerified.data.message);
+        // if (tokenVerified.data.message === "Invalid token") {
+        //     const session_token = await api.get(BASE_URL + `/api/auth/generate-token`);
+        //     // console.log('session_token', session_token.token);
+        //     const headers: any = {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': session_token.token,
+        //     };
+        //     redisRES.sessionToken = session_token.token;
+        const jsonString = JSON.stringify(redisRES);
+        await useRedis.set(uuidHeader, jsonString, ttlInSeconds);
+        //     res.status(500).json({
+        //         message: "Token refresh."
+        //     });
+        // } else {
+
+        try {
+            req.body.userName = userName;
+            const responseData = await api.downloadPost(API_baseUrl, req.body, token);
+            console.log("URL =>", API_baseUrl, "Request Headers =>", responseData.headers, "Request Body =>", req.body, " Response =>", responseData.data);
+            res.set({
+                'Content-Type': "text/plain",
             });
-        } else {
 
-            try {
-                req.body.userName = userName;
-                const responseData = await api.downloadPost(API_baseUrl, req.body, token);
-                console.log("URL =>", API_baseUrl, "Request Headers =>", responseData.headers, "Request Body =>", req.body, " Response =>", responseData.data);
-                res.set({
-                    'Content-Type': "text/plain",
+            if (responseData.status === 200) {
+                res.json({
+                    data: responseData.data,
                 });
-
-                if (responseData.status === 200) {
-                    res.json({
-                        data: responseData.data,
-                    });
-                }
-                else if (responseData.status === 404 || responseData.status === 400) {
-                    return res.status(404).json({ error: '404 Bad request' });
-                }
-                else if (responseData.status === 500) {
-                    return res.status(500).json({ error: '500 Bad request' });
-                }
-                else {
-                    res.json({
-                        data: responseData.data,
-                    });
-                }
-
-            } catch (error) {
-                console.error('Error occurred :', error);
-                res.status(404).json({ error: error.message });
+            }
+            else if (responseData.status === 404 || responseData.status === 400) {
+                return res.status(404).json({ error: '404 Bad request' });
+            }
+            else if (responseData.status === 500) {
+                return res.status(500).json({ error: '500 Bad request' });
+            }
+            else {
+                res.json({
+                    data: responseData.data,
+                });
             }
 
+        } catch (error) {
+            console.error('Error occurred :', error);
+            res.status(404).json({ error: error.message });
         }
-    } else if (redisRES == "Please provide redis key") {
+
+    }
+    // } 
+    else if (redisRES == "Please provide redis key") {
         return res.status(500).json({
             message: "Please provide valid redis key"
         });
